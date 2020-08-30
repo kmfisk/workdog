@@ -1,0 +1,76 @@
+{
+  "work_group": "HERDING",
+  "coats": 11,
+  "max_health": 15,
+  "max_litter_size": 4,
+  "equippable_items": [
+    "workdog:collar",
+    "workdog:muzzle",
+    "workdog:harness"
+  ],
+  "max_gam": 1,
+  "max_agg": 1,
+  "max_war": 1,
+  "max_voc": 3,
+  "min_crg": 2,
+  "max_crg": 3,
+  "max_pla": 4,
+  "min_hnt": 2,
+  "max_hnt": 3,
+  "min_spd": 0.13,
+  "max_spd": 0.7,
+  "min_dmg": 2,
+  "max_dmg": 4,
+  "gam0targets": [
+  ],
+  "gam1targets": [
+    "rats:rat",
+    "zawa:brownrat",
+    "zawa:fijibandediguana",
+    "zawa:meerkat",
+    "zawa:treefrog",
+    "zawa:echidna",
+    "lilcritters:opossum"
+  ],
+  "genetics": [
+    {
+      "variant": 3,
+      "carries": [4, 10]
+    },
+    {
+      "variant": 4,
+      "carries": [3, 5]
+    },
+    {
+      "variant": 5,
+      "carries": [3, 4]
+    },
+    {
+      "variant": 2,
+      "carries": [5, 9]
+    },
+    {
+      "variant": 7,
+      "carries": [3, 10]
+    },
+    {
+      "variant": 6,
+      "carries": [7, 11]
+    },
+    {
+      "variant": 8,
+      "carries": [9, 10]
+    },
+    {
+      "variant": 9,
+      "carries": [10]
+    },
+    {
+      "variant": 11,
+      "carries": [6, 8]
+    },
+    {
+      "variant": 10
+    }
+  ]
+}
