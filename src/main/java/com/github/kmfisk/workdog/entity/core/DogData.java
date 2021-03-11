@@ -1,57 +1,63 @@
 package com.github.kmfisk.workdog.entity.core;
 
 import com.google.gson.annotations.SerializedName;
-
-import java.util.ArrayList;
-import java.util.List;
+import net.minecraft.network.PacketByteBuf;
 
 public class DogData {
     @SerializedName("max_health")
-    private int maxHealth = 20;
-
-    @SerializedName("coats")
-    private int maxVariants = 0;
+    public int maxHealth = 20;
+    public int coats = 0;
 
     @SerializedName("hunting_skill")
-    private List<WeightedValue> huntingSkill = new ArrayList<>();
-    private List<WeightedValue> gaminess = new ArrayList<>();
-    private List<WeightedValue> aggression = new ArrayList<>();
-    private List<WeightedValue> wariness = new ArrayList<>();
-    private List<WeightedValue> voice = new ArrayList<>();
-    private List<WeightedValue> courage = new ArrayList<>();
-    private List<WeightedValue> playfulness = new ArrayList<>();
-    private List<WeightedValue> speed = new ArrayList<>();
-    private List<WeightedValue> damage = new ArrayList<>();
+    public IntRange huntingSkill;
+    public IntRange gaminess;
+    public IntRange aggression;
+    public IntRange wariness;
+    public IntRange voice;
+    public IntRange courage;
+    public IntRange playfulness;
+    public FloatRange speed;
+    public IntRange damage;
 
-    private List<Genetic> genetics = new ArrayList<>();
-
-    public static class WeightedValue{
-        public boolean min, max;
-        public int value, weight;
-    }
-
-    public static class Genetic{
-        public int variant;
-        public int[] carries = new int[0];
-    }
-
-    public List<Genetic> getGenetics() {
-        return genetics;
-    }
+    public int[][] genetics = new int[0][];
 
     public int getMaxHealth() {
         return maxHealth;
     }
 
-    public void setMaxHealth(int maxHealth) {
-        this.maxHealth = maxHealth;
-    }
-
     public int getMaxVariants() {
-        return maxVariants;
+        return coats;
     }
 
-    public void setMaxVariants(int maxVariants) {
-        this.maxVariants = maxVariants;
+    public static class IntRange {
+        public int min, max;
+
+        public void write(PacketByteBuf packetByteBuf) {
+            packetByteBuf.writeVarInt(min);
+            packetByteBuf.writeVarInt(max);
+        }
+
+        public static IntRange read(PacketByteBuf packetByteBuf) {
+            IntRange intRange = new IntRange();
+            intRange.min = packetByteBuf.readVarInt();
+            intRange.max = packetByteBuf.readVarInt();
+            return intRange;
+        }
+    }
+
+    public static class FloatRange {
+        public float min, max;
+
+        public void write(PacketByteBuf packetByteBuf) {
+            packetByteBuf.writeFloat(min);
+            packetByteBuf.writeFloat(max);
+        }
+
+        public static FloatRange read(PacketByteBuf packetByteBuf) {
+            FloatRange floatRange = new FloatRange();
+            floatRange.min = packetByteBuf.readFloat();
+            floatRange.max = packetByteBuf.readFloat();
+            return floatRange;
+        }
     }
 }

@@ -4,9 +4,11 @@
   "package": "com.github.kmfisk.workdog.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "DogDataMixin",
+    "PlayerManagerMixin",
+    "ServerMixin"
   ],
   "client": [
-    "DogDataMixin"
   ],
   "injectors": {
     "defaultRequire": 1

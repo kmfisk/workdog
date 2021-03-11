@@ -1,6 +1,5 @@
 package com.github.kmfisk.workdog.mixin;
 
-import com.github.kmfisk.workdog.util.DogDataHandler;
 import com.github.kmfisk.workdog.util.DogDataManager;
 import net.minecraft.resource.ReloadableResourceManager;
 import net.minecraft.resource.ServerResourceManager;
@@ -13,20 +12,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerResourceManager.class)
-public class DogDataMixin implements DogDataHandler {
-	@Shadow @Final
+public class DogDataMixin {
+	@Shadow
+	@Final
 	private ReloadableResourceManager resourceManager;
-	private DogDataManager dogDataManager;
 
 	@Inject(at = @At("TAIL"), method = "<init>")
 	private void init(CommandManager.RegistrationEnvironment registrationEnvironment, int i, CallbackInfo info) {
-		System.out.println("This line is printed by an example mod mixin!");
-		dogDataManager = getDogDataManager();
-		resourceManager.registerListener(dogDataManager);
-	}
-
-	@Override
-	public DogDataManager getDogDataManager() {
-		return dogDataManager;
+		resourceManager.registerListener(DogDataManager.INSTANCE);
 	}
 }

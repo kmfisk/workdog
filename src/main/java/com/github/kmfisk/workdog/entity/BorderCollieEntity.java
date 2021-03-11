@@ -1,7 +1,6 @@
 package com.github.kmfisk.workdog.entity;
 
 import com.github.kmfisk.workdog.entity.core.WorkingDogEntity;
-import com.github.kmfisk.workdog.init.ModEntities;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;

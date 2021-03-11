@@ -1,4 +1,4 @@
-package com.github.kmfisk.workdog.init;
+package com.github.kmfisk.workdog.entity;
 
 import com.github.kmfisk.workdog.WorkingDogs;
 import com.github.kmfisk.workdog.entity.BorderCollieEntity;

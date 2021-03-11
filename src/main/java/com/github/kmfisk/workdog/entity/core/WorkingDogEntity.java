@@ -1,6 +1,5 @@
 package com.github.kmfisk.workdog.entity.core;
 
-import com.github.kmfisk.workdog.util.DogDataHandler;
 import com.github.kmfisk.workdog.util.DogDataManager;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -18,12 +17,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
@@ -67,20 +64,10 @@ public abstract class WorkingDogEntity extends TameableEntity {
     }
 
     public DogData getDogData() {
-        if (!world.isClient) {
-            if (dogData == null) {
-                MinecraftServer server = world.getServer();
-                if (server != null) {
-                    DogDataManager manager = ((DogDataHandler) server).getDogDataManager();
-                    this.dogData = manager.getDogData(Registry.ENTITY_TYPE.getId(this.getType()));
-                }
-            }
-            return dogData;
-        }
-        return null;
+        return DogDataManager.INSTANCE.getDogData(this.getType());
     }
 
-    public int getMaxWorkingTime(){
+    public int getMaxWorkingTime() {
         return 12000;
     }
 
@@ -122,7 +109,7 @@ public abstract class WorkingDogEntity extends TameableEntity {
 
     @Override
     public boolean tryAttack(Entity target) {
-        boolean bl = target.damage(DamageSource.mob(this), (float)((int)this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE)));
+        boolean bl = target.damage(DamageSource.mob(this), (float) ((int) this.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE)));
         if (bl) this.dealDamage(this, target);
 
         return bl;
@@ -154,7 +141,7 @@ public abstract class WorkingDogEntity extends TameableEntity {
         }
     }
 
-    public boolean canBePickedUpBy(Entity entity){
+    public boolean canBePickedUpBy(Entity entity) {
         return this.isBaby() && entity.getPassengerList().isEmpty();
     }
 
@@ -177,7 +164,7 @@ public abstract class WorkingDogEntity extends TameableEntity {
                 if (this.isBreedingItem(itemStack) && this.getHealth() < this.getMaxHealth()) {
                     if (!player.abilities.creativeMode) itemStack.decrement(1);
 
-                    this.heal((float)item.getFoodComponent().getHunger());
+                    this.heal((float) item.getFoodComponent().getHunger());
                     return ActionResult.SUCCESS;
                 }
 
@@ -186,7 +173,8 @@ public abstract class WorkingDogEntity extends TameableEntity {
                     GuiDogBook.dog = this;
                     player.openGui(DogMain.instance, GuiHandler.GUI.DATA.id, player.world, (int)player.posX, (int)player.posY, (int)player.posZ);
 
-                } else*/ if (!(item instanceof DyeItem)) {
+                } else*/
+                if (!(item instanceof DyeItem)) {
                     ActionResult actionResult = super.interactMob(player, hand);
                     if ((!actionResult.isAccepted() || this.isBaby()) && this.isOwner(player)) {
                         this.setSitting(!this.isSitting());
@@ -216,9 +204,9 @@ public abstract class WorkingDogEntity extends TameableEntity {
                     this.setTarget(null);
                     this.setSitting(true);
                     this.setState(State.SITTING);
-                    this.world.sendEntityStatus(this, (byte)7);
+                    this.world.sendEntityStatus(this, (byte) 7);
                 } else
-                    this.world.sendEntityStatus(this, (byte)6);
+                    this.world.sendEntityStatus(this, (byte) 6);
 
                 return ActionResult.SUCCESS;
             }
@@ -276,8 +264,7 @@ public abstract class WorkingDogEntity extends TameableEntity {
             if (this.getOwner() != null) {
                 if (this.getOwner().isSleeping())
                     if (this.getState() != State.LYING) this.setState(State.LYING);
-                else
-                    if (this.getState() != State.SITTING) this.setState(State.SITTING);
+                    else if (this.getState() != State.SITTING) this.setState(State.SITTING);
 
                 if (!this.isSitting() && !this.hasPlayerRider()) {
                     //20^2
@@ -316,7 +303,7 @@ public abstract class WorkingDogEntity extends TameableEntity {
             }
 
             if (this.isWorking()) {
-                if(this.getWorkingTime() <= 0) {
+                if (this.getWorkingTime() <= 0) {
                     this.setWorking(false);
                     //TODO start tired timer
                 }
