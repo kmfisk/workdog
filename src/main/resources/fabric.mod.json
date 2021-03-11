@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "workdog",
+  "version": "${version}",
+
+  "name": "Working Dogs",
+  "description": "Dogs that do work.",
+  "authors": [
+    "fisk", "Mnesikos"
+  ],
+  "contact": {
+    "sources": "https://github.com/kmfisk/workdog"
+  },
+
+  "license": "CC0-1.0",
+  "icon": "assets/workdog/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.github.kmfisk.workdog.WorkingDogs"
+    ],
+	"client": [
+	  "com.github.kmfisk.workdog.WorkingDogsClient"
+	]
+  },
+  "mixins": [
+    "workdog.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": "1.16.x"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}

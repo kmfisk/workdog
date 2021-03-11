@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "workdog:hogvest"
+  },
+  "pattern": [
+    " TT",
+    "TRF",
+    "TTT"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "R": {
+      "item": "minecraft:iron_ingot"
+    },
+    "T": {
+      "item": "minecraft:leather"
+    },
+    "F": {
+      "item": "minecraft:string"
+    }
+  }
+}
