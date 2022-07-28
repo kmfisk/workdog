@@ -3,6 +3,7 @@ package com.github.kmfisk.workdog.entity;
 import com.github.kmfisk.workdog.WorkingDogs;
 import com.github.kmfisk.workdog.client.renderer.entity.AkitaRenderer;
 import com.github.kmfisk.workdog.client.renderer.entity.BorderCollieRenderer;
+import com.github.kmfisk.workdog.client.renderer.entity.JackRussellTerrierRenderer;
 import com.github.kmfisk.workdog.client.renderer.entity.WDWolfRenderer;
 import com.github.kmfisk.workdog.item.WorkDogItems;
 import net.minecraft.entity.Entity;
@@ -42,6 +43,12 @@ public class WorkDogEntities {
             .renderer(() -> BorderCollieRenderer::new)
             .data(builder -> builder.sized(1.0f, 1.0f).clientTrackingRange(10))
             .build(REGISTRAR, "border_collie");
+
+    public static final RegistryObject<EntityType<JackRussellTerrierEntity>> JACK_RUSSELL_TERRIER = new Builder<>(JackRussellTerrierEntity::new, EntityClassification.CREATURE)
+            .attributes(JackRussellTerrierEntity::registerAttributes)
+            .renderer(() -> JackRussellTerrierRenderer::new)
+            .data(builder -> builder.sized(1.0f, 1.0f).clientTrackingRange(10))
+            .build(REGISTRAR, "jack_russell_terrier");
 
     public static final RegistryObject<EntityType<WDWolfEntity>> WOLF = new Builder<>(WDWolfEntity::new, EntityClassification.CREATURE)
             .attributes(WDWolfEntity::registerAttributes)
