@@ -31,12 +31,12 @@ public abstract class WorkingDogEntity extends TameableEntity {
 
     @Override
     public ILivingEntityData finalizeSpawn(IServerWorld world, DifficultyInstance difficulty, SpawnReason reason, @Nullable ILivingEntityData spawnData, @Nullable CompoundNBT dataTag) {
-        setVariant(random.nextInt(getVariants()));
+        setVariant(random.nextInt(getVariantCount()));
 
         return super.finalizeSpawn(world, difficulty, reason, spawnData, dataTag);
     }
 
-    public abstract int getVariants();
+    public abstract int getVariantCount();
 
     public int getVariant() {
         return entityData.get(VARIANT);
@@ -45,6 +45,8 @@ public abstract class WorkingDogEntity extends TameableEntity {
     public void setVariant(int variant) {
         entityData.set(VARIANT, variant);
     }
+
+    public abstract boolean hasLonghair();
 
     public boolean isLonghair() {
         return entityData.get(LONGHAIR);

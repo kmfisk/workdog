@@ -1,6 +1,6 @@
 package com.github.kmfisk.workdog.entity;
 
-import com.github.kmfisk.workdog.entity.core.HerdingDogEntity;
+import com.github.kmfisk.workdog.entity.core.HuntingDogEntity;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -11,8 +11,8 @@ import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 
-public class BorderCollieEntity extends HerdingDogEntity {
-    public BorderCollieEntity(EntityType<? extends TameableEntity> type, World world) {
+public class AkitaEntity extends HuntingDogEntity {
+    public AkitaEntity(EntityType<? extends TameableEntity> type, World world) {
         super(type, world);
     }
 
@@ -22,12 +22,12 @@ public class BorderCollieEntity extends HerdingDogEntity {
 
     @Override
     public int getVariantCount() {
-        return 12;
+        return 17;
     }
 
     @Override
     public boolean hasLonghair() {
-        return true;
+        return false;
     }
 
     @Nullable

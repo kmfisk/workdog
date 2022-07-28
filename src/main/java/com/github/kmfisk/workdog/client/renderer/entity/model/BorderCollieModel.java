@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 
-public abstract class BorderCollieModel extends SegmentedModel<BorderCollieEntity> {
+public abstract class BorderCollieModel extends WorkDogModel<BorderCollieEntity> {
     public ModelRenderer Chest;
     public ModelRenderer Body;
     public ModelRenderer Neck;
@@ -452,11 +452,5 @@ public abstract class BorderCollieModel extends SegmentedModel<BorderCollieEntit
         public void setupAnim(BorderCollieEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 
         }
-    }
-
-    public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
-        modelRenderer.xRot = x;
-        modelRenderer.yRot = y;
-        modelRenderer.zRot = z;
     }
 }

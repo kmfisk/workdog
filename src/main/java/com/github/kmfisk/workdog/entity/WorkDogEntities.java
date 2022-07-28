@@ -1,6 +1,7 @@
 package com.github.kmfisk.workdog.entity;
 
 import com.github.kmfisk.workdog.WorkingDogs;
+import com.github.kmfisk.workdog.client.renderer.entity.AkitaRenderer;
 import com.github.kmfisk.workdog.client.renderer.entity.BorderCollieRenderer;
 import com.github.kmfisk.workdog.item.WorkDogItems;
 import net.minecraft.entity.Entity;
@@ -29,8 +30,14 @@ public class WorkDogEntities {
     private static final List<Tuple<Supplier<EntityType<? extends LivingEntity>>, Supplier<AttributeModifierMap.MutableAttribute>>> ATTRIBUTES = new ArrayList<>();
     private static final List<Tuple<Supplier<EntityType<?>>, Supplier<IRenderFactory<?>>>> RENDERERS = new ArrayList<>();
 
+    public static final RegistryObject<EntityType<AkitaEntity>> AKITA = new Builder<>(AkitaEntity::new, EntityClassification.CREATURE)
+            .attributes(AkitaEntity::registerAttributes)
+            .renderer(() -> AkitaRenderer::new)
+            .data(builder -> builder.sized(1.0f, 1.0f).clientTrackingRange(10))
+            .build(REGISTRAR, "akita");
+
     public static final RegistryObject<EntityType<BorderCollieEntity>> BORDER_COLLIE = new Builder<>(BorderCollieEntity::new, EntityClassification.CREATURE)
-            .attributes(BorderCollieEntity::registerBorderCollieAttributes)
+            .attributes(BorderCollieEntity::registerAttributes)
             .renderer(() -> BorderCollieRenderer::new)
             .data(builder -> builder.sized(1.0f, 1.0f).clientTrackingRange(10))
             .build(REGISTRAR, "border_collie");
