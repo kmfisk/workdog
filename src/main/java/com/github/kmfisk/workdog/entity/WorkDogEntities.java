@@ -3,6 +3,7 @@ package com.github.kmfisk.workdog.entity;
 import com.github.kmfisk.workdog.WorkingDogs;
 import com.github.kmfisk.workdog.client.renderer.entity.AkitaRenderer;
 import com.github.kmfisk.workdog.client.renderer.entity.BorderCollieRenderer;
+import com.github.kmfisk.workdog.client.renderer.entity.WDWolfRenderer;
 import com.github.kmfisk.workdog.item.WorkDogItems;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
@@ -41,6 +42,12 @@ public class WorkDogEntities {
             .renderer(() -> BorderCollieRenderer::new)
             .data(builder -> builder.sized(1.0f, 1.0f).clientTrackingRange(10))
             .build(REGISTRAR, "border_collie");
+
+    public static final RegistryObject<EntityType<WDWolfEntity>> WOLF = new Builder<>(WDWolfEntity::new, EntityClassification.CREATURE)
+            .attributes(WDWolfEntity::registerAttributes)
+            .renderer(() -> WDWolfRenderer::new)
+            .data(builder -> builder.sized(1.0f, 1.0f).clientTrackingRange(10))
+            .build(REGISTRAR, "wolf");
 
     public static void registerAttributes(BiConsumer<EntityType<? extends LivingEntity>, AttributeModifierMap.MutableAttribute> register) {
         for (Tuple<Supplier<EntityType<? extends LivingEntity>>, Supplier<AttributeModifierMap.MutableAttribute>> attribute : ATTRIBUTES) {
