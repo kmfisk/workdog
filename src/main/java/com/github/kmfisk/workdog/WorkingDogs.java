@@ -36,6 +36,7 @@ public class WorkingDogs {
 	}
 
 	private void setupClient(final FMLClientSetupEvent event) {
+		WorkDogEntities.registerRenderers();
 	}
 
 	private void registerAttributes(final EntityAttributeCreationEvent event) {
