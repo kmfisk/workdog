@@ -1,0 +1,30 @@
+modLoader="javafml"
+loaderVersion="[36.2,)"
+license="All rights reserved"
+issueTrackerURL="https://github.com/kmfisk/workdog/issues"
+
+[[mods]]
+    modId="workdog"
+    version="${file.jarVersion}"
+    displayName="Working Dogs"
+    #updateJSONURL=""
+    displayURL="https://github.com/kmfisk/workdog/wiki"
+    logoFile="icon.png"
+    credits=""
+    authors="fisk, Mnesikos"
+    description='''
+Dogs that do work.
+    '''
+[[dependencies.workdog]]
+    modId="forge"
+    mandatory=true
+    versionRange="[36.2,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.workdog]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.16.5,1.17)"
+    ordering="NONE"
+    side="BOTH"
