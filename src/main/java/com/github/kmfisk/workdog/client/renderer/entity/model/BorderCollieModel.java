@@ -2,7 +2,6 @@ package com.github.kmfisk.workdog.client.renderer.entity.model;
 
 import com.github.kmfisk.workdog.entity.BorderCollieEntity;
 import com.google.common.collect.ImmutableList;
-import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 
 public abstract class BorderCollieModel extends WorkDogModel<BorderCollieEntity> {
@@ -326,12 +325,12 @@ public abstract class BorderCollieModel extends WorkDogModel<BorderCollieEntity>
         }
     }
 
-    public static class Child extends BorderCollieModel {
+    public static class Baby extends BorderCollieModel {
         public ModelRenderer Tail;
         public ModelRenderer LegLeft;
         public ModelRenderer LegRight;
 
-        public Child() {
+        public Baby() {
             this.texWidth = 64;
             this.texHeight = 32;
             this.ArmLeft = new ModelRenderer(this, 24, 15);

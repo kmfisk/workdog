@@ -9,6 +9,8 @@ import net.minecraft.util.ResourceLocation;
 public class GermanShepherdRenderer extends WorkDogRenderer<GermanShepherdEntity, GermanShepherdModel> {
     public GermanShepherdRenderer(EntityRendererManager rendererManager) {
         super(rendererManager, new GermanShepherdModel.Adult(), 0.5f);
+        adultModel = model;
+        babyModel = new GermanShepherdModel.Baby();
     }
 
     @Override

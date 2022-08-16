@@ -9,6 +9,8 @@ import net.minecraft.util.ResourceLocation;
 public class JackRussellTerrierRenderer extends WorkDogRenderer<JackRussellTerrierEntity, JackRussellTerrierModel> {
     public JackRussellTerrierRenderer(EntityRendererManager rendererManager) {
         super(rendererManager, new JackRussellTerrierModel.Adult(), 0.5f);
+        adultModel = model;
+        babyModel = new JackRussellTerrierModel.Baby();
     }
 
     @Override

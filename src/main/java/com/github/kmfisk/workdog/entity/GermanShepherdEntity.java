@@ -32,7 +32,7 @@ public class GermanShepherdEntity extends ProtectionDogEntity {
 
     @Nullable
     @Override
-    public AgeableEntity getBreedOffspring(ServerWorld p_241840_1_, AgeableEntity p_241840_2_) {
-        return null;
+    public AgeableEntity getBreedOffspring(ServerWorld world, AgeableEntity entity) {
+        return null; // todo
     }
 }

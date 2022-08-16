@@ -9,6 +9,8 @@ import net.minecraft.util.ResourceLocation;
 public class BorderCollieRenderer extends WorkDogRenderer<BorderCollieEntity, BorderCollieModel> {
     public BorderCollieRenderer(EntityRendererManager rendererManager) {
         super(rendererManager, new BorderCollieModel.Adult(), 0.5f);
+        adultModel = model;
+        babyModel = new BorderCollieModel.Baby();
     }
 
     @Override

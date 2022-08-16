@@ -33,6 +33,6 @@ public class AkitaEntity extends HuntingDogEntity {
     @Nullable
     @Override
     public AgeableEntity getBreedOffspring(ServerWorld world, AgeableEntity entity) {
-        return null;
+        return WorkDogEntities.AKITA.create(world);
     }
 }

@@ -9,6 +9,8 @@ import net.minecraft.util.ResourceLocation;
 public class WDWolfRenderer extends WorkDogRenderer<WDWolfEntity, WDWolfModel> {
     public WDWolfRenderer(EntityRendererManager rendererManager) {
         super(rendererManager, new WDWolfModel.Adult(), 0.5f);
+        adultModel = model;
+        babyModel = new WDWolfModel.Baby();
     }
 
     @Override

@@ -300,8 +300,8 @@ public abstract class JackRussellTerrierModel extends WorkDogModel<JackRussellTe
         }
     }
 
-    public static class Child extends JackRussellTerrierModel {
-        public Child() {
+    public static class Baby extends JackRussellTerrierModel {
+        public Baby() {
         }
 
         @Override

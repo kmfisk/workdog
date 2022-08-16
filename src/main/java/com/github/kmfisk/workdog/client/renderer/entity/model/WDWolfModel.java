@@ -255,8 +255,8 @@ public abstract class WDWolfModel extends WorkDogModel<WDWolfEntity> {
         }
     }
 
-    public static class Child extends WDWolfModel {
-        public Child() {
+    public static class Baby extends WDWolfModel {
+        public Baby() {
         }
 
         @Override

@@ -1,6 +1,8 @@
 package com.github.kmfisk.workdog.client.renderer.entity;
 
 import com.github.kmfisk.workdog.entity.core.WorkingDogEntity;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.model.EntityModel;
@@ -8,12 +10,20 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.util.ResourceLocation;
 
 public abstract class WorkDogRenderer<T extends MobEntity, M extends EntityModel<T>> extends MobRenderer<T, M> {
+    protected M adultModel;
+    protected M babyModel;
     protected ResourceLocation baby_loc;
     protected ResourceLocation adult_loc;
     protected String[] variants;
 
     public WorkDogRenderer(EntityRendererManager rendererManager, M model, float shadowRadius) {
         super(rendererManager, model, shadowRadius);
+    }
+
+    @Override
+    public void render(T entity, float entityYaw, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int packedLight) {
+        model = entity.isBaby() ? babyModel : adultModel;
+        super.render(entity, entityYaw, partialTicks, matrixStack, buffer, packedLight);
     }
 
     public abstract void setupBabyTextureLocations(T entity);
@@ -46,7 +56,8 @@ public abstract class WorkDogRenderer<T extends MobEntity, M extends EntityModel
 
             } else {
                 if (getAdultLocation() == null) setupAdultTextureLocations(entity);
-                if (dog.hasLonghair()) return new ResourceLocation(getAdultLocation() + getVariant(i) + (dog.isLonghair() ? "_long.png" : "_short.png"));
+                if (dog.hasLonghair())
+                    return new ResourceLocation(getAdultLocation() + getVariant(i) + (dog.isLonghair() ? "_long.png" : "_short.png"));
                 else return new ResourceLocation(getAdultLocation() + getVariant(i) + ".png");
             }
         }

@@ -9,6 +9,8 @@ import net.minecraft.util.ResourceLocation;
 public class AkitaRenderer extends WorkDogRenderer<AkitaEntity, AkitaModel> {
     public AkitaRenderer(EntityRendererManager rendererManager) {
         super(rendererManager, new AkitaModel.Adult(), 0.5f);
+        adultModel = model;
+        babyModel = new AkitaModel.Baby();
     }
 
     @Override

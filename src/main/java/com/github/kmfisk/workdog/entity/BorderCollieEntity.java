@@ -33,6 +33,6 @@ public class BorderCollieEntity extends HerdingDogEntity {
     @Nullable
     @Override
     public AgeableEntity getBreedOffspring(ServerWorld world, AgeableEntity entity) {
-        return null;
+        return WorkDogEntities.BORDER_COLLIE.create(world);
     }
 }

@@ -25,8 +25,8 @@ public abstract class GermanShepherdModel extends WorkDogModel<GermanShepherdEnt
         }
     }
 
-    public static class Child extends GermanShepherdModel {
-        public Child() {
+    public static class Baby extends GermanShepherdModel {
+        public Baby() {
         }
 
         @Override
