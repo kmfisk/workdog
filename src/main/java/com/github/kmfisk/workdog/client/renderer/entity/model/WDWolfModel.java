@@ -42,7 +42,7 @@ public abstract class WDWolfModel extends WorkDogModel<WDWolfEntity> {
     public ModelRenderer ArmRight;
     public ModelRenderer ForearmRight;
     public ModelRenderer HandRight;
-    private Iterable<ModelRenderer> parts;
+    private Iterable<ModelRenderer> parts; // todo: child
 
     @Override
     public Iterable<ModelRenderer> parts() {

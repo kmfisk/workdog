@@ -50,7 +50,7 @@ public abstract class JackRussellTerrierModel extends WorkDogModel<JackRussellTe
     public ModelRenderer ArmRight;
     public ModelRenderer ForearmRight;
     public ModelRenderer HandRight;
-    private Iterable<ModelRenderer> parts;
+    private Iterable<ModelRenderer> parts; // todo: child
 
     @Override
     public Iterable<ModelRenderer> parts() {

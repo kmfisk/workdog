@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.model.ModelRenderer;
 
 public abstract class GermanShepherdModel extends WorkDogModel<GermanShepherdEntity> {
-    private Iterable<ModelRenderer> parts;
+    private Iterable<ModelRenderer> parts; // todo: adult & child
 
     @Override
     public Iterable<ModelRenderer> parts() {

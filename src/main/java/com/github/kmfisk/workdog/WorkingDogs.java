@@ -15,31 +15,31 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 
 @Mod(WorkingDogs.MOD_ID)
 public class WorkingDogs {
-	public static final String MOD_ID = "workdog";
-	public static final ItemGroup ITEM_GROUP = new ItemGroup(MOD_ID + ".tab") {
-		@Override
-		public ItemStack makeIcon() {
-			return new ItemStack(Items.BONE);
-		}
-	};
+    public static final String MOD_ID = "workdog";
+    public static final ItemGroup ITEM_GROUP = new ItemGroup(MOD_ID + ".tab") {
+        @Override
+        public ItemStack makeIcon() {
+            return new ItemStack(Items.BONE);
+        }
+    };
 
-	public WorkingDogs() {
-		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+    public WorkingDogs() {
+        IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-		WorkDogEntities.REGISTRAR.register(modBus);
-		WorkDogItems.REGISTRAR.register(modBus);
+        WorkDogEntities.REGISTRAR.register(modBus);
+        WorkDogItems.REGISTRAR.register(modBus);
 
-		modBus.addListener(this::registerAttributes);
+        modBus.addListener(this::registerAttributes);
 
-		if (FMLEnvironment.dist == Dist.CLIENT)
-			modBus.addListener(this::setupClient);
-	}
+        if (FMLEnvironment.dist == Dist.CLIENT)
+            modBus.addListener(this::setupClient);
+    }
 
-	private void setupClient(final FMLClientSetupEvent event) {
-		WorkDogEntities.registerRenderers();
-	}
+    private void setupClient(final FMLClientSetupEvent event) {
+        WorkDogEntities.registerRenderers();
+    }
 
-	private void registerAttributes(final EntityAttributeCreationEvent event) {
-		WorkDogEntities.registerAttributes((type, builder) -> event.put(type, builder.build()));
-	}
+    private void registerAttributes(final EntityAttributeCreationEvent event) {
+        WorkDogEntities.registerAttributes((type, builder) -> event.put(type, builder.build()));
+    }
 }
