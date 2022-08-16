@@ -2,13 +2,11 @@ package com.github.kmfisk.workdog.entity.core;
 
 import com.github.kmfisk.workdog.WorkingDogs;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.entity.AgeableEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -51,6 +49,7 @@ public abstract class WorkingDogEntity extends TameableEntity {
     @Override
     public ILivingEntityData finalizeSpawn(IServerWorld world, DifficultyInstance difficulty, SpawnReason reason, @Nullable ILivingEntityData spawnData, @Nullable CompoundNBT dataTag) {
         setGender(Gender.fromBool(random.nextBoolean()));
+        setLonghair(random.nextFloat() <= 0.08F);
         setVariant(random.nextInt(getVariantCount()));
 
         return super.finalizeSpawn(world, difficulty, reason, spawnData, dataTag);
@@ -154,12 +153,32 @@ public abstract class WorkingDogEntity extends TameableEntity {
                 partner.resetLove();
                 baby.setBaby(true);
                 baby.setGender(Gender.fromBool(random.nextBoolean()));
+                boolean longhair;
+                if (isLonghair() && partner.isLonghair())
+                    longhair = true;
+                else if ((isLonghair() && !partner.isLonghair()) || (!isLonghair() && partner.isLonghair()))
+                    longhair = random.nextFloat() <= 0.25F;
+                else
+                    longhair = random.nextFloat() <= 0.08F;
+                baby.setLonghair(longhair);
+                baby.setVariant(random.nextInt(getVariantCount())); // todo: coat "genetics"
                 baby.moveTo(getX(), getY(), getZ(), 0.0F, 0.0F);
                 world.addFreshEntityWithPassengers(baby);
                 world.broadcastEntityEvent(this, (byte) 18);
                 if (world.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT))
                     world.addFreshEntity(new ExperienceOrbEntity(world, this.getX(), this.getY(), this.getZ(), this.getRandom().nextInt(7) + 1));
             }
+        }
+    }
+
+    @Override
+    protected void onOffspringSpawnedFromEgg(PlayerEntity player, MobEntity entity) {
+        if (entity instanceof WorkingDogEntity) {
+            WorkingDogEntity baby = (WorkingDogEntity) entity;
+            baby.setBaby(true);
+            baby.setGender(Gender.fromBool(random.nextBoolean()));
+            baby.setLonghair(isLonghair() ? random.nextFloat() <= 0.25F : random.nextFloat() <= 0.8F);
+            baby.setVariant(random.nextInt(getVariantCount())); // todo: coat "genetics"
         }
     }
 
