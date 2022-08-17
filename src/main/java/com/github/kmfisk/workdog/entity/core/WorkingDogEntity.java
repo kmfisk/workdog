@@ -1,6 +1,7 @@
 package com.github.kmfisk.workdog.entity.core;
 
 import com.github.kmfisk.workdog.WorkingDogs;
+import com.github.kmfisk.workdog.entity.goal.DogBreedGoal;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
@@ -14,6 +15,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -40,7 +42,8 @@ public abstract class WorkingDogEntity extends TameableEntity {
 
     private static final DataParameter<Boolean> IN_HEAT = EntityDataManager.defineId(WorkingDogEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> IS_PREGNANT = EntityDataManager.defineId(WorkingDogEntity.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Integer> MATE_TIMER = EntityDataManager.defineId(WorkingDogEntity.class, DataSerializers.INT);
+    private static final DataParameter<Integer> BREED_TIMER = EntityDataManager.defineId(WorkingDogEntity.class, DataSerializers.INT);
+    private static final DataParameter<Integer> PUPPIES = EntityDataManager.defineId(WorkingDogEntity.class, DataSerializers.INT);
 
     public WorkingDogEntity(EntityType<? extends TameableEntity> type, World world) {
         super(type, world);
@@ -49,6 +52,9 @@ public abstract class WorkingDogEntity extends TameableEntity {
     @Override
     protected void registerGoals() {
         // todo
+
+        /*if (!this.isFixed())*/
+            this.goalSelector.addGoal(9, new DogBreedGoal(this, 1.2D));
     }
 
     @Override
@@ -59,7 +65,8 @@ public abstract class WorkingDogEntity extends TameableEntity {
         this.entityData.define(VARIANT, 0);
         this.entityData.define(IN_HEAT, false);
         this.entityData.define(IS_PREGNANT, false);
-        this.entityData.define(MATE_TIMER, 0);
+        this.entityData.define(BREED_TIMER, 0);
+        this.entityData.define(PUPPIES, 0);
     }
 
     @Override
@@ -104,14 +111,14 @@ public abstract class WorkingDogEntity extends TameableEntity {
     public void setTimeCycle(String s, int time) {
         if (s.equals("start")) {
             setBreedingStatus("inheat", true);
-            setMateTimer(time);
+            setBreedTimer(time);
         }
         if (s.equals("end")) {
             setBreedingStatus("inheat", false);
-            setMateTimer(-time);
+            setBreedTimer(-time);
         }
         if (s.equals("pregnancy")) {
-            setMateTimer(time);
+            setBreedTimer(time);
         }
     }
 
@@ -128,12 +135,40 @@ public abstract class WorkingDogEntity extends TameableEntity {
         return false;
     }
 
-    public void setMateTimer(int time) {
-        entityData.set(MATE_TIMER, time);
+    public void setBreedTimer(int time) {
+        entityData.set(BREED_TIMER, time);
     }
 
-    public int getMateTimer() {
-        return entityData.get(MATE_TIMER);
+    public int getBreedTimer() {
+        return entityData.get(BREED_TIMER);
+    }
+
+    public void setPuppies(int puppies) {
+        if (getPuppies() <= 0 || puppies == 0)
+            this.entityData.set(PUPPIES, puppies);
+        else if (getPuppies() > 0)
+            this.entityData.set(PUPPIES, this.getPuppies() + puppies);
+    }
+
+    public int getPuppies() {
+        return this.entityData.get(PUPPIES);
+    }
+
+    public void addFather(WorkingDogEntity father, int size) {
+        for (int i = 0; i < size; i++) {
+            if (!this.getPersistentData().contains("Father" + i) || (this.getPersistentData().contains("Father" + i) && this.getPersistentData().getCompound("Father" + i).isEmpty())) {
+                this.getPersistentData().put("Father" + i, father.saveWithoutId(new CompoundNBT()));
+            }
+        }
+    }
+
+    private void setFather(int i, INBT father) {
+        if (this.getPersistentData().contains("Father" + i))
+            this.getPersistentData().put("Father" + i, father);
+    }
+
+    public CompoundNBT getFather(int i) {
+        return this.getPersistentData().getCompound("Father" + i);
     }
 
     @Override
@@ -146,8 +181,11 @@ public abstract class WorkingDogEntity extends TameableEntity {
         if (getGender() == Gender.FEMALE) {
             nbt.putBoolean("InHeat", getBreedingStatus("inheat"));
             nbt.putBoolean("IsPregnant", getBreedingStatus("ispregnant"));
+            nbt.putInt("Puppies", getPuppies());
+            for (int i = 0; i < 5; i++)
+                nbt.put("Father" + i, getFather(i));
         }
-        nbt.putInt("Timer", getMateTimer());
+        nbt.putInt("Timer", getBreedTimer());
     }
 
     @Override
@@ -160,9 +198,12 @@ public abstract class WorkingDogEntity extends TameableEntity {
         if (getGender() == Gender.FEMALE /*todo: && !isFixed()*/) {
             setBreedingStatus("inheat", nbt.getBoolean("InHeat"));
             setBreedingStatus("ispregnant", nbt.getBoolean("IsPregnant"));
+            setPuppies(nbt.getInt("Puppies"));
+            for (int i = 0; i < 5; i++)
+                setFather(i, nbt.get("Father" + i));
         }
         /*todo: if (!isFixed())*/
-        setMateTimer(nbt.getInt("Timer"));
+        setBreedTimer(nbt.getInt("Timer"));
     }
 
     @Override
@@ -170,7 +211,7 @@ public abstract class WorkingDogEntity extends TameableEntity {
         super.tick();
         if (!level.isClientSide && !isBaby() /*todo: && !isFixed()*/ && getGender() == Gender.FEMALE) { //if female & adult & not fixed
             if (getBreedingStatus("inheat")) //if in heat
-                if (getMateTimer() <= 0) { //and timer is finished (reaching 0 after being in positives)
+                if (getBreedTimer() <= 0) { //and timer is finished (reaching 0 after being in positives)
                     if (!getBreedingStatus("ispregnant")) //and not pregnant
                         setTimeCycle("end", 72000); //sets out of heat for 16 (default) minecraft days
                     else { //or if IS pregnant
@@ -179,7 +220,7 @@ public abstract class WorkingDogEntity extends TameableEntity {
                     }
                 }
             if (!getBreedingStatus("inheat")) { //if not in heat
-                if (getMateTimer() >= 0) { //and timer is finished (reaching 0 after being in negatives)
+                if (getBreedTimer() >= 0) { //and timer is finished (reaching 0 after being in negatives)
                     if (!getBreedingStatus("ispregnant")) //and not pregnant
                         setTimeCycle("start", 48000); //sets in heat for 2 minecraft days
                 }
@@ -192,12 +233,12 @@ public abstract class WorkingDogEntity extends TameableEntity {
         super.baseTick();
 
         if (!isBaby() /*todo: && !isFixed()*/) { //if not a child & not fixed
-            int mateTimer = getMateTimer();
+            int breedTimer = getBreedTimer();
             if (getGender() == Gender.FEMALE) {
                 if (getBreedingStatus("inheat") || getBreedingStatus("ispregnant")) {
-                    --mateTimer;
+                    --breedTimer;
                     if (getBreedingStatus("inheat")) {
-                        if (mateTimer % 10 == 0) {
+                        if (breedTimer % 10 == 0) {
 
                             double d0 = random.nextGaussian() * 0.02D;
                             double d1 = random.nextGaussian() * 0.02D;
@@ -206,14 +247,14 @@ public abstract class WorkingDogEntity extends TameableEntity {
                         }
                     }
                 } else if (!getBreedingStatus("inheat") && !getBreedingStatus("ispregnant"))
-                    ++mateTimer;
+                    ++breedTimer;
             } else if (getGender() == Gender.MALE) {
-                if (mateTimer > 0)
-                    --mateTimer;
-                else if (mateTimer <= 0)
-                    mateTimer = 0;
+                if (breedTimer > 0)
+                    --breedTimer;
+                else if (breedTimer <= 0)
+                    breedTimer = 0;
             }
-            setMateTimer(mateTimer);
+            setBreedTimer(breedTimer);
         }
     }
 
@@ -232,7 +273,7 @@ public abstract class WorkingDogEntity extends TameableEntity {
         /*if (partner.isFixed() || isFixed()) todo: neutering
             return false;*/
 
-        if (getGender() == Gender.MALE && getMateTimer() == 0)
+        if (getGender() == Gender.MALE && getBreedTimer() == 0)
             return (partner.getGender() == Gender.FEMALE && partner.getBreedingStatus("inheat"));
         else
             return false;
@@ -306,18 +347,20 @@ public abstract class WorkingDogEntity extends TameableEntity {
         if (stack.getItem() == Items.STICK) { //todo: remove testing
             if (player.isDiscrete())
                 player.displayClientMessage(new StringTextComponent("Longhair: " + isLonghair()), true);
+            else if (getGender() == Gender.FEMALE && !getBreedingStatus("ispregnant"))
+                player.displayClientMessage(new StringTextComponent("FEMALE, heat: " + getBreedingStatus("inheat") + " // timer: " + getBreedTimer()), true);
             else if (getGender() == Gender.FEMALE)
-                player.displayClientMessage(new StringTextComponent("FEMALE, heat: " + getBreedingStatus("inheat") + " // pregnant: " + getBreedingStatus("ispregnant") + " // timer: " + getMateTimer()), true);
+                player.displayClientMessage(new StringTextComponent("FEMALE, pregnant: " + getBreedingStatus("ispregnant") + " // puppies: " + getPuppies()), true);
             else
-                player.displayClientMessage(new StringTextComponent("MALE, timer: " + getMateTimer()), true);
+                player.displayClientMessage(new StringTextComponent("MALE, timer: " + getBreedTimer()), true);
 
             return ActionResultType.CONSUME;
 
         } else if (stack.getItem() == Items.BLAZE_POWDER) { //todo: remove testing
             if (isBaby())
                 ageUp((int) ((float) (-getAge() / 20) * 0.8F), true);
-            else if (/*!isFixed() &&*/ getMateTimer() != 0)
-                setMateTimer(getMateTimer() / 2);
+            else if (/*!isFixed() &&*/ getBreedTimer() != 0)
+                setBreedTimer(getBreedTimer() / 2);
 
             return ActionResultType.CONSUME;
         }
