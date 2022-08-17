@@ -31,7 +31,7 @@ public class DogBreedGoal extends Goal {
         if (dog.getGender() == WorkingDogEntity.Gender.FEMALE)
             return false;
 
-        nearbyDogs = level.getEntitiesOfClass(dog.getClass(), dog.getBoundingBox().inflate(NEARBY_RADIUS_CHECK));
+        nearbyDogs = level.getEntitiesOfClass(WorkingDogEntity.class, dog.getBoundingBox().inflate(NEARBY_RADIUS_CHECK));
         /*if (nearbyDogs.size() >= SCConfig.breeding_limit.get()) todo: breeding limit?
             return false;*/
 
@@ -57,7 +57,7 @@ public class DogBreedGoal extends Goal {
         boolean maleCooldownCheck = dog.getGender() == WorkingDogEntity.Gender.MALE && dog.getBreedTimer() == 0;
         boolean femaleHeatCheck = target.getGender() == WorkingDogEntity.Gender.FEMALE && target.getBreedingStatus("inheat");
 
-        nearbyDogs = level.getEntitiesOfClass(dog.getClass(), dog.getBoundingBox().inflate(NEARBY_RADIUS_CHECK));
+        nearbyDogs = level.getEntitiesOfClass(WorkingDogEntity.class, dog.getBoundingBox().inflate(NEARBY_RADIUS_CHECK));
 
         return maleCooldownCheck && target.isAlive() && femaleHeatCheck && breedDelay < 60
                 /*todo: && nearbyDogs.size() < SCConfig.breeding_limit.get()*/ && dog.getSensing().canSee(target);
@@ -94,7 +94,7 @@ public class DogBreedGoal extends Goal {
     }
 
     private WorkingDogEntity getNearbyMate() {
-        List<WorkingDogEntity> list = level.getNearbyEntities(dog.getClass(), PARTNER_TARGETING, dog, dog.getBoundingBox().inflate(NEARBY_RADIUS_CHECK));
+        List<WorkingDogEntity> list = level.getNearbyEntities(WorkingDogEntity.class, PARTNER_TARGETING, dog, dog.getBoundingBox().inflate(NEARBY_RADIUS_CHECK));
         double d0 = Double.MAX_VALUE;
         WorkingDogEntity entityDog = null;
 
