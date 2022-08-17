@@ -87,8 +87,7 @@ public class DogBreedGoal extends Goal {
         ++breedDelay;
 
         if (breedDelay >= 60 && dog.distanceToSqr(target) < 4.0D) {
-            if (level.random.nextInt(4) <= 2) // 75% chance of success
-                startPregnancy();
+            startPregnancy(); // 100% chance of success
             dog.setBreedTimer(6000 /*todo: male cooldown?*/); // starts male cooldown
         }
     }
@@ -111,16 +110,11 @@ public class DogBreedGoal extends Goal {
     }
 
     private void startPregnancy() {
-        int litterSize;
-        if (target.getPuppies() <= 0) litterSize = level.random.nextInt(4); // at least 0 puppies, max of 4
-        else litterSize = level.random.nextInt(4 - target.getPuppies()); // max of 4, minus already accrued puppies
+        int litterSize = level.random.nextInt(4); // at least 0 puppies, max of 4
         target.setBreedingStatus("ispregnant", true);
         target.setPuppies(litterSize);
-        target.addFather(dog, target.getPuppies()); // save father nbt data to mother dog for each puppy added to litterSize
-
-        if (litterSize == 6 || target.getPuppies() == 6 || level.random.nextInt(4) == 0) { // full litter OR 25% chance ends heat
-            target.setBreedingStatus("inheat", false);
-            target.setTimeCycle("pregnancy", 72000); // starts pregnancy timer
-        }
+        target.addSire(dog); // save sire nbt data to mother dog for each puppy added to litterSize
+        target.setBreedingStatus("inheat", false); // 100% chance ends heat
+        target.setTimeCycle("pregnancy", 72000); // starts pregnancy timer
     }
 }

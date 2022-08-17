@@ -3,7 +3,6 @@ package com.github.kmfisk.workdog.entity.core;
 import com.github.kmfisk.workdog.WorkingDogs;
 import com.github.kmfisk.workdog.entity.goal.DogBirthGoal;
 import com.github.kmfisk.workdog.entity.goal.DogBreedGoal;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.MobEntity;
@@ -12,7 +11,6 @@ import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
@@ -21,7 +19,6 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.StringTextComponent;
@@ -35,7 +32,6 @@ import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 import java.util.Locale;
-import java.util.Random;
 
 public abstract class WorkingDogEntity extends TameableEntity {
     public static final DataParameter<Boolean> GENDER = EntityDataManager.defineId(WorkingDogEntity.class, DataSerializers.BOOLEAN);
@@ -156,23 +152,21 @@ public abstract class WorkingDogEntity extends TameableEntity {
         return entityData.get(PUPPIES);
     }
 
-    public void addFather(WorkingDogEntity father, int size) {
-        for (int i = 0; i < size; i++) {
-            if (!getPersistentData().contains("Father" + i) || (getPersistentData().contains("Father" + i) && getPersistentData().getCompound("Father" + i).isEmpty())) {
-                CompoundNBT tags = new CompoundNBT();
-                father.save(tags);
-                getPersistentData().put("Father" + i, tags);
-            }
+    public void addSire(WorkingDogEntity sire) {
+        if (!getPersistentData().contains("Sire") || (getPersistentData().contains("Sire") && getPersistentData().getCompound("Sire").isEmpty())) {
+            CompoundNBT tags = new CompoundNBT();
+            sire.save(tags);
+            getPersistentData().put("Sire", tags);
         }
     }
 
-    private void setFather(int i, INBT father) {
-        if (getPersistentData().contains("Father" + i))
-            getPersistentData().put("Father" + i, father);
+    private void setSire(INBT sire) {
+        if (getPersistentData().contains("Sire"))
+            getPersistentData().put("Sire", sire);
     }
 
-    public CompoundNBT getFather(int i) {
-        return getPersistentData().getCompound("Father" + i);
+    public CompoundNBT getSire() {
+        return getPersistentData().getCompound("Sire");
     }
 
     @Override
@@ -186,8 +180,7 @@ public abstract class WorkingDogEntity extends TameableEntity {
             nbt.putBoolean("InHeat", getBreedingStatus("inheat"));
             nbt.putBoolean("IsPregnant", getBreedingStatus("ispregnant"));
             nbt.putInt("Puppies", getPuppies());
-            for (int i = 0; i < 5; i++)
-                nbt.put("Father" + i, getFather(i));
+            nbt.put("Sire", getSire());
         }
         nbt.putInt("Timer", getBreedTimer());
     }
@@ -203,8 +196,7 @@ public abstract class WorkingDogEntity extends TameableEntity {
             setBreedingStatus("inheat", nbt.getBoolean("InHeat"));
             setBreedingStatus("ispregnant", nbt.getBoolean("IsPregnant"));
             setPuppies(nbt.getInt("Puppies"));
-            for (int i = 0; i < 5; i++)
-                setFather(i, nbt.get("Father" + i));
+            setSire(nbt.get("Sire"));
         }
         /*todo: if (!isFixed())*/
         setBreedTimer(nbt.getInt("Timer"));

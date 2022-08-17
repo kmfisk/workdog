@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public class DogBirthGoal extends Goal {
     private final WorkingDogEntity mother;
-    private WorkingDogEntity father;
+    private WorkingDogEntity sire;
     World level;
 
     public DogBirthGoal(WorkingDogEntity dogEntity) {
@@ -37,25 +37,22 @@ public class DogBirthGoal extends Goal {
 
     @Override
     public void stop() {
-        father = null;
+        sire = null;
     }
 
     @Override
     public void tick() {
-        for (int i = 0; i < mother.getPuppies(); i++) {
-            Optional<EntityType<?>> type = EntityType.by(mother.getFather(i)); // recreate the saved father nbt data
-            if (type.isPresent()) {
-                Entity entity = type.get().create(level);
-                if (entity instanceof WorkingDogEntity) {
-                    father = (WorkingDogEntity) entity; // create the father dog for kitten referencing
-
-                    mother.spawnChildFromBreeding((ServerWorld) level, father);
-                }
+        Optional<EntityType<?>> sireType = EntityType.by(mother.getSire()); // recreate the saved sire nbt data
+        if (sireType.isPresent()) {
+            Entity entity = sireType.get().create(level);
+            if (entity instanceof WorkingDogEntity) {
+                sire = (WorkingDogEntity) entity; // create the sire dog for puppy referencing
+                for (int i = 0; i < mother.getPuppies(); i++) mother.spawnChildFromBreeding((ServerWorld) level, sire);
             }
-            mother.getPersistentData().remove("Father" + i); // deletes just used father data
         }
 
-        mother.setPuppies(0); // resets kitten counter
+        mother.getPersistentData().remove("Sire"); // deletes just used sire data
+        mother.setPuppies(0); // resets puppy counter
         mother.setBreedingStatus("ispregnant", false); // ends pregnancy
         mother.setTimeCycle("end", 72000); // sets out of heat timer
     }
