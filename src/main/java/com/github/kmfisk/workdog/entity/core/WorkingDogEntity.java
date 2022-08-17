@@ -1,6 +1,7 @@
 package com.github.kmfisk.workdog.entity.core;
 
 import com.github.kmfisk.workdog.WorkingDogs;
+import com.github.kmfisk.workdog.entity.goal.DogBirthGoal;
 import com.github.kmfisk.workdog.entity.goal.DogBreedGoal;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.EntityType;
@@ -34,6 +35,7 @@ import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
 import java.util.Locale;
+import java.util.Random;
 
 public abstract class WorkingDogEntity extends TameableEntity {
     public static final DataParameter<Boolean> GENDER = EntityDataManager.defineId(WorkingDogEntity.class, DataSerializers.BOOLEAN);
@@ -52,7 +54,7 @@ public abstract class WorkingDogEntity extends TameableEntity {
     @Override
     protected void registerGoals() {
         // todo
-
+        this.goalSelector.addGoal(6, new DogBirthGoal(this));
         /*if (!this.isFixed())*/
             this.goalSelector.addGoal(9, new DogBreedGoal(this, 1.2D));
     }
@@ -145,30 +147,32 @@ public abstract class WorkingDogEntity extends TameableEntity {
 
     public void setPuppies(int puppies) {
         if (getPuppies() <= 0 || puppies == 0)
-            this.entityData.set(PUPPIES, puppies);
+            entityData.set(PUPPIES, puppies);
         else if (getPuppies() > 0)
-            this.entityData.set(PUPPIES, this.getPuppies() + puppies);
+            entityData.set(PUPPIES, getPuppies() + puppies);
     }
 
     public int getPuppies() {
-        return this.entityData.get(PUPPIES);
+        return entityData.get(PUPPIES);
     }
 
     public void addFather(WorkingDogEntity father, int size) {
         for (int i = 0; i < size; i++) {
-            if (!this.getPersistentData().contains("Father" + i) || (this.getPersistentData().contains("Father" + i) && this.getPersistentData().getCompound("Father" + i).isEmpty())) {
-                this.getPersistentData().put("Father" + i, father.saveWithoutId(new CompoundNBT()));
+            if (!getPersistentData().contains("Father" + i) || (getPersistentData().contains("Father" + i) && getPersistentData().getCompound("Father" + i).isEmpty())) {
+                CompoundNBT tags = new CompoundNBT();
+                father.save(tags);
+                getPersistentData().put("Father" + i, tags);
             }
         }
     }
 
     private void setFather(int i, INBT father) {
-        if (this.getPersistentData().contains("Father" + i))
-            this.getPersistentData().put("Father" + i, father);
+        if (getPersistentData().contains("Father" + i))
+            getPersistentData().put("Father" + i, father);
     }
 
     public CompoundNBT getFather(int i) {
-        return this.getPersistentData().getCompound("Father" + i);
+        return getPersistentData().getCompound("Father" + i);
     }
 
     @Override
@@ -288,29 +292,10 @@ public abstract class WorkingDogEntity extends TameableEntity {
             final boolean cancelled = net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event);
             baby = (WorkingDogEntity) event.getChild();
 
-            if (cancelled) {
-                setAge(6000);
-                partner.setAge(6000);
-                resetLove();
-                partner.resetLove();
-                return;
-            }
+            if (cancelled) return;
 
             if (baby != null) {
-                ServerPlayerEntity serverplayerentity = getLoveCause();
-                if (serverplayerentity == null && partner.getLoveCause() != null)
-                    serverplayerentity = partner.getLoveCause();
-
-                if (serverplayerentity != null) {
-                    serverplayerentity.awardStat(Stats.ANIMALS_BRED);
-                    CriteriaTriggers.BRED_ANIMALS.trigger(serverplayerentity, this, partner, baby);
-                }
-
-                setAge(6000);
-                partner.setAge(6000);
-                resetLove();
-                partner.resetLove();
-                baby.setBaby(true);
+                baby.setAge(-72000);
                 baby.setGender(Gender.fromBool(random.nextBoolean()));
                 boolean longhair;
                 if (isLonghair() && partner.isLonghair())
@@ -324,6 +309,14 @@ public abstract class WorkingDogEntity extends TameableEntity {
                 baby.moveTo(getX(), getY(), getZ(), 0.0F, 0.0F);
                 world.addFreshEntityWithPassengers(baby);
                 world.broadcastEntityEvent(this, (byte) 18);
+
+                for (int i = 0; i < 7; ++i) {
+                    double d0 = random.nextGaussian() * 0.02D;
+                    double d1 = random.nextGaussian() * 0.02D;
+                    double d2 = random.nextGaussian() * 0.02D;
+                    level.addParticle(ParticleTypes.HEART, getRandomX(1.0D), getRandomY() + 0.5D, getRandomZ(1.0D), d0, d1, d2);
+                }
+
                 if (world.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT))
                     world.addFreshEntity(new ExperienceOrbEntity(world, getX(), getY(), getZ(), getRandom().nextInt(7) + 1));
             }
@@ -350,7 +343,7 @@ public abstract class WorkingDogEntity extends TameableEntity {
             else if (getGender() == Gender.FEMALE && !getBreedingStatus("ispregnant"))
                 player.displayClientMessage(new StringTextComponent("FEMALE, heat: " + getBreedingStatus("inheat") + " // timer: " + getBreedTimer()), true);
             else if (getGender() == Gender.FEMALE)
-                player.displayClientMessage(new StringTextComponent("FEMALE, pregnant: " + getBreedingStatus("ispregnant") + " // puppies: " + getPuppies()), true);
+                player.displayClientMessage(new StringTextComponent("FEMALE, pregnant: " + getBreedingStatus("ispregnant") + " // puppies: " + getPuppies() + " // timer: " + getBreedTimer()), true);
             else
                 player.displayClientMessage(new StringTextComponent("MALE, timer: " + getBreedTimer()), true);
 
