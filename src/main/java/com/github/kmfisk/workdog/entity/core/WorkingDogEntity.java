@@ -287,7 +287,9 @@ public abstract class WorkingDogEntity extends TameableEntity {
     public void spawnChildFromBreeding(ServerWorld world, AnimalEntity entity) {
         if (entity instanceof WorkingDogEntity) {
             WorkingDogEntity partner = (WorkingDogEntity) entity;
-            WorkingDogEntity baby = (WorkingDogEntity) getBreedOffspring(world, partner);
+            WorkingDogEntity baby;
+            if (getType() == partner.getType() || random.nextBoolean()) baby = (WorkingDogEntity) getBreedOffspring(world, partner);
+            else baby = (WorkingDogEntity) partner.getBreedOffspring(world, this);
             final net.minecraftforge.event.entity.living.BabyEntitySpawnEvent event = new net.minecraftforge.event.entity.living.BabyEntitySpawnEvent(this, partner, baby);
             final boolean cancelled = net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event);
             baby = (WorkingDogEntity) event.getChild();
