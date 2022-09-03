@@ -2,6 +2,7 @@ package com.github.kmfisk.workdog;
 
 import com.github.kmfisk.workdog.entity.WorkDogEntities;
 import com.github.kmfisk.workdog.item.WorkDogItems;
+import com.github.kmfisk.workdog.tags.WorkDogTags;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -25,6 +26,7 @@ public class WorkingDogs {
 
     public WorkingDogs() {
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+        WorkDogTags.init();
 
         WorkDogEntities.REGISTRAR.register(modBus);
         WorkDogItems.REGISTRAR.register(modBus);

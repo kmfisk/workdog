@@ -1,8 +1,10 @@
 package com.github.kmfisk.workdog.entity.core;
 
 import com.github.kmfisk.workdog.WorkingDogs;
+import com.github.kmfisk.workdog.entity.WDWolfEntity;
 import com.github.kmfisk.workdog.entity.goal.DogBirthGoal;
 import com.github.kmfisk.workdog.entity.goal.DogBreedGoal;
+import com.github.kmfisk.workdog.entity.goal.DogTemptGoal;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.MobEntity;
@@ -13,6 +15,7 @@ import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.network.datasync.DataParameter;
@@ -33,6 +36,8 @@ import net.minecraft.world.server.ServerWorld;
 import javax.annotation.Nullable;
 import java.util.Locale;
 
+import static com.github.kmfisk.workdog.tags.WorkDogTags.RAW_MEATS;
+
 public abstract class WorkingDogEntity extends TameableEntity {
     public static final DataParameter<Boolean> GENDER = EntityDataManager.defineId(WorkingDogEntity.class, DataSerializers.BOOLEAN);
     public static final DataParameter<Boolean> LONGHAIR = EntityDataManager.defineId(WorkingDogEntity.class, DataSerializers.BOOLEAN);
@@ -43,6 +48,8 @@ public abstract class WorkingDogEntity extends TameableEntity {
     private static final DataParameter<Integer> BREED_TIMER = EntityDataManager.defineId(WorkingDogEntity.class, DataSerializers.INT);
     private static final DataParameter<Integer> PUPPIES = EntityDataManager.defineId(WorkingDogEntity.class, DataSerializers.INT);
 
+    private static final Ingredient FOOD = Ingredient.of(Items.BEEF); //todo: all raw meats.. tag stuff.. stupid ugh
+
     public WorkingDogEntity(EntityType<? extends TameableEntity> type, World world) {
         super(type, world);
     }
@@ -50,9 +57,10 @@ public abstract class WorkingDogEntity extends TameableEntity {
     @Override
     protected void registerGoals() {
         // todo
+        this.goalSelector.addGoal(3, new DogTemptGoal(this, 0.6D, FOOD, true));
         this.goalSelector.addGoal(6, new DogBirthGoal(this));
         /*if (!this.isFixed())*/
-            this.goalSelector.addGoal(9, new DogBreedGoal(this, 1.2D));
+        this.goalSelector.addGoal(9, new DogBreedGoal(this, 1.2D));
     }
 
     @Override
@@ -255,6 +263,11 @@ public abstract class WorkingDogEntity extends TameableEntity {
     }
 
     @Override
+    public boolean isFood(ItemStack stack) {
+        return FOOD.test(stack);
+    }
+
+    @Override
     public boolean canMate(AnimalEntity entity) {
         if (entity == this)
             return false;
@@ -280,7 +293,8 @@ public abstract class WorkingDogEntity extends TameableEntity {
         if (entity instanceof WorkingDogEntity) {
             WorkingDogEntity partner = (WorkingDogEntity) entity;
             WorkingDogEntity baby;
-            if (getType() == partner.getType() || random.nextBoolean()) baby = (WorkingDogEntity) getBreedOffspring(world, partner);
+            if (getType() == partner.getType() || random.nextBoolean())
+                baby = (WorkingDogEntity) getBreedOffspring(world, partner);
             else baby = (WorkingDogEntity) partner.getBreedOffspring(world, this);
             final net.minecraftforge.event.entity.living.BabyEntitySpawnEvent event = new net.minecraftforge.event.entity.living.BabyEntitySpawnEvent(this, partner, baby);
             final boolean cancelled = net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event);
@@ -331,6 +345,7 @@ public abstract class WorkingDogEntity extends TameableEntity {
     @Override
     public ActionResultType mobInteract(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getItemInHand(hand);
+
         if (stack.getItem() == Items.STICK) { //todo: remove testing
             if (player.isDiscrete())
                 player.displayClientMessage(new StringTextComponent("Longhair: " + isLonghair()), true);
@@ -352,7 +367,27 @@ public abstract class WorkingDogEntity extends TameableEntity {
             return ActionResultType.CONSUME;
         }
 
-        return super.mobInteract(player, hand);
+        boolean canTame = isFood(stack) && !isTame() && (!(this instanceof WDWolfEntity) || isBaby());
+        if (level.isClientSide) {
+            return canTame ? ActionResultType.CONSUME : ActionResultType.PASS;
+
+        } else {
+            if (canTame) {
+                if (!player.abilities.instabuild) stack.shrink(1);
+
+                if (random.nextInt(3) == 0 && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, player)) {
+                    tame(player);
+                    navigation.stop();
+                    setTarget(null);
+                    setOrderedToSit(true);
+                    level.broadcastEntityEvent(this, (byte) 7);
+                } else level.broadcastEntityEvent(this, (byte) 6);
+
+                return ActionResultType.SUCCESS;
+            }
+        }
+
+        return ActionResultType.PASS;
     }
 
     public enum Gender {
