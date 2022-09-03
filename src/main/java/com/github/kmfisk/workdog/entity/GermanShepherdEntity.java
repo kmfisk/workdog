@@ -33,6 +33,6 @@ public class GermanShepherdEntity extends ProtectionDogEntity {
     @Nullable
     @Override
     public AgeableEntity getBreedOffspring(ServerWorld world, AgeableEntity entity) {
-        return null; // todo
+        return WorkDogEntities.GERMAN_SHEPHERD.create(world);
     }
 }
