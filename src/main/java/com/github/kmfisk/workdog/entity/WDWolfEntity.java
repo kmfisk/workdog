@@ -33,6 +33,6 @@ public class WDWolfEntity extends WorkingDogEntity {
     @Nullable
     @Override
     public AgeableEntity getBreedOffspring(ServerWorld world, AgeableEntity entity) {
-        return null; // todo
+        return WorkDogEntities.WOLF.create(world);
     }
 }
