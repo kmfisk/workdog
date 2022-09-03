@@ -22,7 +22,7 @@ public class GermanShepherdEntity extends ProtectionDogEntity {
 
     @Override
     public int getVariantCount() {
-        return 13;
+        return 11;
     }
 
     @Override

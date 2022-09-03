@@ -22,7 +22,7 @@ public class WDWolfEntity extends WorkingDogEntity {
 
     @Override
     public int getVariantCount() {
-        return 6;
+        return 4;
     }
 
     @Override

@@ -26,8 +26,8 @@ public class GermanShepherdRenderer extends WorkDogRenderer<GermanShepherdEntity
     @Override
     public void setupVariants() {
         variants = new String[]{
-                "albino", "black_and_red", "black_and_silver", "black_and_tan", "black", "melanistic", "red_sable",
-                "red_saddleback", "silver_sable", "silver_saddleback", "tan_sable", "tan_saddleback", "white"
+                "black_and_red", "black_and_silver", "black_and_tan", "black", "red_sable", "red_saddleback",
+                "silver_sable", "silver_saddleback", "tan_sable", "tan_saddleback", "white"
         };
     }
 }

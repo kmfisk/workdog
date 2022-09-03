@@ -22,7 +22,7 @@ public class JackRussellTerrierEntity extends TerrierDogEntity {
 
     @Override
     public int getVariantCount() {
-        return 10;
+        return 8;
     }
 
     @Override

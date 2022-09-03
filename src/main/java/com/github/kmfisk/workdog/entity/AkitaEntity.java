@@ -22,7 +22,7 @@ public class AkitaEntity extends HuntingDogEntity {
 
     @Override
     public int getVariantCount() {
-        return 17;
+        return 16;
     }
 
     @Override

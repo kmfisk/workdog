@@ -26,7 +26,7 @@ public class WDWolfRenderer extends WorkDogRenderer<WDWolfEntity, WDWolfModel> {
     @Override
     public void setupVariants() {
         variants = new String[]{
-                "albino", "black", "brown", "gray", "melanistic", "white"
+                "black", "brown", "gray", "white"
         };
     }
 }
