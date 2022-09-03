@@ -26,7 +26,8 @@ public class JackRussellTerrierRenderer extends WorkDogRenderer<JackRussellTerri
     @Override
     public void setupVariants() {
         variants = new String[]{
-                "black_and_tan", "brown_ears", "brown_face", "brown_saddle", "heavy_tri", "light_tri", "mid_tri", "white"
+                "black_and_tan", "black", "brown_ears", "brown_face", "brown_saddle", "heavy_tri", "light_tri",
+                "mid_tri", "white"
         };
     }
 }

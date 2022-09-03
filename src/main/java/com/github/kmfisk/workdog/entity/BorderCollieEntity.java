@@ -22,7 +22,7 @@ public class BorderCollieEntity extends HerdingDogEntity {
 
     @Override
     public int getVariantCount() {
-        return 10;
+        return 15;
     }
 
     @Override

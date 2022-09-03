@@ -26,7 +26,8 @@ public class BorderCollieRenderer extends WorkDogRenderer<BorderCollieEntity, Bo
     @Override
     public void setupVariants() {
         variants = new String[]{
-                "black1", "black2", "black3", "black_tri", "blue", "blue_merle", "chocolate", "redmerle", "tan", "white"
+                "black", "black_skim", "black_light", "black_heavy", "black_tri", "blue_skim", "blue_light", "blue_heavy",
+                "blue_merle", "chocolate_skim", "chocolate_light", "chocolate_heavy", "red_merle", "tan", "white"
         };
     }
 }
