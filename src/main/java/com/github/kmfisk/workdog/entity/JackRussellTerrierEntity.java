@@ -33,6 +33,6 @@ public class JackRussellTerrierEntity extends TerrierDogEntity {
     @Nullable
     @Override
     public AgeableEntity getBreedOffspring(ServerWorld world, AgeableEntity entity) {
-        return null; // todo
+        return WorkDogEntities.JACK_RUSSELL_TERRIER.create(world);
     }
 }
