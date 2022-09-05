@@ -32,6 +32,7 @@ public class WorkDogEntities {
     public static final EntityType<BostonTerrierEntity> BOSTON_TERRIER = register("boston_terrier", BostonTerrierEntity::new, EntityClassification.CREATURE, BostonTerrierEntity::registerAttributes, () -> BostonTerrierRenderer::new, 1.0F, 1.0F);
     public static final EntityType<GermanShepherdEntity> GERMAN_SHEPHERD = register("german_shepherd", GermanShepherdEntity::new, EntityClassification.CREATURE, GermanShepherdEntity::registerAttributes, () -> GermanShepherdRenderer::new, 1.0F, 1.0F);
     public static final EntityType<JackRussellTerrierEntity> JACK_RUSSELL_TERRIER = register("jack_russell_terrier", JackRussellTerrierEntity::new, EntityClassification.CREATURE, JackRussellTerrierEntity::registerAttributes, () -> JackRussellTerrierRenderer::new, 1.0F, 1.0F);
+    public static final EntityType<PitBullEntity> PIT_BULL = register("pit_bull", PitBullEntity::new, EntityClassification.CREATURE, PitBullEntity::registerAttributes, () -> PitBullRenderer::new, 1.0F, 1.0F);
     public static final EntityType<WDWolfEntity> WOLF = register("wolf", WDWolfEntity::new, EntityClassification.CREATURE, WDWolfEntity::registerAttributes, () -> WDWolfRenderer::new, 1.0F, 1.0F);
 
     public static void registerAttributes(BiConsumer<EntityType<? extends LivingEntity>, AttributeModifierMap.MutableAttribute> register) {
