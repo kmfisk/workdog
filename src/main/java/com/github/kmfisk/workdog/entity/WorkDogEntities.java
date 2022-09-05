@@ -29,6 +29,7 @@ public class WorkDogEntities {
 
     public static final EntityType<AkitaEntity> AKITA = register("akita", AkitaEntity::new, EntityClassification.CREATURE, AkitaEntity::registerAttributes, () -> AkitaRenderer::new, 1.0F, 1.0F);
     public static final EntityType<BorderCollieEntity> BORDER_COLLIE = register("border_collie", BorderCollieEntity::new, EntityClassification.CREATURE, BorderCollieEntity::registerAttributes, () -> BorderCollieRenderer::new, 1.0F, 1.0F);
+    public static final EntityType<BostonTerrierEntity> BOSTON_TERRIER = register("boston_terrier", BostonTerrierEntity::new, EntityClassification.CREATURE, BostonTerrierEntity::registerAttributes, () -> BostonTerrierRenderer::new, 1.0F, 1.0F);
     public static final EntityType<GermanShepherdEntity> GERMAN_SHEPHERD = register("german_shepherd", GermanShepherdEntity::new, EntityClassification.CREATURE, GermanShepherdEntity::registerAttributes, () -> GermanShepherdRenderer::new, 1.0F, 1.0F);
     public static final EntityType<JackRussellTerrierEntity> JACK_RUSSELL_TERRIER = register("jack_russell_terrier", JackRussellTerrierEntity::new, EntityClassification.CREATURE, JackRussellTerrierEntity::registerAttributes, () -> JackRussellTerrierRenderer::new, 1.0F, 1.0F);
     public static final EntityType<WDWolfEntity> WOLF = register("wolf", WDWolfEntity::new, EntityClassification.CREATURE, WDWolfEntity::registerAttributes, () -> WDWolfRenderer::new, 1.0F, 1.0F);
