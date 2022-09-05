@@ -26,10 +26,10 @@ public class AkitaRenderer extends WorkDogRenderer<AkitaEntity, AkitaModel> {
     @Override
     public void setupVariants() {
         variants = new String[]{
-                "black", "black_brindle", "black_brown_pinto", "black_pinto", "black_tan_pinto", "black_white_socks",
-                "brown_brindle", "brown_pinto", "fawn", "fawn_brindle", "fawn_pinto", "gold_sesame", "gray_brindle",
-                "gray_pinto", "red_sesame", "silver_brindle", "silver_pinto", "tan_brindle", "tan_pinto",
-                "tiger_brindle", "white"
+                "black", "black_white_socks", "black_pinto", "black_brown_pinto", "black_tan_pinto", "black_brindle",
+                "brown_brindle", "brown_pinto", "fawn", "fawn_brindle", "fawn_pinto", "gray_brindle", "gray_pinto",
+                "silver_brindle", "silver_pinto", "tan_brindle", "tan_pinto", "tiger_brindle", "red_sesame",
+                "gold_sesame", "white"
         };
     }
 }
