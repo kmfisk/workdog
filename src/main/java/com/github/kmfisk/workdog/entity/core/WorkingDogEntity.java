@@ -2,6 +2,7 @@ package com.github.kmfisk.workdog.entity.core;
 
 import com.github.kmfisk.workdog.WorkingDogs;
 import com.github.kmfisk.workdog.entity.WDWolfEntity;
+import com.github.kmfisk.workdog.entity.goal.DogAvoidEntityGoal;
 import com.github.kmfisk.workdog.entity.goal.DogBirthGoal;
 import com.github.kmfisk.workdog.entity.goal.DogBreedGoal;
 import com.github.kmfisk.workdog.entity.goal.DogTemptGoal;
@@ -9,6 +10,9 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.ai.goal.SitGoal;
+import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
@@ -36,8 +40,6 @@ import net.minecraft.world.server.ServerWorld;
 import javax.annotation.Nullable;
 import java.util.Locale;
 
-import static com.github.kmfisk.workdog.tags.WorkDogTags.RAW_MEATS;
-
 public abstract class WorkingDogEntity extends TameableEntity {
     public static final DataParameter<Boolean> GENDER = EntityDataManager.defineId(WorkingDogEntity.class, DataSerializers.BOOLEAN);
     public static final DataParameter<Boolean> LONGHAIR = EntityDataManager.defineId(WorkingDogEntity.class, DataSerializers.BOOLEAN);
@@ -49,6 +51,7 @@ public abstract class WorkingDogEntity extends TameableEntity {
     private static final DataParameter<Integer> PUPPIES = EntityDataManager.defineId(WorkingDogEntity.class, DataSerializers.INT);
 
     private static final Ingredient FOOD = Ingredient.of(Items.BEEF); //todo: all raw meats.. tag stuff.. stupid ugh
+    private DogAvoidEntityGoal<PlayerEntity> avoidPlayersGoal;
 
     public WorkingDogEntity(EntityType<? extends TameableEntity> type, World world) {
         super(type, world);
@@ -56,11 +59,13 @@ public abstract class WorkingDogEntity extends TameableEntity {
 
     @Override
     protected void registerGoals() {
-        // todo
+        this.goalSelector.addGoal(1, new SwimGoal(this));
+        this.goalSelector.addGoal(1, new SitGoal(this));
         this.goalSelector.addGoal(3, new DogTemptGoal(this, 0.6D, FOOD, true));
         this.goalSelector.addGoal(6, new DogBirthGoal(this));
-        /*if (!this.isFixed())*/
+        /*if (!this.isFixed()) todo*/
         this.goalSelector.addGoal(9, new DogBreedGoal(this, 1.2D));
+        this.goalSelector.addGoal(10, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
     }
 
     @Override
@@ -372,12 +377,20 @@ public abstract class WorkingDogEntity extends TameableEntity {
             return ActionResultType.CONSUME;
         }
 
+        boolean isOwner = isOwnedBy(player);
         boolean canTame = isFood(stack) && !isTame() && (!(this instanceof WDWolfEntity) || isBaby());
         if (level.isClientSide) {
-            return canTame ? ActionResultType.CONSUME : ActionResultType.PASS;
+            return isOwner || canTame ? ActionResultType.CONSUME : ActionResultType.PASS;
 
         } else {
-            if (canTame) {
+            if (isTame() && isOwner) {
+                setOrderedToSit(!isOrderedToSit());
+                jumping = false;
+                navigation.stop();
+                setTarget(null);
+                return ActionResultType.SUCCESS;
+
+            } else if (canTame) {
                 if (!player.abilities.instabuild) stack.shrink(1);
 
                 if (random.nextInt(3) == 0 && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, player)) {
@@ -393,6 +406,15 @@ public abstract class WorkingDogEntity extends TameableEntity {
         }
 
         return ActionResultType.PASS;
+    }
+
+    @Override
+    protected void reassessTameGoals() {
+        if (avoidPlayersGoal == null)
+            avoidPlayersGoal = new DogAvoidEntityGoal<>(this, PlayerEntity.class, 16.0F, 0.8D, 1.33D);
+
+        this.goalSelector.removeGoal(avoidPlayersGoal);
+        if (!isTame()) this.goalSelector.addGoal(4, avoidPlayersGoal);
     }
 
     public enum Gender {
