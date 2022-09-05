@@ -348,22 +348,27 @@ public abstract class WorkingDogEntity extends TameableEntity {
 
         if (stack.getItem() == Items.STICK) { //todo: remove testing
             if (player.isDiscrete())
-                player.displayClientMessage(new StringTextComponent("Longhair: " + isLonghair()), true);
+                player.displayClientMessage(new StringTextComponent("Variant: " + getVariant() + " // Longhair: " + isLonghair()), true);
             else if (getGender() == Gender.FEMALE && !getBreedingStatus("ispregnant"))
                 player.displayClientMessage(new StringTextComponent("FEMALE, heat: " + getBreedingStatus("inheat") + " // timer: " + getBreedTimer()), true);
             else if (getGender() == Gender.FEMALE)
                 player.displayClientMessage(new StringTextComponent("FEMALE, pregnant: " + getBreedingStatus("ispregnant") + " // puppies: " + getPuppies() + " // timer: " + getBreedTimer()), true);
             else
                 player.displayClientMessage(new StringTextComponent("MALE, timer: " + getBreedTimer()), true);
-
             return ActionResultType.CONSUME;
 
-        } else if (stack.getItem() == Items.BLAZE_POWDER) { //todo: remove testing
-            if (isBaby())
-                ageUp((int) ((float) (-getAge() / 20) * 0.8F), true);
-            else if (/*!isFixed() &&*/ getBreedTimer() != 0)
-                setBreedTimer(getBreedTimer() / 2);
+        } else if (stack.getItem() == Items.BLAZE_POWDER && /*!isFixed() &&*/ getBreedTimer() != 0 && !getBreedingStatus("ispregnant")) { //todo: remove testing
+            if (getGender() == Gender.MALE) setBreedTimer(0);
+            else if (getBreedingStatus("inheat")) setBreedTimer(20);
+            else setBreedTimer(-20);
+            return ActionResultType.CONSUME;
 
+        } else if (stack.getItem() == Items.MILK_BUCKET && getGender() == Gender.FEMALE && getBreedingStatus("ispregnant")) { //todo: remove testing
+            setBreedTimer(20);
+            return ActionResultType.CONSUME;
+
+        } else if (stack.getItem() == Items.BONE && isBaby()) { //todo: remove testing
+            ageUp(-getAge(), true);
             return ActionResultType.CONSUME;
         }
 
