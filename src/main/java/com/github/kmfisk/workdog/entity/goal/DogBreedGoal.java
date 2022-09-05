@@ -86,10 +86,7 @@ public class DogBreedGoal extends Goal {
         target.getNavigation().moveTo(dog, moveSpeed);
         ++breedDelay;
 
-        if (breedDelay >= 60 && dog.distanceToSqr(target) < 4.0D) {
-            startPregnancy(); // 100% chance of success
-            dog.setBreedTimer(6000 /*todo: male cooldown?*/); // starts male cooldown
-        }
+        if (breedDelay >= 60 && dog.distanceToSqr(target) < 4.0D) startPregnancy(); // 100% chance of success
     }
 
     private WorkingDogEntity getNearbyMate() {
