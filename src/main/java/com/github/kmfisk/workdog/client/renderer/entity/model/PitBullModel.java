@@ -255,6 +255,68 @@ public abstract class PitBullModel extends WorkDogModel<PitBullEntity> {
         public void setupAnim(PitBullEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 
         }
+
+        @Override
+        public void prepareMobModel(PitBullEntity entity, float speed, float walkSpeed, float partialTick) {
+            if (entity.isInSittingPose()) {
+                this.Body.setPos(0.0F, -3.7F, 1.9F);
+                this.FootLeft.setPos(-0.1F, 2.9F, -1.0F);
+                this.FootRight.setPos(0.1F, 2.9F, -1.0F);
+                this.Head.setPos(0.0F, -3.8F, -0.4F);
+                this.LegLeft.setPos(0.0F, 6.0F, 2.0F);
+                this.LegRight.setPos(0.0F, 6.0F, 2.0F);
+                this.LowerLegLeft.setPos(0.17F, 3.9F, 2.4F);
+                this.LowerLegRight.setPos(0.03F, 3.9F, 2.4F);
+                this.setRotateAngle(ArmBaseLeft, 0.4553564018453205F, 0.0F, 0.0F);
+                this.setRotateAngle(ArmBaseRight, 0.4553564018453205F, 0.0F, 0.0F);
+                this.setRotateAngle(Body, -0.40980330836826856F, 0.0F, 0.0F);
+                this.setRotateAngle(Chest, -0.31869712141416456F, 0.0F, 0.0F);
+                this.setRotateAngle(FootLeft, 1.730144887501979F, 0.0F, 0.0F);
+                this.setRotateAngle(FootRight, 1.730144887501979F, 0.0F, 0.0F);
+                this.setRotateAngle(Head, -0.4553564018453205F, 0.0F, 0.0F);
+                this.setRotateAngle(LegLeft, 2.1855012893472994F, 0.0F, 0.0F);
+                this.setRotateAngle(LegRight, 2.1855012893472994F, 0.0F, 0.0F);
+                this.setRotateAngle(LowerLegLeft, -1.8668041679331349F, 0.0F, 0.0F);
+                this.setRotateAngle(LowerLegRight, -1.8668041679331349F, 0.0F, 0.0F);
+                this.setRotateAngle(Neck, 0.8651597102135892F, 0.0F, 0.0F);
+                this.setRotateAngle(Tail1, -0.136659280431156F, 0.36425021489121656F, 0.0F);
+                this.setRotateAngle(Tail2, 0.36425021489121656F, 0.8651597102135892F, 0.0F);
+                this.setRotateAngle(ThighLeft, -1.0927506446736497F, -0.18203784098300857F, 0.0F);
+                this.setRotateAngle(ThighRight, -1.0927506446736497F, 0.18203784098300857F, 0.0F);
+                this.Tail1.setPos(-0.1F, 1.4F, 3.0F);
+                this.ThighLeft.setPos(2.9F, 2.9F, 5.9F);
+                this.ThighRight.setPos(-2.9F, 2.9F, 5.9F);
+
+            } else {
+                this.Body.setPos(0.0F, -4.4F, 1.5F);
+                this.FootLeft.setPos(-0.1F, 4.0F, -0.7F);
+                this.FootRight.setPos(0.1F, 4.0F, -0.7F);
+                this.Head.setPos(0.0F, -3.5F, -0.6F);
+                this.LegLeft.setPos(0.0F, 6.0F, -2.0F);
+                this.LegRight.setPos(0.0F, 6.0F, -2.0F);
+                this.LowerLegLeft.setPos(-0.03F, 2.9F, 3.4F);
+                this.LowerLegRight.setPos(0.03F, 2.9F, 3.4F);
+                this.setRotateAngle(ArmBaseLeft, 0.22759093446006054F, 0.0F, 0.0F);
+                this.setRotateAngle(ArmBaseRight, 0.22759093446006054F, 0.0F, 0.0F);
+                this.setRotateAngle(Body, 0.045553093477052F, 0.0F, 0.0F);
+                this.setRotateAngle(Chest, -0.091106186954104F, 0.0F, 0.0F);
+                this.setRotateAngle(FootLeft, 0.045553093477052F, 0.0F, 0.0F);
+                this.setRotateAngle(FootRight, 0.045553093477052F, 0.0F, 0.0F);
+                this.setRotateAngle(Head, -0.5462880558742251F, 0.0F, 0.0F);
+                this.setRotateAngle(LegLeft, 0.27314402793711257F, 0.0F, 0.0F);
+                this.setRotateAngle(LegRight, 0.27314402793711257F, 0.0F, 0.0F);
+                this.setRotateAngle(LowerLegLeft, -0.36425021489121656F, 0.0F, 0.0F);
+                this.setRotateAngle(LowerLegRight, -0.36425021489121656F, 0.0F, 0.0F);
+                this.setRotateAngle(Neck, 0.7285004297824331F, 0.0F, 0.0F);
+                this.setRotateAngle(Tail1, -0.9560913642424937F, 0.0F, 0.0F);
+                this.setRotateAngle(Tail2, 0.18203784098300857F, 0.0F, 0.0F);
+                this.setRotateAngle(ThighLeft, 0.31869712141416456F, 0.0F, 0.0F);
+                this.setRotateAngle(ThighRight, 0.27314402793711257F, 0.0F, 0.0F);
+                this.Tail1.setPos(0.0F, 1.5F, 3.0F);
+                this.ThighLeft.setPos(2.9F, 2.9F, 0.9F);
+                this.ThighRight.setPos(-2.9F, 2.9F, 0.9F);
+            }
+        }
     }
 
     public static class Baby extends PitBullModel {
@@ -381,6 +443,44 @@ public abstract class PitBullModel extends WorkDogModel<PitBullEntity> {
         @Override
         public void setupAnim(PitBullEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 
+        }
+
+        @Override
+        public void prepareMobModel(PitBullEntity entity, float speed, float walkSpeed, float partialTick) {
+            if (entity.isInSittingPose()) {
+                this.ArmLeft.setPos(1.3F, 1.2F, 0.2F);
+                this.ArmRight.setPos(-1.3F, 1.2F, 0.2F);
+                this.Neck.setPos(0.0F, -0.8F, -1.5F);
+                this.setRotateAngle(ArmLeft, 0.7740535232594852F, 0.0F, 0.0F);
+                this.setRotateAngle(ArmRight, 0.7740535232594852F, 0.0F, 0.0F);
+                this.setRotateAngle(Body, -0.31869712141416456F, 0.0F, 0.0F);
+                this.setRotateAngle(Chest, -0.7285004297824331F, 0.0F, 0.0F);
+                this.setRotateAngle(Head, -0.4553564018453205F, 0.0F, 0.0F);
+                this.setRotateAngle(Neck, 1.2292353921796064F, 0.0F, 0.0F);
+                this.setRotateAngle(Tail, 1.0016444577195458F, 0.40980330836826856F, 0.5918411493512771F);
+                this.setRotateAngle(ThighLeft, -0.5462880558742251F, -0.36425021489121656F, 0.0F);
+                this.setRotateAngle(ThighRight, -0.5462880558742251F, 0.36425021489121656F, 0.0F);
+                this.Tail.setPos(-0.3F, 1.0F, 3.2F);
+                this.ThighLeft.setPos(1.7F, 1.3F, 4.4F);
+                this.ThighRight.setPos(-1.7F, 1.3F, 4.4F);
+
+            } else {
+                this.ArmLeft.setPos(1.7F, 0.7F, -0.5F);
+                this.ArmRight.setPos(-1.7F, 0.7F, -0.5F);
+                this.Neck.setPos(0.0F, -1.3F, -0.7F);
+                this.setRotateAngle(ArmLeft, 0.136659280431156F, 0.0F, 0.0F);
+                this.setRotateAngle(ArmRight, 0.136659280431156F, 0.0F, 0.0F);
+                this.setRotateAngle(Body, 0.0F, 0.0F, 0.0F);
+                this.setRotateAngle(Chest, -0.045553093477052F, 0.0F, 0.0F);
+                this.setRotateAngle(Head, -0.6373942428283291F, 0.0F, 0.0F);
+                this.setRotateAngle(Neck, 0.7285004297824331F, 0.0F, 0.0F);
+                this.setRotateAngle(Tail, -0.7285004297824331F, 0.0F, 0.0F);
+                this.setRotateAngle(ThighLeft, 0.0F, 0.0F, 0.0F);
+                this.setRotateAngle(ThighRight, 0.0F, 0.0F, 0.0F);
+                this.Tail.setPos(0.0F, 0.4F, 4.0F);
+                this.ThighLeft.setPos(1.7F, 0.9F, 2.7F);
+                this.ThighRight.setPos(-1.7F, 0.9F, 2.7F);
+            }
         }
     }
 }

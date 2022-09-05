@@ -323,6 +323,74 @@ public abstract class BorderCollieModel extends WorkDogModel<BorderCollieEntity>
         public void setupAnim(BorderCollieEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 
         }
+
+        @Override
+        public void prepareMobModel(BorderCollieEntity entity, float speed, float walkSpeed, float partialTick) {
+            if (entity.isInSittingPose()) {
+                this.ArmBaseLeft.setPos(2.2F, 2.2F, -0.6F);
+                this.ArmBaseRight.setPos(-2.2F, 2.2F, -0.6F);
+                this.BellyFur.setPos(0.0F, 6.6F, 0.5F);
+                this.Body.setPos(0.0F, -3.2F, 1.9F);
+                this.Chest.setPos(0.0F, 13.1F, -4.0F);
+                this.ChestFur.setPos(0.0F, 3.3F, -2.7F);
+                this.FootLeft.setPos(-0.1F, 3.7F, -0.9F);
+                this.FootRight.setPos(0.1F, 3.7F, -0.9F);
+                this.LowerLegLeft.setPos(0.55F, 4.7F, 2.7F);
+                this.LowerLegRight.setPos(-0.55F, 4.7F, 2.7F);
+                this.setRotateAngle(ArmBaseLeft, 0.6829473363053812F, 0.0F, 0.0F);
+                this.setRotateAngle(ArmBaseRight, 0.6829473363053812F, 0.0F, 0.0F);
+                this.setRotateAngle(Body, -0.5009094953223726F, 0.0F, 0.0F);
+                this.setRotateAngle(Chest, -0.5918411493512771F, 0.0F, 0.0F);
+                this.setRotateAngle(FootLeft, 1.6390387005478748F, 0.0F, 0.0F);
+                this.setRotateAngle(FootRight, 1.6390387005478748F, 0.0F, 0.0F);
+                this.setRotateAngle(LowerLegLeft, -1.6390387005478748F, 0.0F, 0.0F);
+                this.setRotateAngle(LowerLegRight, -1.6390387005478748F, 0.0F, 0.0F);
+                this.setRotateAngle(Neck, 1.1838568316277536F, 0.0F, 0.0F);
+                this.setRotateAngle(Tail1, 2.367539130330308F, 0.0F, 0.0F);
+                this.setRotateAngle(Tail2, 0.40980330836826856F, 0.0F, 0.0F);
+                this.setRotateAngle(ThighLeft, -1.0016444577195458F, -0.045553093477052F, -0.091106186954104F);
+                this.setRotateAngle(ThighRight, -1.0016444577195458F, 0.045553093477052F, 0.091106186954104F);
+                this.setRotateAngle(UpperLegLeft, 2.41309222380736F, 0.0F, 0.0F);
+                this.setRotateAngle(UpperLegRight, 2.41309222380736F, 0.0F, 0.0F);
+                this.Tail1.setPos(0.0F, 2.1F, 3.5F);
+                this.ThighLeft.setPos(2.6F, 1.8F, 4.6F);
+                this.ThighRight.setPos(-2.6F, 1.8F, 4.6F);
+                this.UpperLegLeft.setPos(0.4F, 5.9F, 1.2F);
+                this.UpperLegRight.setPos(-0.4F, 5.9F, 1.2F);
+
+            } else {
+                this.ArmBaseLeft.setPos(2.2F, 1.3F, 0.0F);
+                this.ArmBaseRight.setPos(-2.2F, 1.3F, 0.0F);
+                this.BellyFur.setPos(0.0F, 6.6F, -1.0F);
+                this.Body.setPos(0.0F, -3.5F, 1.9F);
+                this.Chest.setPos(0.0F, 13.0F, -4.0F);
+                this.ChestFur.setPos(0.0F, 3.3F, -2.5F);
+                this.FootLeft.setPos(-0.1F, 4.0F, -0.9F);
+                this.FootRight.setPos(0.1F, 4.0F, -0.9F);
+                this.LowerLegLeft.setPos(0.0F, 4.0F, 2.7F);
+                this.LowerLegRight.setPos(0.0F, 4.0F, 2.7F);
+                this.setRotateAngle(ArmBaseLeft, 0.136659280431156F, 0.0F, 0.0F);
+                this.setRotateAngle(ArmBaseRight, 0.136659280431156F, 0.0F, 0.0F);
+                this.setRotateAngle(Body, 0.045553093477052F, 0.0F, 0.0F);
+                this.setRotateAngle(Chest, -0.045553093477052F, 0.0F, 0.0F);
+                this.setRotateAngle(FootLeft, 0.0F, 0.0F, 0.0F);
+                this.setRotateAngle(FootRight, 0.0F, 0.0F, 0.0F);
+                this.setRotateAngle(LowerLegLeft, -0.6829473363053812F, 0.0F, 0.0F);
+                this.setRotateAngle(LowerLegRight, -0.6829473363053812F, 0.0F, 0.0F);
+                this.setRotateAngle(Neck, 0.7285004297824331F, 0.0F, 0.0F);
+                this.setRotateAngle(Tail1, 1.2747884856566583F, 0.0F, 0.0F);
+                this.setRotateAngle(Tail2, 0.27314402793711257F, 0.0F, 0.0F);
+                this.setRotateAngle(ThighLeft, 0.18203784098300857F, 0.0F, 0.0F);
+                this.setRotateAngle(ThighRight, 0.18203784098300857F, 0.0F, 0.0F);
+                this.setRotateAngle(UpperLegLeft, 0.6373942428283291F, 0.0F, 0.0F);
+                this.setRotateAngle(UpperLegRight, 0.6373942428283291F, 0.0F, 0.0F);
+                this.Tail1.setPos(0.0F, 1.5F, 3.5F);
+                this.ThighLeft.setPos(1.9F, 1.7F, 1.9F);
+                this.ThighRight.setPos(-1.9F, 1.7F, 1.9F);
+                this.UpperLegLeft.setPos(0.0F, 6.0F, -1.8F);
+                this.UpperLegRight.setPos(0.0F, 6.0F, -1.8F);
+            }
+        }
     }
 
     public static class Baby extends BorderCollieModel {
@@ -450,6 +518,44 @@ public abstract class BorderCollieModel extends WorkDogModel<BorderCollieEntity>
         @Override
         public void setupAnim(BorderCollieEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 
+        }
+
+        @Override
+        public void prepareMobModel(BorderCollieEntity entity, float speed, float walkSpeed, float partialTick) {
+            if (entity.isInSittingPose()) {
+                this.ArmLeft.setPos(1.3F, 1.2F, 0.2F);
+                this.ArmRight.setPos(-1.3F, 1.2F, 0.2F);
+                this.Neck.setPos(0.0F, -0.8F, -1.5F);
+                this.setRotateAngle(ArmLeft, 0.7740535232594852F, 0.0F, 0.0F);
+                this.setRotateAngle(ArmRight, 0.7740535232594852F, 0.0F, 0.0F);
+                this.setRotateAngle(Body, -0.31869712141416456F, 0.0F, 0.0F);
+                this.setRotateAngle(Chest, -0.7285004297824331F, 0.0F, 0.0F);
+                this.setRotateAngle(Head, -0.4553564018453205F, 0.0F, 0.0F);
+                this.setRotateAngle(Neck, 1.2292353921796064F, 0.0F, 0.0F);
+                this.setRotateAngle(Tail, 1.0016444577195458F, 0.40980330836826856F, 0.5918411493512771F);
+                this.setRotateAngle(ThighLeft, -0.5462880558742251F, -0.36425021489121656F, 0.0F);
+                this.setRotateAngle(ThighRight, -0.5462880558742251F, 0.36425021489121656F, 0.0F);
+                this.Tail.setPos(-0.3F, 1.0F, 3.2F);
+                this.ThighLeft.setPos(1.7F, 1.3F, 4.4F);
+                this.ThighRight.setPos(-1.7F, 1.3F, 4.4F);
+
+            } else {
+                this.ArmLeft.setPos(1.7F, 0.7F, -0.5F);
+                this.ArmRight.setPos(-1.7F, 0.7F, -0.5F);
+                this.Neck.setPos(0.0F, -1.3F, -0.7F);
+                this.setRotateAngle(ArmLeft, 0.136659280431156F, 0.0F, 0.0F);
+                this.setRotateAngle(ArmRight, 0.136659280431156F, 0.0F, 0.0F);
+                this.setRotateAngle(Body, 0.0F, 0.0F, 0.0F);
+                this.setRotateAngle(Chest, -0.045553093477052F, 0.0F, 0.0F);
+                this.setRotateAngle(Head, -0.6373942428283291F, 0.0F, 0.0F);
+                this.setRotateAngle(Neck, 0.7285004297824331F, 0.0F, 0.0F);
+                this.setRotateAngle(Tail, -0.7285004297824331F, 0.0F, 0.0F);
+                this.setRotateAngle(ThighLeft, 0.0F, 0.0F, 0.0F);
+                this.setRotateAngle(ThighRight, 0.0F, 0.0F, 0.0F);
+                this.Tail.setPos(0.0F, 0.4F, 4.0F);
+                this.ThighLeft.setPos(1.7F, 0.9F, 2.7F);
+                this.ThighRight.setPos(-1.7F, 0.9F, 2.7F);
+            }
         }
     }
 }
