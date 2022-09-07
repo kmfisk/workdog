@@ -35,21 +35,21 @@ public class WDWolfEntity extends WorkingDogEntity {
     public String getVariantName() {
         switch (getVariant()) {
             case 0:
-                return Variant.BLACK.name();
+                return WolfVariant.BLACK.name();
             case 1:
-                return Variant.BROWN.name();
+                return WolfVariant.BROWN.name();
             case 2:
-                return Variant.GRAY.name();
+                return WolfVariant.GRAY.name();
             case 3:
-                return Variant.WHITE.name();
+                return WolfVariant.WHITE.name();
             default:
                 throw new IllegalStateException("Unexpected Wolf variant, value of: " + getVariant());
         }
     }
 
     public int getCarriedVariant(String name) {
-        int size = Variant.getCarriedVariants(name).size();
-        return Variant.getCarriedVariants(name).get(random.nextInt(size));
+        int size = WolfVariant.getCarriedVariants(name).size();
+        return WolfVariant.getCarriedVariants(name).get(random.nextInt(size));
     }
 
     @Override
@@ -105,7 +105,7 @@ public class WDWolfEntity extends WorkingDogEntity {
         return null;
     }
 
-    public enum Variant {
+    public enum WolfVariant {
         BLACK(Collections.singletonList(2)),
         BROWN(Collections.singletonList(2)),
         GRAY(Collections.singletonList(1)),
@@ -113,12 +113,12 @@ public class WDWolfEntity extends WorkingDogEntity {
 
         private final List<Integer> carries;
 
-        Variant(List<Integer> carries) {
+        WolfVariant(List<Integer> carries) {
             this.carries = carries;
         }
 
         public static List<Integer> getCarriedVariants(String name) {
-            return Variant.valueOf(name).carries;
+            return WolfVariant.valueOf(name).carries;
         }
     }
 }

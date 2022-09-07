@@ -33,35 +33,35 @@ public class BorderCollieEntity extends HerdingDogEntity {
     public String getVariantName() {
         switch (getVariant()) {
             case 0:
-                return Variant.BLACK.name();
+                return BorderCollieVariant.BLACK.name();
             case 1:
-                return Variant.BLACK_SKIM.name();
+                return BorderCollieVariant.BLACK_SKIM.name();
             case 2:
-                return Variant.BLACK_LIGHT.name();
+                return BorderCollieVariant.BLACK_LIGHT.name();
             case 3:
-                return Variant.BLACK_HEAVY.name();
+                return BorderCollieVariant.BLACK_HEAVY.name();
             case 4:
-                return Variant.BLACK_TRI.name();
+                return BorderCollieVariant.BLACK_TRI.name();
             case 5:
-                return Variant.BLUE_SKIM.name();
+                return BorderCollieVariant.BLUE_SKIM.name();
             case 6:
-                return Variant.BLUE_LIGHT.name();
+                return BorderCollieVariant.BLUE_LIGHT.name();
             case 7:
-                return Variant.BLUE_HEAVY.name();
+                return BorderCollieVariant.BLUE_HEAVY.name();
             case 8:
-                return Variant.BLUE_MERLE.name();
+                return BorderCollieVariant.BLUE_MERLE.name();
             case 9:
-                return Variant.CHOCOLATE_SKIM.name();
+                return BorderCollieVariant.CHOCOLATE_SKIM.name();
             case 10:
-                return Variant.CHOCOLATE_LIGHT.name();
+                return BorderCollieVariant.CHOCOLATE_LIGHT.name();
             case 11:
-                return Variant.CHOCOLATE_HEAVY.name();
+                return BorderCollieVariant.CHOCOLATE_HEAVY.name();
             case 12:
-                return Variant.RED_MERLE.name();
+                return BorderCollieVariant.RED_MERLE.name();
             case 13:
-                return Variant.TAN.name();
+                return BorderCollieVariant.TAN.name();
             case 14:
-                return Variant.WHITE.name();
+                return BorderCollieVariant.WHITE.name();
             default:
                 throw new IllegalStateException("Unexpected Border Collie variant, value of: " + getVariant());
         }
@@ -69,8 +69,8 @@ public class BorderCollieEntity extends HerdingDogEntity {
 
     @Override
     public int getCarriedVariant(String name) {
-        int size = WDWolfEntity.Variant.getCarriedVariants(name).size();
-        return WDWolfEntity.Variant.getCarriedVariants(name).get(random.nextInt(size));
+        int size = BorderCollieVariant.getCarriedVariants(name).size();
+        return BorderCollieVariant.getCarriedVariants(name).get(random.nextInt(size));
     }
 
     @Override
@@ -108,7 +108,7 @@ public class BorderCollieEntity extends HerdingDogEntity {
         return null;
     }
 
-    public enum Variant {
+    public enum BorderCollieVariant {
         BLACK(Arrays.asList(3, 4)),
         BLACK_SKIM(Arrays.asList(14, 2)),
         BLACK_LIGHT(Arrays.asList(1, 5)),
@@ -127,12 +127,12 @@ public class BorderCollieEntity extends HerdingDogEntity {
 
         private final List<Integer> carries;
 
-        Variant(List<Integer> carries) {
+        BorderCollieVariant(List<Integer> carries) {
             this.carries = carries;
         }
 
         public static List<Integer> getCarriedVariants(String name) {
-            return Variant.valueOf(name).carries;
+            return BorderCollieVariant.valueOf(name).carries;
         }
     }
 }
