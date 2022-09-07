@@ -26,6 +26,16 @@ public class JackRussellTerrierEntity extends TerrierDogEntity {
     }
 
     @Override
+    public String getVariantName() {
+        return null;
+    }
+
+    @Override
+    public int getCarriedVariant(String name) {
+        return 0;
+    }
+
+    @Override
     public boolean hasLonghair() {
         return true;
     }

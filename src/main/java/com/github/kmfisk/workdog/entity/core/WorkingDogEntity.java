@@ -111,6 +111,10 @@ public abstract class WorkingDogEntity extends TameableEntity {
 
     public abstract int getVariantCount();
 
+    public abstract String getVariantName();
+
+    public abstract int getCarriedVariant(String name);
+
     public int getVariant() {
         return entityData.get(VARIANT);
     }
@@ -318,7 +322,7 @@ public abstract class WorkingDogEntity extends TameableEntity {
                 else
                     longhair = random.nextFloat() <= 0.08F;
                 baby.setLonghair(longhair);
-                baby.setVariant(random.nextInt(getVariantCount())); // todo: coat "genetics"
+//                baby.setVariant(random.nextInt(baby.getVariantCount())); // todo: coat "genetics"
                 baby.moveTo(getX(), getY(), getZ(), 0.0F, 0.0F);
                 world.addFreshEntityWithPassengers(baby);
                 world.broadcastEntityEvent(this, (byte) 18);
@@ -410,11 +414,13 @@ public abstract class WorkingDogEntity extends TameableEntity {
 
     @Override
     protected void reassessTameGoals() {
-        if (avoidPlayersGoal == null)
-            avoidPlayersGoal = new DogAvoidEntityGoal<>(this, PlayerEntity.class, 16.0F, 0.8D, 1.33D);
+        if (isBaby() || !(this instanceof WDWolfEntity)) {
+            if (avoidPlayersGoal == null)
+                avoidPlayersGoal = new DogAvoidEntityGoal<>(this, PlayerEntity.class, 16.0F, 0.8D, 1.33D);
 
-        this.goalSelector.removeGoal(avoidPlayersGoal);
-        if (!isTame()) this.goalSelector.addGoal(4, avoidPlayersGoal);
+            this.goalSelector.removeGoal(avoidPlayersGoal);
+            if (!isTame()) this.goalSelector.addGoal(4, avoidPlayersGoal);
+        }
     }
 
     public enum Gender {
