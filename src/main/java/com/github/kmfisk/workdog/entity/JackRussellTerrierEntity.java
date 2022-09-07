@@ -1,6 +1,7 @@
 package com.github.kmfisk.workdog.entity;
 
 import com.github.kmfisk.workdog.entity.core.TerrierDogEntity;
+import com.github.kmfisk.workdog.entity.core.WorkingDogEntity;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -10,6 +11,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class JackRussellTerrierEntity extends TerrierDogEntity {
     public JackRussellTerrierEntity(EntityType<? extends TameableEntity> type, World world) {
@@ -27,12 +31,34 @@ public class JackRussellTerrierEntity extends TerrierDogEntity {
 
     @Override
     public String getVariantName() {
-        return null;
+        switch (getVariant()) {
+            case 0:
+                return JackRussellTerrierVariant.BLACK.name();
+            case 1:
+                return JackRussellTerrierVariant.BLACK_AND_TAN.name();
+            case 2:
+                return JackRussellTerrierVariant.BROWN_EARS.name();
+            case 3:
+                return JackRussellTerrierVariant.BROWN_FACE.name();
+            case 4:
+                return JackRussellTerrierVariant.BROWN_SADDLE.name();
+            case 5:
+                return JackRussellTerrierVariant.HEAVY_TRI.name();
+            case 6:
+                return JackRussellTerrierVariant.MID_TRI.name();
+            case 7:
+                return JackRussellTerrierVariant.LIGHT_TRI.name();
+            case 8:
+                return JackRussellTerrierVariant.WHITE.name();
+            default:
+                throw new IllegalStateException("Unexpected Jack Russell Terrier variant, value of: " + getVariant());
+        }
     }
 
     @Override
     public int getCarriedVariant(String name) {
-        return 0;
+        int size = JackRussellTerrierVariant.getCarriedVariants(name).size();
+        return JackRussellTerrierVariant.getCarriedVariants(name).get(random.nextInt(size));
     }
 
     @Override
@@ -43,6 +69,52 @@ public class JackRussellTerrierEntity extends TerrierDogEntity {
     @Nullable
     @Override
     public AgeableEntity getBreedOffspring(ServerWorld world, AgeableEntity entity) {
-        return WorkDogEntities.JACK_RUSSELL_TERRIER.create(world);
+        if (entity instanceof WorkingDogEntity) {
+            WorkingDogEntity partner = (WorkingDogEntity) entity;
+            WorkingDogEntity baby = WorkDogEntities.JACK_RUSSELL_TERRIER.create(world);
+            if (baby != null) {
+                int variant;
+                if (getType() == partner.getType()) {
+                    if (random.nextBoolean()) {
+                        if (random.nextFloat() <= 0.6F) variant = partner.getVariant();
+                        else variant = getCarriedVariant(partner.getVariantName());
+                    } else {
+                        if (random.nextFloat() <= 0.6F) variant = getVariant();
+                        else variant = getCarriedVariant(getVariantName());
+                    }
+
+                } else {
+                    if (random.nextFloat() <= 0.6F) variant = getVariant();
+                    else variant = getCarriedVariant(getVariantName());
+                }
+                baby.setVariant(variant);
+            }
+
+            return baby;
+        }
+
+        return null;
+    }
+
+    public enum JackRussellTerrierVariant {
+        BLACK(Collections.singletonList(1)),
+        BLACK_AND_TAN(Arrays.asList(0, 5)),
+        BROWN_EARS(Arrays.asList(3, 4)),
+        BROWN_FACE(Arrays.asList(2, 7)),
+        BROWN_SADDLE(Arrays.asList(5, 7)),
+        HEAVY_TRI(Arrays.asList(1, 7)),
+        MID_TRI(Arrays.asList(5, 7)),
+        LIGHT_TRI(Arrays.asList(8, 5)),
+        WHITE(Collections.singletonList(8));
+
+        private final List<Integer> carries;
+
+        JackRussellTerrierVariant(List<Integer> carries) {
+            this.carries = carries;
+        }
+
+        public static List<Integer> getCarriedVariants(String name) {
+            return JackRussellTerrierEntity.JackRussellTerrierVariant.valueOf(name).carries;
+        }
     }
 }
