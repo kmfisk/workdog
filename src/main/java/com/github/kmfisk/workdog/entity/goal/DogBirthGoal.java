@@ -45,6 +45,7 @@ public class DogBirthGoal extends Goal {
         Optional<EntityType<?>> sireType = EntityType.by(mother.getSire()); // recreate the saved sire nbt data
         if (sireType.isPresent()) {
             Entity entity = sireType.get().create(level);
+            entity.load(mother.getSire());
             if (entity instanceof WorkingDogEntity) {
                 sire = (WorkingDogEntity) entity; // create the sire dog for puppy referencing
                 for (int i = 0; i < mother.getPuppies(); i++) mother.spawnChildFromBreeding((ServerWorld) level, sire);
