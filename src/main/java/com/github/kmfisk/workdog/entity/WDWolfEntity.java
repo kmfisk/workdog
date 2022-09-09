@@ -63,7 +63,7 @@ public class WDWolfEntity extends WorkingDogEntity {
         if (entity instanceof WorkingDogEntity) {
             WorkingDogEntity partner = (WorkingDogEntity) entity;
             WorkingDogEntity baby = null;
-            if (random.nextBoolean()) {
+            if (random.nextFloat() <= 0.05F) {
                 Biome biome = level.getBiome(blockPosition());
                 Set<BiomeDictionary.Type> biomeTypes = BiomeDictionary.getTypes(RegistryKey.create(Registry.BIOME_REGISTRY, biome.getRegistryName()));
                 if (biomeTypes.contains(BiomeDictionary.Type.PLAINS) && !biomeTypes.contains(BiomeDictionary.Type.HOT) && !biomeTypes.contains(BiomeDictionary.Type.COLD)) {
