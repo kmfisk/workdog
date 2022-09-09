@@ -64,6 +64,11 @@ public class BostonTerrierEntity extends ToyDogEntity {
         return false;
     }
 
+    @Override
+    public float getLonghairChance() {
+        return 0F;
+    }
+
     @Nullable
     @Override
     public AgeableEntity getBreedOffspring(ServerWorld world, AgeableEntity entity) {

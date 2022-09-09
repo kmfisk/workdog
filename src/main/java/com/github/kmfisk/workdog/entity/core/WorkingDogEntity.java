@@ -83,7 +83,7 @@ public abstract class WorkingDogEntity extends TameableEntity {
     @Override
     public ILivingEntityData finalizeSpawn(IServerWorld world, DifficultyInstance difficulty, SpawnReason reason, @Nullable ILivingEntityData spawnData, @Nullable CompoundNBT dataTag) {
         setGender(Gender.fromBool(random.nextBoolean()));
-        setLonghair(random.nextFloat() <= 0.08F);
+        setLonghair(random.nextFloat() <= getLonghairChance());
         setVariant(random.nextInt(getVariantCount()));
 
         if (getGender() == Gender.FEMALE /*todo: && !isFixed()*/) setTimeCycle("end", random.nextInt(72000));
@@ -100,6 +100,8 @@ public abstract class WorkingDogEntity extends TameableEntity {
     }
 
     public abstract boolean hasLonghair();
+
+    public abstract float getLonghairChance();
 
     public boolean isLonghair() {
         return entityData.get(LONGHAIR);

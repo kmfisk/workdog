@@ -78,6 +78,11 @@ public class BorderCollieEntity extends HerdingDogEntity {
         return true;
     }
 
+    @Override
+    public float getLonghairChance() {
+        return 0.08F;
+    }
+
     @Nullable
     @Override
     public AgeableEntity getBreedOffspring(ServerWorld world, AgeableEntity entity) {

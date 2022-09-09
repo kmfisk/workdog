@@ -57,6 +57,11 @@ public class WDWolfEntity extends WorkingDogEntity {
         return false;
     }
 
+    @Override
+    public float getLonghairChance() {
+        return 1.0F;
+    }
+
     @Nullable
     @Override
     public AgeableEntity getBreedOffspring(ServerWorld world, AgeableEntity entity) {
