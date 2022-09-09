@@ -322,7 +322,6 @@ public abstract class WorkingDogEntity extends TameableEntity {
                 else
                     longhair = random.nextFloat() <= 0.08F;
                 baby.setLonghair(longhair);
-//                baby.setVariant(random.nextInt(baby.getVariantCount())); // todo: coat "genetics"
                 baby.moveTo(getX(), getY(), getZ(), 0.0F, 0.0F);
                 world.addFreshEntityWithPassengers(baby);
                 world.broadcastEntityEvent(this, (byte) 18);

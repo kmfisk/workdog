@@ -107,9 +107,9 @@ public class DogBreedGoal extends Goal {
     }
 
     private void startPregnancy() {
-        int litterSize = level.random.nextInt(4); // at least 0 puppies, max of 4
+        int litterSize = level.random.nextInt(4) + 1; // at least 1 puppies, max of 4
         target.setBreedingStatus("ispregnant", true);
-        target.setPuppies(litterSize);
+        target.setPuppies(target.getRandom().nextFloat() <= 0.1F ? 0 : litterSize);
         target.addSire(dog); // save sire nbt data to mother dog for each puppy added to litterSize
         target.setBreedingStatus("inheat", false); // 100% chance ends heat
         target.setTimeCycle("pregnancy", 72000); // starts pregnancy timer
