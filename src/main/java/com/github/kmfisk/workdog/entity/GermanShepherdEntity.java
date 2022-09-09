@@ -111,7 +111,7 @@ public class GermanShepherdEntity extends ProtectionDogEntity {
         SILVER_SADDLEBACK(Arrays.asList(2, 9)),
         TAN_SABLE(Arrays.asList(9, 7)),
         TAN_SADDLEBACK(Arrays.asList(3, 5)),
-        WHITE(Collections.singletonList(14));
+        WHITE(Collections.singletonList(10));
 
         private final List<Integer> carries;
 
