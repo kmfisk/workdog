@@ -74,7 +74,7 @@ public class PitBullEntity extends HuntingDogEntity {
     }
 
     @Override
-    public boolean hasLonghair() {
+    public boolean hasLonghairVariants() {
         return false;
     }
 
@@ -86,31 +86,9 @@ public class PitBullEntity extends HuntingDogEntity {
     @Nullable
     @Override
     public AgeableEntity getBreedOffspring(ServerWorld world, AgeableEntity entity) {
-        if (entity instanceof WorkingDogEntity) {
-            WorkingDogEntity partner = (WorkingDogEntity) entity;
-            WorkingDogEntity baby = WorkDogEntities.PIT_BULL.create(world);
-            if (baby != null) {
-                int variant;
-                if (getType() == partner.getType()) {
-                    if (random.nextBoolean()) {
-                        if (random.nextFloat() <= 0.6F) variant = partner.getVariant();
-                        else variant = getCarriedVariant(partner.getVariantName());
-                    } else {
-                        if (random.nextFloat() <= 0.6F) variant = getVariant();
-                        else variant = getCarriedVariant(getVariantName());
-                    }
-
-                } else {
-                    if (random.nextFloat() <= 0.6F) variant = getVariant();
-                    else variant = getCarriedVariant(getVariantName());
-                }
-                baby.setVariant(variant);
-            }
-
-            return baby;
-        }
-
-        return null;
+        PitBullEntity baby = WorkDogEntities.PIT_BULL.create(world);
+        if (baby != null) baby.setupChildVariant(this, (WorkingDogEntity) entity);
+        return baby;
     }
 
     public enum PitBullVariant {

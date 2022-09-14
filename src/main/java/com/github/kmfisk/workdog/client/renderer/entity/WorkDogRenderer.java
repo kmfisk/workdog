@@ -56,7 +56,7 @@ public abstract class WorkDogRenderer<T extends MobEntity, M extends EntityModel
 
             } else {
                 if (getAdultLocation() == null) setupAdultTextureLocations(entity);
-                if (dog.hasLonghair())
+                if (dog.hasLonghairVariants())
                     return new ResourceLocation(getAdultLocation() + getVariant(i) + (dog.isLonghair() ? "_long.png" : "_short.png"));
                 else return new ResourceLocation(getAdultLocation() + getVariant(i) + ".png");
             }

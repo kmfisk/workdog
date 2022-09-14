@@ -99,7 +99,7 @@ public abstract class WorkingDogEntity extends TameableEntity {
         entityData.set(GENDER, gender.toBool());
     }
 
-    public abstract boolean hasLonghair();
+    public abstract boolean hasLonghairVariants();
 
     public abstract float getLonghairChance();
 
@@ -299,6 +299,24 @@ public abstract class WorkingDogEntity extends TameableEntity {
             return false;
     }
 
+    public void setupChildVariant(WorkingDogEntity parent1, WorkingDogEntity parent2) {
+        int variant;
+        if (parent1.getType() == parent2.getType()) {
+            if (random.nextBoolean()) {
+                if (random.nextFloat() <= 0.6F) variant = parent2.getVariant();
+                else variant = getCarriedVariant(parent2.getVariantName());
+            } else {
+                if (random.nextFloat() <= 0.6F) variant = parent1.getVariant();
+                else variant = getCarriedVariant(parent1.getVariantName());
+            }
+
+        } else {
+            if (random.nextFloat() <= 0.6F) variant = parent1.getVariant();
+            else variant = getCarriedVariant(parent1.getVariantName());
+        }
+        setVariant(variant);
+    }
+
     @Override
     public void spawnChildFromBreeding(ServerWorld world, AnimalEntity entity) {
         if (entity instanceof WorkingDogEntity) {
@@ -323,6 +341,8 @@ public abstract class WorkingDogEntity extends TameableEntity {
                     longhair = random.nextFloat() <= 0.25F;
                 else
                     longhair = random.nextFloat() <= 0.08F;
+                if (getLonghairChance() == 1.0F) longhair = true;
+                else if (getLonghairChance() == 0.0F) longhair = false;
                 baby.setLonghair(longhair);
                 baby.moveTo(getX(), getY(), getZ(), 0.0F, 0.0F);
                 world.addFreshEntityWithPassengers(baby);
@@ -346,9 +366,7 @@ public abstract class WorkingDogEntity extends TameableEntity {
         if (entity instanceof WorkingDogEntity) {
             WorkingDogEntity baby = (WorkingDogEntity) entity;
             baby.setBaby(true);
-            baby.setGender(Gender.fromBool(random.nextBoolean()));
-            baby.setLonghair(isLonghair() ? random.nextFloat() <= 0.25F : random.nextFloat() <= 0.8F);
-            baby.setVariant(random.nextInt(getVariantCount())); // todo: coat "genetics"
+            baby.setupChildVariant(this, this);
         }
     }
 

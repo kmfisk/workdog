@@ -53,7 +53,7 @@ public class WDWolfEntity extends WorkingDogEntity {
     }
 
     @Override
-    public boolean hasLonghair() {
+    public boolean hasLonghairVariants() {
         return false;
     }
 
@@ -85,23 +85,7 @@ public class WDWolfEntity extends WorkingDogEntity {
 
             if (baby == null) {
                 baby = WorkDogEntities.WOLF.create(world);
-                if (baby != null) {
-                    int variant;
-                    if (getType() == partner.getType()) {
-                        if (random.nextBoolean()) {
-                            if (random.nextFloat() <= 0.6F) variant = partner.getVariant();
-                            else variant = getCarriedVariant(partner.getVariantName());
-                        } else {
-                            if (random.nextFloat() <= 0.6F) variant = getVariant();
-                            else variant = getCarriedVariant(getVariantName());
-                        }
-
-                    } else {
-                        if (random.nextFloat() <= 0.6F) variant = getVariant();
-                        else variant = getCarriedVariant(getVariantName());
-                    }
-                    baby.setVariant(variant);
-                }
+                if (baby != null) baby.setupChildVariant(this, partner);
             }
 
             return baby;
