@@ -1,0 +1,19 @@
+{
+  "multipart": [
+    { "when": { "facing": "north" },
+      "apply": { "model": "workdog:block/beds/green_fancy_bed" }
+    },
+
+    { "when": { "facing": "south" },
+      "apply": { "model": "workdog:block/beds/green_fancy_bed", "y": 180 }
+    },
+
+    { "when": { "facing": "east" },
+      "apply": { "model": "workdog:block/beds/green_fancy_bed", "y": 90 }
+    },
+
+    { "when": { "facing": "west" },
+      "apply": { "model": "workdog:block/beds/green_fancy_bed", "y": 270 }
+    }
+  ]
+}

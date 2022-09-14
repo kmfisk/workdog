@@ -1,0 +1,7 @@
+{
+  "parent": "workdog:block/fancy_bed",
+  "textures": {
+    "0": "block/pink_glazed_terracotta",
+    "1": "block/pink_wool"
+  }
+}

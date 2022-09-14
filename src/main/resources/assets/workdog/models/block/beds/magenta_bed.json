@@ -1,0 +1,7 @@
+{
+  "parent": "workdog:block/bed",
+  "textures": {
+    "0": "block/magenta_wool",
+    "1": "block/sand"
+  }
+}
