@@ -6,6 +6,7 @@ import com.github.kmfisk.workdog.entity.goal.DogAvoidEntityGoal;
 import com.github.kmfisk.workdog.entity.goal.DogBirthGoal;
 import com.github.kmfisk.workdog.entity.goal.DogBreedGoal;
 import com.github.kmfisk.workdog.entity.goal.DogTemptGoal;
+import com.github.kmfisk.workdog.item.WorkDogItems;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.MobEntity;
@@ -45,6 +46,7 @@ public abstract class WorkingDogEntity extends TameableEntity {
     public static final DataParameter<Boolean> LONGHAIR = EntityDataManager.defineId(WorkingDogEntity.class, DataSerializers.BOOLEAN);
     public static final DataParameter<Integer> VARIANT = EntityDataManager.defineId(WorkingDogEntity.class, DataSerializers.INT);
 
+    private static final DataParameter<Boolean> FIXED = EntityDataManager.defineId(WorkingDogEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> IN_HEAT = EntityDataManager.defineId(WorkingDogEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> IS_PREGNANT = EntityDataManager.defineId(WorkingDogEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Integer> BREED_TIMER = EntityDataManager.defineId(WorkingDogEntity.class, DataSerializers.INT);
@@ -63,8 +65,8 @@ public abstract class WorkingDogEntity extends TameableEntity {
         this.goalSelector.addGoal(1, new SitGoal(this));
         this.goalSelector.addGoal(3, new DogTemptGoal(this, 0.6D, FOOD, true));
         this.goalSelector.addGoal(6, new DogBirthGoal(this));
-        /*if (!this.isFixed()) todo*/
-        this.goalSelector.addGoal(9, new DogBreedGoal(this, 1.2D));
+        if (!this.isFixed())
+            this.goalSelector.addGoal(9, new DogBreedGoal(this, 1.2D));
         this.goalSelector.addGoal(10, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
     }
 
@@ -74,6 +76,7 @@ public abstract class WorkingDogEntity extends TameableEntity {
         this.entityData.define(GENDER, false);
         this.entityData.define(LONGHAIR, false);
         this.entityData.define(VARIANT, 0);
+        this.entityData.define(FIXED, false);
         this.entityData.define(IN_HEAT, false);
         this.entityData.define(IS_PREGNANT, false);
         this.entityData.define(BREED_TIMER, 0);
@@ -86,7 +89,7 @@ public abstract class WorkingDogEntity extends TameableEntity {
         setLonghair(random.nextFloat() <= getLonghairChance());
         setVariant(random.nextInt(getVariantCount()));
 
-        if (getGender() == Gender.FEMALE /*todo: && !isFixed()*/) setTimeCycle("end", random.nextInt(72000));
+        if (getGender() == Gender.FEMALE && !isFixed()) setTimeCycle("end", random.nextInt(72000));
 
         return super.finalizeSpawn(world, difficulty, reason, spawnData, dataTag);
     }
@@ -123,6 +126,18 @@ public abstract class WorkingDogEntity extends TameableEntity {
 
     public void setVariant(int variant) {
         entityData.set(VARIANT, variant);
+    }
+
+    public void setFixed(boolean fixed) {
+        this.entityData.set(FIXED, fixed);
+    }
+
+    public boolean isFixed() {
+        return this.entityData.get(FIXED);
+    }
+
+    public boolean getIsFixed() {
+        return this.entityData.get(FIXED);
     }
 
     public void setTimeCycle(String s, int time) {
@@ -195,6 +210,7 @@ public abstract class WorkingDogEntity extends TameableEntity {
         nbt.putBoolean("Longhair", isLonghair());
         nbt.putInt("Variant", getVariant());
 
+        nbt.putBoolean("Fixed", getIsFixed());
         if (getGender() == Gender.FEMALE) {
             nbt.putBoolean("InHeat", getBreedingStatus("inheat"));
             nbt.putBoolean("IsPregnant", getBreedingStatus("ispregnant"));
@@ -211,20 +227,20 @@ public abstract class WorkingDogEntity extends TameableEntity {
         setLonghair(nbt.getBoolean("Longhair"));
         setVariant(nbt.getInt("Variant"));
 
-        if (getGender() == Gender.FEMALE /*todo: && !isFixed()*/) {
+        setFixed(nbt.getBoolean("Fixed"));
+        if (getGender() == Gender.FEMALE && !isFixed()) {
             setBreedingStatus("inheat", nbt.getBoolean("InHeat"));
             setBreedingStatus("ispregnant", nbt.getBoolean("IsPregnant"));
             setPuppies(nbt.getInt("Puppies"));
             setSire(nbt.get("Sire"));
         }
-        /*todo: if (!isFixed())*/
-        setBreedTimer(nbt.getInt("Timer"));
+        if (!isFixed()) setBreedTimer(nbt.getInt("Timer"));
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (!level.isClientSide && !isBaby() /*todo: && !isFixed()*/ && getGender() == Gender.FEMALE) { //if female & adult & not fixed
+        if (!level.isClientSide && !isBaby() && !isFixed() && getGender() == Gender.FEMALE) { //if female & adult & not fixed
             if (getBreedingStatus("inheat")) //if in heat
                 if (getBreedTimer() <= 0) { //and timer is finished (reaching 0 after being in positives)
                     if (!getBreedingStatus("ispregnant")) //and not pregnant
@@ -247,7 +263,7 @@ public abstract class WorkingDogEntity extends TameableEntity {
     public void baseTick() {
         super.baseTick();
 
-        if (!isBaby() /*todo: && !isFixed()*/) { //if not a child & not fixed
+        if (!isBaby() && !isFixed()) { //if not a child & not fixed
             int breedTimer = getBreedTimer();
             if (getGender() == Gender.FEMALE) {
                 if (getBreedingStatus("inheat") || getBreedingStatus("ispregnant")) {
@@ -280,23 +296,17 @@ public abstract class WorkingDogEntity extends TameableEntity {
 
     @Override
     public boolean canMate(AnimalEntity entity) {
-        if (entity == this)
-            return false;
-        if (!(entity instanceof WorkingDogEntity))
-            return false;
-        if (entity.isBaby() || isBaby())
-            return false;
-        if (isOrderedToSit() || ((WorkingDogEntity) entity).isOrderedToSit())
-            return false;
+        if (entity == this) return false;
+        if (!(entity instanceof WorkingDogEntity)) return false;
+        if (entity.isBaby() || isBaby()) return false;
+        if (isOrderedToSit() || ((WorkingDogEntity) entity).isOrderedToSit()) return false;
 
         WorkingDogEntity partner = (WorkingDogEntity) entity;
-        /*if (partner.isFixed() || isFixed()) todo: neutering
-            return false;*/
+        if (partner.isFixed() || isFixed()) return false;
 
         if (getGender() == Gender.MALE && getBreedTimer() == 0)
             return (partner.getGender() == Gender.FEMALE && partner.getBreedingStatus("inheat"));
-        else
-            return false;
+        else return false;
     }
 
     public void setupChildVariant(WorkingDogEntity parent1, WorkingDogEntity parent2) {
@@ -385,7 +395,7 @@ public abstract class WorkingDogEntity extends TameableEntity {
                 player.displayClientMessage(new StringTextComponent("MALE, timer: " + getBreedTimer()), true);
             return ActionResultType.CONSUME;
 
-        } else if (stack.getItem() == Items.BLAZE_POWDER && /*!isFixed() &&*/ getBreedTimer() != 0 && !getBreedingStatus("ispregnant")) { //todo: remove testing
+        } else if (stack.getItem() == Items.BLAZE_POWDER && !isFixed() && getBreedTimer() != 0 && !getBreedingStatus("ispregnant")) { //todo: remove testing
             if (getGender() == Gender.MALE) setBreedTimer(0);
             else if (getBreedingStatus("inheat")) setBreedTimer(20);
             else setBreedTimer(-20);
@@ -403,15 +413,18 @@ public abstract class WorkingDogEntity extends TameableEntity {
         boolean isOwner = isOwnedBy(player);
         boolean canTame = isFood(stack) && !isTame() && (!(this instanceof WDWolfEntity) || isBaby());
         if (level.isClientSide) {
-            return isOwner || canTame ? ActionResultType.CONSUME : ActionResultType.PASS;
+            return isOwner || canTame ? ActionResultType.SUCCESS : ActionResultType.PASS;
 
         } else {
-            if (isTame() && isOwner) {
+            if (stack.getItem() == WorkDogItems.STERILIZATION_POTION.get() && player.isDiscrete())
+                return ActionResultType.CONSUME;
+
+            else if (isTame() && isOwner) {
                 setOrderedToSit(!isOrderedToSit());
                 jumping = false;
                 navigation.stop();
                 setTarget(null);
-                return ActionResultType.SUCCESS;
+                return ActionResultType.CONSUME;
 
             } else if (canTame) {
                 if (!player.abilities.instabuild) stack.shrink(1);
@@ -424,7 +437,7 @@ public abstract class WorkingDogEntity extends TameableEntity {
                     level.broadcastEntityEvent(this, (byte) 7);
                 } else level.broadcastEntityEvent(this, (byte) 6);
 
-                return ActionResultType.SUCCESS;
+                return ActionResultType.CONSUME;
             }
         }
 
