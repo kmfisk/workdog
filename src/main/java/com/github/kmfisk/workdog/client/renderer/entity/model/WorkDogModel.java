@@ -1,12 +1,21 @@
 package com.github.kmfisk.workdog.client.renderer.entity.model;
 
+import com.github.kmfisk.workdog.entity.core.WorkingDogEntity;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public abstract class WorkDogModel<E extends Entity> extends SegmentedModel<E> {
+public abstract class WorkDogModel<E extends WorkingDogEntity> extends SegmentedModel<E> {
     @Override
-    public abstract void setupAnim(E entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch);
+    public void setupAnim(E entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        if (!entity.isInSittingPose()) this.playMovementAnimation(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+        if ((limbSwingAmount <= 0.05F && !entity.isInWater()))
+            this.playIdleAnimation(entity, entity.tickCount, 0.3F, ageInTicks, netHeadYaw, headPitch);
+    }
+
+    public abstract void playIdleAnimation(E entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch);
+
+    public abstract void playMovementAnimation(E entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch);
 
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
         modelRenderer.xRot = x;
