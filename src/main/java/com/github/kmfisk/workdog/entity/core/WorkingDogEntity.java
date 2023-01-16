@@ -65,8 +65,7 @@ public abstract class WorkingDogEntity extends TameableEntity {
         this.goalSelector.addGoal(1, new SitGoal(this));
         this.goalSelector.addGoal(3, new DogTemptGoal(this, 0.6D, FOOD, true));
         this.goalSelector.addGoal(6, new DogBirthGoal(this));
-        if (!this.isFixed())
-            this.goalSelector.addGoal(9, new DogBreedGoal(this, 1.2D));
+        this.goalSelector.addGoal(9, new DogBreedGoal(this, 1.2D));
         this.goalSelector.addGoal(10, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
     }
 
@@ -133,10 +132,6 @@ public abstract class WorkingDogEntity extends TameableEntity {
     }
 
     public boolean isFixed() {
-        return this.entityData.get(FIXED);
-    }
-
-    public boolean getIsFixed() {
         return this.entityData.get(FIXED);
     }
 
@@ -210,14 +205,14 @@ public abstract class WorkingDogEntity extends TameableEntity {
         nbt.putBoolean("Longhair", isLonghair());
         nbt.putInt("Variant", getVariant());
 
-        nbt.putBoolean("Fixed", getIsFixed());
-        if (getGender() == Gender.FEMALE) {
+        nbt.putBoolean("Fixed", isFixed());
+        if (getGender() == Gender.FEMALE && !isFixed()) {
             nbt.putBoolean("InHeat", getBreedingStatus("inheat"));
             nbt.putBoolean("IsPregnant", getBreedingStatus("ispregnant"));
             nbt.putInt("Puppies", getPuppies());
             nbt.put("Sire", getSire());
         }
-        nbt.putInt("Timer", getBreedTimer());
+        if (!isFixed()) nbt.putInt("Timer", getBreedTimer());
     }
 
     @Override
@@ -387,12 +382,18 @@ public abstract class WorkingDogEntity extends TameableEntity {
         if (stack.getItem() == Items.STICK) { //todo: remove testing
             if (player.isDiscrete())
                 player.displayClientMessage(new StringTextComponent("Variant: " + getVariant() + " // Longhair: " + isLonghair()), true);
-            else if (getGender() == Gender.FEMALE && !getBreedingStatus("ispregnant"))
-                player.displayClientMessage(new StringTextComponent("FEMALE, heat: " + getBreedingStatus("inheat") + " // timer: " + getBreedTimer()), true);
-            else if (getGender() == Gender.FEMALE)
-                player.displayClientMessage(new StringTextComponent("FEMALE, pregnant: " + getBreedingStatus("ispregnant") + " // puppies: " + getPuppies() + " // timer: " + getBreedTimer()), true);
-            else
-                player.displayClientMessage(new StringTextComponent("MALE, timer: " + getBreedTimer()), true);
+            else {
+                StringBuilder debugInfo = new StringBuilder();
+                debugInfo.append(getGender() == Gender.MALE ? "MALE, " : "FEMALE, ");
+                if (isFixed()) debugInfo.append("fixed: ").append(getBreedTimer());
+                else if (getGender() == Gender.MALE) debugInfo.append("timer: ").append(getBreedTimer());
+                else if (getBreedingStatus("inheat")) debugInfo.append("in heat for: ").append(getBreedTimer());
+                else if (!getBreedingStatus("ispregnant")) debugInfo.append("heat starts in: ").append(getBreedTimer());
+                else debugInfo.append("pregnant for: ").append(getBreedTimer()).append(" // puppies: ").append(getPuppies());
+
+                player.displayClientMessage(new StringTextComponent(debugInfo.toString()), true);
+            }
+
             return ActionResultType.CONSUME;
 
         } else if (stack.getItem() == Items.BLAZE_POWDER && !isFixed() && getBreedTimer() != 0 && !getBreedingStatus("ispregnant")) { //todo: remove testing
@@ -416,10 +417,7 @@ public abstract class WorkingDogEntity extends TameableEntity {
             return isOwner || canTame ? ActionResultType.SUCCESS : ActionResultType.PASS;
 
         } else {
-            if (stack.getItem() == WorkDogItems.STERILIZATION_POTION.get() && player.isDiscrete())
-                return ActionResultType.CONSUME;
-
-            else if (isTame() && isOwner) {
+            if (isTame() && isOwner) {
                 setOrderedToSit(!isOrderedToSit());
                 jumping = false;
                 navigation.stop();

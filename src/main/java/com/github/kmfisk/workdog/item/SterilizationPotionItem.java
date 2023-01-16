@@ -29,22 +29,24 @@ public class SterilizationPotionItem extends Item {
         if (target instanceof WorkingDogEntity) {
             WorkingDogEntity dog = (WorkingDogEntity) target;
             if ((!dog.isTame() || (dog.isTame() && dog.isOwnedBy(player))) && player.isCrouching() && !dog.isFixed()) {
-                dog.setFixed(true);
                 for (int i = 0; i < 7; ++i) {
                     double d0 = random.nextGaussian() * 0.02D;
                     double d1 = random.nextGaussian() * 0.02D;
                     double d2 = random.nextGaussian() * 0.02D;
                     dog.level.addParticle(ParticleTypes.HAPPY_VILLAGER, dog.getRandomX(1.0D), dog.getRandomY() + 0.5D, dog.getRandomZ(1.0D), d0, d1, d2);
                 }
-                player.displayClientMessage(new TranslationTextComponent(dog.getGender() == WorkingDogEntity.Gender.FEMALE ? "chat.info.success_fixed_female" : "chat.info.success_fixed_male", dog.getName()), true);
+                if (!target.level.isClientSide()) {
+                    dog.setFixed(true);
+                    player.displayClientMessage(new TranslationTextComponent(dog.getGender() == WorkingDogEntity.Gender.FEMALE ? "chat.info.success_fixed_female" : "chat.info.success_fixed_male", dog.getName()), true);
 
-                if (!player.isCreative()) {
-                    ItemStack emptyBottle = new ItemStack(Items.GLASS_BOTTLE);
-                    stack.shrink(1);
-                    if (stack.isEmpty())
-                        player.setItemInHand(hand, emptyBottle);
-                    else if (!player.inventory.add(emptyBottle))
-                        player.drop(emptyBottle, false);
+                    if (!player.isCreative()) {
+                        ItemStack emptyBottle = new ItemStack(Items.GLASS_BOTTLE);
+                        stack.shrink(1);
+                        if (stack.isEmpty())
+                            player.setItemInHand(hand, emptyBottle);
+                        else if (!player.inventory.add(emptyBottle))
+                            player.drop(emptyBottle, false);
+                    }
                 }
             }
         }

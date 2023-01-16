@@ -24,7 +24,7 @@ public class DogBirthGoal extends Goal {
         if (mother.getGender() != WorkingDogEntity.Gender.FEMALE || !mother.getBreedingStatus("ispregnant") || mother.getBreedingStatus("inheat"))
             return false;
 
-        else if (mother.getBreedTimer() >= 0)
+        else if (mother.getBreedTimer() >= 0 || mother.isFixed())
             return false;
 
         else return !mother.isTame() || mother.getOwner() != null;
@@ -32,7 +32,7 @@ public class DogBirthGoal extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        return mother.getBreedingStatus("ispregnant");
+        return mother.getBreedingStatus("ispregnant") && !mother.isFixed();
     }
 
     @Override

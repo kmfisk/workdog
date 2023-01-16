@@ -29,7 +29,7 @@ public class DogBreedGoal extends Goal {
     @Override
     public boolean canUse() {
         if (dog.getGender() == WorkingDogEntity.Gender.FEMALE) return false;
-        if (dog.getIsFixed()) return false;
+        if (dog.isFixed()) return false;
 
         nearbyDogs = level.getEntitiesOfClass(WorkingDogEntity.class, dog.getBoundingBox().inflate(NEARBY_RADIUS_CHECK));
         /*if (nearbyDogs.size() >= SCConfig.breeding_limit.get()) todo: breeding limit?
@@ -41,6 +41,7 @@ public class DogBreedGoal extends Goal {
 
         target = getNearbyMate();
         if (target != null && dog.getSensing().canSee(target) && target.getBreedingStatus("inheat")) {
+            if (target.isFixed()) return false;
             if (!target.isTame()) return true;
             LivingEntity targetOwner = target.getOwner();
             return /*todo: !ownerExceedsLimit(target, targetOwner) &&*/ !ownerIsOffline(target, targetOwner);
