@@ -322,35 +322,39 @@ public abstract class WorkingDogEntity extends TameableEntity {
         setVariant(variant);
     }
 
+    protected void setupChildData(WorkingDogEntity parent1, WorkingDogEntity parent2) {
+        setAge(-72000);
+        setGender(Gender.fromBool(random.nextBoolean()));
+        boolean longhair;
+        if (parent1.isLonghair() && parent2.isLonghair())
+            longhair = true;
+        else if ((parent1.isLonghair() && !parent2.isLonghair()) || (!parent1.isLonghair() && parent2.isLonghair()))
+            longhair = random.nextFloat() <= 0.25F;
+        else
+            longhair = random.nextFloat() <= 0.08F;
+        if (getLonghairChance() == 1.0F) longhair = true;
+        else if (getLonghairChance() == 0.0F) longhair = false;
+        setLonghair(longhair);
+    }
+
     @Override
     public void spawnChildFromBreeding(ServerWorld world, AnimalEntity entity) {
         if (entity instanceof WorkingDogEntity) {
             WorkingDogEntity partner = (WorkingDogEntity) entity;
-            WorkingDogEntity baby;
+            WorkingDogEntity child;
             if (getType() == partner.getType() || random.nextBoolean())
-                baby = (WorkingDogEntity) getBreedOffspring(world, partner);
-            else baby = (WorkingDogEntity) partner.getBreedOffspring(world, this);
-            final net.minecraftforge.event.entity.living.BabyEntitySpawnEvent event = new net.minecraftforge.event.entity.living.BabyEntitySpawnEvent(this, partner, baby);
+                child = (WorkingDogEntity) getBreedOffspring(world, partner);
+            else child = (WorkingDogEntity) partner.getBreedOffspring(world, this);
+            final net.minecraftforge.event.entity.living.BabyEntitySpawnEvent event = new net.minecraftforge.event.entity.living.BabyEntitySpawnEvent(this, partner, child);
             final boolean cancelled = net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event);
-            baby = (WorkingDogEntity) event.getChild();
+            child = (WorkingDogEntity) event.getChild();
 
             if (cancelled) return;
 
-            if (baby != null) {
-                baby.setAge(-72000);
-                baby.setGender(Gender.fromBool(random.nextBoolean()));
-                boolean longhair;
-                if (isLonghair() && partner.isLonghair())
-                    longhair = true;
-                else if ((isLonghair() && !partner.isLonghair()) || (!isLonghair() && partner.isLonghair()))
-                    longhair = random.nextFloat() <= 0.25F;
-                else
-                    longhair = random.nextFloat() <= 0.08F;
-                if (getLonghairChance() == 1.0F) longhair = true;
-                else if (getLonghairChance() == 0.0F) longhair = false;
-                baby.setLonghair(longhair);
-                baby.moveTo(getX(), getY(), getZ(), 0.0F, 0.0F);
-                world.addFreshEntityWithPassengers(baby);
+            if (child != null) {
+                child.setupChildData(this, partner);
+                child.moveTo(getX(), getY(), getZ(), 0.0F, 0.0F);
+                world.addFreshEntityWithPassengers(child);
                 world.broadcastEntityEvent(this, (byte) 18);
 
                 for (int i = 0; i < 7; ++i) {
@@ -369,9 +373,9 @@ public abstract class WorkingDogEntity extends TameableEntity {
     @Override
     protected void onOffspringSpawnedFromEgg(PlayerEntity player, MobEntity entity) {
         if (entity instanceof WorkingDogEntity) {
-            WorkingDogEntity baby = (WorkingDogEntity) entity;
-            baby.setBaby(true);
-            baby.setupChildVariant(this, this);
+            WorkingDogEntity child = (WorkingDogEntity) entity;
+            child.setupChildVariant(this, this);
+            child.setupChildData(this, this);
         }
     }
 
