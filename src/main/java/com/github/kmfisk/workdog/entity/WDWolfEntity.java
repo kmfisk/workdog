@@ -1,13 +1,19 @@
 package com.github.kmfisk.workdog.entity;
 
+import com.github.kmfisk.workdog.config.WorkingDogsConfig;
 import com.github.kmfisk.workdog.entity.core.WorkingDogEntity;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ILivingEntityData;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.server.ServerWorld;
@@ -25,6 +31,15 @@ public class WDWolfEntity extends WorkingDogEntity {
 
     public static AttributeModifierMap.MutableAttribute registerAttributes() {
         return createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.30F).add(Attributes.MAX_HEALTH, 18.0F).add(Attributes.ATTACK_DAMAGE, 6.0F);
+    }
+
+    @Override
+    public ILivingEntityData finalizeSpawn(IServerWorld world, DifficultyInstance difficulty, SpawnReason reason, @Nullable ILivingEntityData spawnData, @Nullable CompoundNBT dataTag) {
+        if (spawnData == null) {
+            if (!WorkingDogsConfig.pedigreeMode.get()) spawnData = new AgeableData(0.1F);
+            else spawnData = new AgeableData(false);
+        }
+        return super.finalizeSpawn(world, difficulty, reason, spawnData, dataTag);
     }
 
     @Override
