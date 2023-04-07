@@ -2,6 +2,8 @@ package com.github.kmfisk.workdog.entity;
 
 import com.github.kmfisk.workdog.config.WorkDogConfig;
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
@@ -10,7 +12,9 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RegistryKey;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
@@ -18,10 +22,12 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 public class WDWolfEntity extends WorkDogEntity {
@@ -107,6 +113,13 @@ public class WDWolfEntity extends WorkDogEntity {
         }
 
         return null;
+    }
+
+    public static boolean checkWolfSpawnRules(EntityType<? extends WDWolfEntity> entityType, IServerWorld world, SpawnReason spawnReason, BlockPos pos, Random random) {
+        BlockState blockState = world.getBlockState(pos.below());
+        return (blockState.is(Blocks.GRASS_BLOCK) || blockState.is(Blocks.SNOW) || blockState.is(BlockTags.ICE)
+                || Tags.Blocks.SAND.contains(blockState.getBlock()) || Tags.Blocks.DIRT.contains(blockState.getBlock()))
+                && world.getRawBrightness(pos, 0) < 13;
     }
 
     public enum WolfVariant {

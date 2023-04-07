@@ -5,7 +5,6 @@ import com.github.kmfisk.workdog.client.color.ColorEvents;
 import com.github.kmfisk.workdog.config.WorkDogConfig;
 import com.github.kmfisk.workdog.entity.WorkDogEntities;
 import com.github.kmfisk.workdog.item.WorkDogItems;
-import com.github.kmfisk.workdog.tags.WorkDogTags;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -22,7 +21,7 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 @Mod(WorkDog.MOD_ID)
 public class WorkDog {
     public static final String MOD_ID = "workdog";
-    public static final ItemGroup ITEM_GROUP = new ItemGroup(MOD_ID + ".tab") {
+    public static final ItemGroup ITEM_GROUP = new ItemGroup(MOD_ID + ".group") {
         @Override
         public ItemStack makeIcon() {
             return new ItemStack(Items.BONE);
@@ -30,21 +29,24 @@ public class WorkDog {
     };
 
     public WorkDog() {
-        IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
-        WorkDogTags.init();
+        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        WorkDogEntities.REGISTRAR.register(modBus);
-        WorkDogItems.REGISTRAR.register(modBus);
-        WorkDogBlocks.REGISTRAR.register(modBus);
+        WorkDogEntities.REGISTRAR.register(bus);
+        WorkDogBlocks.REGISTRAR.register(bus);
+        WorkDogItems.REGISTRAR.register(bus);
 
-        modBus.addListener(this::registerAttributes);
+        bus.addListener(this::setup);
+        bus.addListener(this::registerAttributes);
 
-        if (FMLEnvironment.dist == Dist.CLIENT) {
-            modBus.addListener(this::setupClient);
-            modBus.addListener(ColorEvents::registerColorHandlerBlocks);
-        }
+        bus.addListener(this::setupClient);
+
+        if (FMLEnvironment.dist == Dist.CLIENT) bus.addListener(ColorEvents::registerColorHandlerBlocks);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, WorkDogConfig.CONFIG_SPEC);
+    }
+
+    private void setup(final FMLClientSetupEvent event) {
+        WorkDogEntities.registerSpawnPlacements();
     }
 
     private void setupClient(final FMLClientSetupEvent event) {

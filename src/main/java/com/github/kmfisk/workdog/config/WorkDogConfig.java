@@ -19,7 +19,7 @@ public class WorkDogConfig {
     private static void setupConfig(ForgeConfigSpec.Builder builder) {
         builder.push("Spawns");
         builder.push("Wolves");
-        wolfSpawnChance = builder.define("chance", 8);
+        wolfSpawnChance = builder.define("chance", 16);
         wolfMinGroup = builder.define("min", 1);
         wolfMaxGroup = builder.define("max", 5);
         pedigreeMode = builder.define("pedigreeMode", false);

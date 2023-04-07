@@ -3,13 +3,11 @@ package com.github.kmfisk.workdog.entity;
 import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.client.renderer.entity.*;
 import com.github.kmfisk.workdog.item.WorkDogItems;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.item.Item;
 import net.minecraft.util.Tuple;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -34,6 +32,10 @@ public class WorkDogEntities {
     public static final EntityType<JackRussellTerrierEntity> JACK_RUSSELL_TERRIER = register("jack_russell_terrier", JackRussellTerrierEntity::new, EntityClassification.CREATURE, JackRussellTerrierEntity::registerAttributes, () -> JackRussellTerrierRenderer::new, 1.0F, 1.0F);
     public static final EntityType<PitBullEntity> PIT_BULL = register("pit_bull", PitBullEntity::new, EntityClassification.CREATURE, PitBullEntity::registerAttributes, () -> PitBullRenderer::new, 1.0F, 1.0F);
     public static final EntityType<WDWolfEntity> WOLF = register("wolf", WDWolfEntity::new, EntityClassification.CREATURE, WDWolfEntity::registerAttributes, () -> WDWolfRenderer::new, 1.0F, 1.0F);
+
+    public static void registerSpawnPlacements() {
+        EntitySpawnPlacementRegistry.register(WOLF, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, WDWolfEntity::checkWolfSpawnRules);
+    }
 
     public static void registerAttributes(BiConsumer<EntityType<? extends LivingEntity>, AttributeModifierMap.MutableAttribute> register) {
         for (Tuple<EntityType<? extends LivingEntity>, Supplier<AttributeModifierMap.MutableAttribute>> attribute : ATTRIBUTES)
