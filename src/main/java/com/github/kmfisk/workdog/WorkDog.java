@@ -2,6 +2,7 @@ package com.github.kmfisk.workdog;
 
 import com.github.kmfisk.workdog.block.WorkDogBlocks;
 import com.github.kmfisk.workdog.client.color.ColorEvents;
+import com.github.kmfisk.workdog.config.WorkDogConfig;
 import com.github.kmfisk.workdog.entity.WorkDogEntities;
 import com.github.kmfisk.workdog.item.WorkDogItems;
 import com.github.kmfisk.workdog.tags.WorkDogTags;
@@ -11,7 +12,9 @@ import net.minecraft.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
@@ -40,6 +43,8 @@ public class WorkDog {
             modBus.addListener(this::setupClient);
             modBus.addListener(ColorEvents::registerColorHandlerBlocks);
         }
+
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, WorkDogConfig.CONFIG_SPEC);
     }
 
     private void setupClient(final FMLClientSetupEvent event) {
