@@ -1,13 +1,11 @@
 package com.github.kmfisk.workdog.item;
 
-import com.github.kmfisk.workdog.entity.core.WorkingDogEntity;
+import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
@@ -26,8 +24,8 @@ public class PinkJuiceItem extends Item {
 
     @Override
     public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity player, LivingEntity target, Hand hand) {
-        if (target instanceof WorkingDogEntity) {
-            WorkingDogEntity dog = (WorkingDogEntity) target;
+        if (target instanceof WorkDogEntity) {
+            WorkDogEntity dog = (WorkDogEntity) target;
             if ((!dog.isTame() || (dog.isTame() && dog.isOwnedBy(player))) && player.isCrouching()) {
                 dog.remove();
                 if (!player.isCreative()) stack.shrink(1);

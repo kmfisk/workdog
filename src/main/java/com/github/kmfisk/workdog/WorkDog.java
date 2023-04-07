@@ -16,8 +16,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
-@Mod(WorkingDogs.MOD_ID)
-public class WorkingDogs {
+@Mod(WorkDog.MOD_ID)
+public class WorkDog {
     public static final String MOD_ID = "workdog";
     public static final ItemGroup ITEM_GROUP = new ItemGroup(MOD_ID + ".tab") {
         @Override
@@ -26,7 +26,7 @@ public class WorkingDogs {
         }
     };
 
-    public WorkingDogs() {
+    public WorkDog() {
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
         WorkDogTags.init();
 

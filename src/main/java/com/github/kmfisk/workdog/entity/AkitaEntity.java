@@ -1,7 +1,7 @@
 package com.github.kmfisk.workdog.entity;
 
 import com.github.kmfisk.workdog.entity.core.HuntingDogEntity;
-import com.github.kmfisk.workdog.entity.core.WorkingDogEntity;
+import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -100,7 +100,7 @@ public class AkitaEntity extends HuntingDogEntity {
     @Override
     public AgeableEntity getBreedOffspring(ServerWorld world, AgeableEntity entity) {
         AkitaEntity baby = WorkDogEntities.AKITA.create(world);
-        if (baby != null) baby.setupChildVariant(this, (WorkingDogEntity) entity);
+        if (baby != null) baby.setupChildVariant(this, (WorkDogEntity) entity);
         return baby;
     }
 

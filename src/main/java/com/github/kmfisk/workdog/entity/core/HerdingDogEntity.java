@@ -4,7 +4,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.world.World;
 
-public abstract class HerdingDogEntity extends WorkingDogEntity {
+public abstract class HerdingDogEntity extends WorkDogEntity {
     public HerdingDogEntity(EntityType<? extends TameableEntity> type, World world) {
         super(type, world);
     }

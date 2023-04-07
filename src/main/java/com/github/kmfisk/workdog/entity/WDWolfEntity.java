@@ -1,7 +1,7 @@
 package com.github.kmfisk.workdog.entity;
 
-import com.github.kmfisk.workdog.config.WorkingDogsConfig;
-import com.github.kmfisk.workdog.entity.core.WorkingDogEntity;
+import com.github.kmfisk.workdog.config.WorkDogConfig;
+import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-public class WDWolfEntity extends WorkingDogEntity {
+public class WDWolfEntity extends WorkDogEntity {
     public WDWolfEntity(EntityType<? extends TameableEntity> type, World world) {
         super(type, world);
     }
@@ -36,7 +36,7 @@ public class WDWolfEntity extends WorkingDogEntity {
     @Override
     public ILivingEntityData finalizeSpawn(IServerWorld world, DifficultyInstance difficulty, SpawnReason reason, @Nullable ILivingEntityData spawnData, @Nullable CompoundNBT dataTag) {
         if (spawnData == null) {
-            if (!WorkingDogsConfig.pedigreeMode.get()) spawnData = new AgeableData(0.1F);
+            if (!WorkDogConfig.pedigreeMode.get()) spawnData = new AgeableData(0.1F);
             else spawnData = new AgeableData(false);
         }
         return super.finalizeSpawn(world, difficulty, reason, spawnData, dataTag);
@@ -80,9 +80,9 @@ public class WDWolfEntity extends WorkingDogEntity {
     @Nullable
     @Override
     public AgeableEntity getBreedOffspring(ServerWorld world, AgeableEntity entity) {
-        if (entity instanceof WorkingDogEntity) {
-            WorkingDogEntity partner = (WorkingDogEntity) entity;
-            WorkingDogEntity baby = null;
+        if (entity instanceof WorkDogEntity) {
+            WorkDogEntity partner = (WorkDogEntity) entity;
+            WorkDogEntity baby = null;
             if (random.nextFloat() <= 0.05F) {
                 Biome biome = level.getBiome(blockPosition());
                 Set<BiomeDictionary.Type> biomeTypes = BiomeDictionary.getTypes(RegistryKey.create(Registry.BIOME_REGISTRY, biome.getRegistryName()));

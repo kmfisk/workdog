@@ -1,11 +1,10 @@
 package com.github.kmfisk.workdog.client.renderer.entity.model;
 
-import com.github.kmfisk.workdog.entity.core.WorkingDogEntity;
+import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
 import net.minecraft.client.renderer.entity.model.SegmentedModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.Entity;
 
-public abstract class WorkDogModel<E extends WorkingDogEntity> extends SegmentedModel<E> {
+public abstract class WorkDogModel<E extends WorkDogEntity> extends SegmentedModel<E> {
     @Override
     public void setupAnim(E entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 //        this.playMovementAnimation(entity, entity.tickCount, 0.3F, ageInTicks, netHeadYaw, headPitch);

@@ -1,6 +1,6 @@
 package com.github.kmfisk.workdog.item;
 
-import com.github.kmfisk.workdog.entity.core.WorkingDogEntity;
+import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -26,8 +26,8 @@ public class SterilizationPotionItem extends Item {
 
     @Override
     public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity player, LivingEntity target, Hand hand) {
-        if (target instanceof WorkingDogEntity) {
-            WorkingDogEntity dog = (WorkingDogEntity) target;
+        if (target instanceof WorkDogEntity) {
+            WorkDogEntity dog = (WorkDogEntity) target;
             if ((!dog.isTame() || (dog.isTame() && dog.isOwnedBy(player))) && player.isCrouching() && !dog.isFixed()) {
                 for (int i = 0; i < 7; ++i) {
                     double d0 = random.nextGaussian() * 0.02D;
@@ -37,7 +37,7 @@ public class SterilizationPotionItem extends Item {
                 }
                 if (!target.level.isClientSide()) {
                     dog.setFixed(true);
-                    player.displayClientMessage(new TranslationTextComponent(dog.getGender() == WorkingDogEntity.Gender.FEMALE ? "chat.info.success_fixed_female" : "chat.info.success_fixed_male", dog.getName()), true);
+                    player.displayClientMessage(new TranslationTextComponent(dog.getGender() == WorkDogEntity.Gender.FEMALE ? "chat.info.success_fixed_female" : "chat.info.success_fixed_male", dog.getName()), true);
 
                     if (!player.isCreative()) {
                         ItemStack emptyBottle = new ItemStack(Items.GLASS_BOTTLE);

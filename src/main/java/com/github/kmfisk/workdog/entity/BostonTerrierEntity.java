@@ -1,7 +1,7 @@
 package com.github.kmfisk.workdog.entity;
 
 import com.github.kmfisk.workdog.entity.core.ToyDogEntity;
-import com.github.kmfisk.workdog.entity.core.WorkingDogEntity;
+import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -73,7 +73,7 @@ public class BostonTerrierEntity extends ToyDogEntity {
     @Override
     public AgeableEntity getBreedOffspring(ServerWorld world, AgeableEntity entity) {
         BostonTerrierEntity baby = WorkDogEntities.BOSTON_TERRIER.create(world);
-        if (baby != null) baby.setupChildVariant(this, (WorkingDogEntity) entity);
+        if (baby != null) baby.setupChildVariant(this, (WorkDogEntity) entity);
         return baby;
     }
 

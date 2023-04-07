@@ -1,6 +1,6 @@
 package com.github.kmfisk.workdog.client.renderer.entity;
 
-import com.github.kmfisk.workdog.WorkingDogs;
+import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.client.renderer.entity.model.BorderCollieModel;
 import com.github.kmfisk.workdog.entity.BorderCollieEntity;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
@@ -15,12 +15,12 @@ public class BorderCollieRenderer extends WorkDogRenderer<BorderCollieEntity, Bo
 
     @Override
     public void setupBabyTextureLocations(BorderCollieEntity entity) {
-        baby_loc = new ResourceLocation(WorkingDogs.MOD_ID, "textures/entity/border_collie/bordercollie_puppy_");
+        baby_loc = new ResourceLocation(WorkDog.MOD_ID, "textures/entity/border_collie/bordercollie_puppy_");
     }
 
     @Override
     public void setupAdultTextureLocations(BorderCollieEntity entity) {
-        adult_loc = new ResourceLocation(WorkingDogs.MOD_ID, "textures/entity/border_collie/bordercollie_");
+        adult_loc = new ResourceLocation(WorkDog.MOD_ID, "textures/entity/border_collie/bordercollie_");
     }
 
     @Override

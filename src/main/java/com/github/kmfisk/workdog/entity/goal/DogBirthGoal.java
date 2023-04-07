@@ -1,6 +1,6 @@
 package com.github.kmfisk.workdog.entity.goal;
 
-import com.github.kmfisk.workdog.entity.core.WorkingDogEntity;
+import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.Goal;
@@ -10,18 +10,18 @@ import net.minecraft.world.server.ServerWorld;
 import java.util.Optional;
 
 public class DogBirthGoal extends Goal {
-    private final WorkingDogEntity mother;
-    private WorkingDogEntity sire;
+    private final WorkDogEntity mother;
+    private WorkDogEntity sire;
     World level;
 
-    public DogBirthGoal(WorkingDogEntity dogEntity) {
+    public DogBirthGoal(WorkDogEntity dogEntity) {
         this.mother = dogEntity;
         this.level = dogEntity.level;
     }
 
     @Override
     public boolean canUse() {
-        if (mother.getGender() != WorkingDogEntity.Gender.FEMALE || !mother.getBreedingStatus("ispregnant") || mother.getBreedingStatus("inheat"))
+        if (mother.getGender() != WorkDogEntity.Gender.FEMALE || !mother.getBreedingStatus("ispregnant") || mother.getBreedingStatus("inheat"))
             return false;
 
         else if (mother.getBreedTimer() >= 0 || mother.isFixed())
@@ -46,8 +46,8 @@ public class DogBirthGoal extends Goal {
         if (sireType.isPresent()) {
             Entity entity = sireType.get().create(level);
             entity.load(mother.getSire());
-            if (entity instanceof WorkingDogEntity) {
-                sire = (WorkingDogEntity) entity; // create the sire dog for puppy referencing
+            if (entity instanceof WorkDogEntity) {
+                sire = (WorkDogEntity) entity; // create the sire dog for puppy referencing
                 for (int i = 0; i < mother.getPuppies(); i++) mother.spawnChildFromBreeding((ServerWorld) level, sire);
             }
         }

@@ -1,6 +1,6 @@
 package com.github.kmfisk.workdog.entity.goal;
 
-import com.github.kmfisk.workdog.entity.core.WorkingDogEntity;
+import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
 import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
@@ -13,13 +13,13 @@ public class DogBreedGoal extends Goal {
     private static final EntityPredicate PARTNER_TARGETING = (new EntityPredicate()).range(8.0D).allowInvulnerable().allowSameTeam().allowUnseeable();
     private static final double NEARBY_RADIUS_CHECK = 16.0D;
     private final double moveSpeed;
-    private final WorkingDogEntity dog;
+    private final WorkDogEntity dog;
     protected final World level;
-    private WorkingDogEntity target;
+    private WorkDogEntity target;
     private int breedDelay;
-    private List<WorkingDogEntity> nearbyDogs;
+    private List<WorkDogEntity> nearbyDogs;
 
-    public DogBreedGoal(WorkingDogEntity entityDog, double speed) {
+    public DogBreedGoal(WorkDogEntity entityDog, double speed) {
         this.dog = entityDog;
         this.level = entityDog.level;
         this.moveSpeed = speed;
@@ -28,10 +28,10 @@ public class DogBreedGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (dog.getGender() == WorkingDogEntity.Gender.FEMALE) return false;
+        if (dog.getGender() == WorkDogEntity.Gender.FEMALE) return false;
         if (dog.isFixed()) return false;
 
-        nearbyDogs = level.getEntitiesOfClass(WorkingDogEntity.class, dog.getBoundingBox().inflate(NEARBY_RADIUS_CHECK));
+        nearbyDogs = level.getEntitiesOfClass(WorkDogEntity.class, dog.getBoundingBox().inflate(NEARBY_RADIUS_CHECK));
         /*if (nearbyDogs.size() >= SCConfig.breeding_limit.get()) todo: breeding limit?
             return false;*/
 
@@ -55,10 +55,10 @@ public class DogBreedGoal extends Goal {
         if (dog.isOrderedToSit() || target.isOrderedToSit()) return false;
         if (dog.isFixed() || target.isFixed()) return false;
 
-        boolean maleCooldownCheck = dog.getGender() == WorkingDogEntity.Gender.MALE && dog.getBreedTimer() == 0;
-        boolean femaleHeatCheck = target.getGender() == WorkingDogEntity.Gender.FEMALE && target.getBreedingStatus("inheat");
+        boolean maleCooldownCheck = dog.getGender() == WorkDogEntity.Gender.MALE && dog.getBreedTimer() == 0;
+        boolean femaleHeatCheck = target.getGender() == WorkDogEntity.Gender.FEMALE && target.getBreedingStatus("inheat");
 
-        nearbyDogs = level.getEntitiesOfClass(WorkingDogEntity.class, dog.getBoundingBox().inflate(NEARBY_RADIUS_CHECK));
+        nearbyDogs = level.getEntitiesOfClass(WorkDogEntity.class, dog.getBoundingBox().inflate(NEARBY_RADIUS_CHECK));
 
         return maleCooldownCheck && target.isAlive() && femaleHeatCheck && breedDelay < 60
                 /*todo: && nearbyDogs.size() < SCConfig.breeding_limit.get()*/ && dog.getSensing().canSee(target);
@@ -68,7 +68,7 @@ public class DogBreedGoal extends Goal {
         return tamedDog != null && tamedDog.isTame() && SCConfig.tamed_limit.get() != 0 && owner != null && owner.getPersistentData().getInt("CatCount") >= SCConfig.tamed_limit.get();
     }*/
 
-    private boolean ownerIsOffline(WorkingDogEntity tamedDog, LivingEntity owner) {
+    private boolean ownerIsOffline(WorkDogEntity tamedDog, LivingEntity owner) {
         return tamedDog != null && tamedDog.isTame() && owner == null;
     }
 
@@ -90,13 +90,13 @@ public class DogBreedGoal extends Goal {
         if (breedDelay >= 60 && dog.distanceToSqr(target) < 4.0D) startPregnancy(); // 100% chance of success
     }
 
-    private WorkingDogEntity getNearbyMate() {
-        List<WorkingDogEntity> list = level.getNearbyEntities(WorkingDogEntity.class, PARTNER_TARGETING, dog, dog.getBoundingBox().inflate(NEARBY_RADIUS_CHECK));
+    private WorkDogEntity getNearbyMate() {
+        List<WorkDogEntity> list = level.getNearbyEntities(WorkDogEntity.class, PARTNER_TARGETING, dog, dog.getBoundingBox().inflate(NEARBY_RADIUS_CHECK));
         double d0 = Double.MAX_VALUE;
-        WorkingDogEntity entityDog = null;
+        WorkDogEntity entityDog = null;
 
-        if (dog.getGender() == WorkingDogEntity.Gender.MALE) {
-            for (WorkingDogEntity dog1 : list) {
+        if (dog.getGender() == WorkDogEntity.Gender.MALE) {
+            for (WorkDogEntity dog1 : list) {
                 if (dog.canMate(dog1) && dog.distanceToSqr(dog1) < d0) {
                     entityDog = dog1;
                     d0 = dog.distanceToSqr(dog1);

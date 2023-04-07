@@ -1,6 +1,6 @@
 package com.github.kmfisk.workdog.client.renderer.entity;
 
-import com.github.kmfisk.workdog.entity.core.WorkingDogEntity;
+import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
@@ -46,8 +46,8 @@ public abstract class WorkDogRenderer<T extends MobEntity, M extends EntityModel
 
     @Override
     public ResourceLocation getTextureLocation(T entity) {
-        if (entity instanceof WorkingDogEntity) {
-            WorkingDogEntity dog = (WorkingDogEntity) entity;
+        if (entity instanceof WorkDogEntity) {
+            WorkDogEntity dog = (WorkDogEntity) entity;
             int i = dog.getVariant();
             if (variants == null || variants.length != dog.getVariantCount()) setupVariants();
             if (dog.isBaby()) {

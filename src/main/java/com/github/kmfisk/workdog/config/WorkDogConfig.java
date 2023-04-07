@@ -2,7 +2,7 @@ package com.github.kmfisk.workdog.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
-public class WorkingDogsConfig {
+public class WorkDogConfig {
     public static final ForgeConfigSpec CONFIG_SPEC;
     public static ForgeConfigSpec.BooleanValue removeVanillaWolves;
     public static ForgeConfigSpec.BooleanValue pedigreeMode;

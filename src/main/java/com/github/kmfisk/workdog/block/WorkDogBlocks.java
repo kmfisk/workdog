@@ -1,6 +1,6 @@
 package com.github.kmfisk.workdog.block;
 
-import com.github.kmfisk.workdog.WorkingDogs;
+import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.item.WorkDogItems;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class WorkDogBlocks {
-    public static final DeferredRegister<Block> REGISTRAR = DeferredRegister.create(ForgeRegistries.BLOCKS, WorkingDogs.MOD_ID);
+    public static final DeferredRegister<Block> REGISTRAR = DeferredRegister.create(ForgeRegistries.BLOCKS, WorkDog.MOD_ID);
 
     public static final RegistryObject<Block> KENNEL_EQUIPMENT = registerWithItem("kennel_equipment", () -> new KennelEquipmentBlock(AbstractBlock.Properties.of(Material.WOOD).noOcclusion()));
 
@@ -39,7 +39,7 @@ public class WorkDogBlocks {
 
     private static <T extends Block> RegistryObject<T> registerWithItem(String name, Supplier<T> block) {
         RegistryObject<T> registryObject = REGISTRAR.register(name, block);
-        WorkDogItems.REGISTRAR.register(name, () -> new BlockItem(registryObject.get(), new Item.Properties().tab(WorkingDogs.ITEM_GROUP)));
+        WorkDogItems.REGISTRAR.register(name, () -> new BlockItem(registryObject.get(), new Item.Properties().tab(WorkDog.ITEM_GROUP)));
         return registryObject;
     }
 

@@ -1,7 +1,7 @@
 package com.github.kmfisk.workdog.entity.goal;
 
 import com.github.kmfisk.workdog.entity.WDWolfEntity;
-import com.github.kmfisk.workdog.entity.core.WorkingDogEntity;
+import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
 import net.minecraft.entity.ai.goal.TemptGoal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.crafting.Ingredient;
@@ -11,9 +11,9 @@ import javax.annotation.Nullable;
 public class DogTemptGoal extends TemptGoal {
     @Nullable
     private PlayerEntity selectedPlayer;
-    private final WorkingDogEntity dog;
+    private final WorkDogEntity dog;
 
-    public DogTemptGoal(WorkingDogEntity dog, double speedModifier, Ingredient items, boolean canScare) {
+    public DogTemptGoal(WorkDogEntity dog, double speedModifier, Ingredient items, boolean canScare) {
         super(dog, speedModifier, items, canScare);
         this.dog = dog;
     }

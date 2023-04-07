@@ -1,6 +1,6 @@
 package com.github.kmfisk.workdog.entity;
 
-import com.github.kmfisk.workdog.WorkingDogs;
+import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.client.renderer.entity.*;
 import com.github.kmfisk.workdog.item.WorkDogItems;
 import net.minecraft.entity.Entity;
@@ -23,7 +23,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 public class WorkDogEntities {
-    public static final DeferredRegister<EntityType<?>> REGISTRAR = DeferredRegister.create(ForgeRegistries.ENTITIES, WorkingDogs.MOD_ID);
+    public static final DeferredRegister<EntityType<?>> REGISTRAR = DeferredRegister.create(ForgeRegistries.ENTITIES, WorkDog.MOD_ID);
     private static final List<Tuple<EntityType<? extends LivingEntity>, Supplier<AttributeModifierMap.MutableAttribute>>> ATTRIBUTES = new ArrayList<>();
     private static final List<Tuple<EntityType<?>, Supplier<IRenderFactory<?>>>> RENDERERS = new ArrayList<>();
 
@@ -59,7 +59,7 @@ public class WorkDogEntities {
         REGISTRAR.register(name, () -> type);
         if (attributes != null) ATTRIBUTES.add(new Tuple<>(cast(type), attributes));
         if (EffectiveSide.get().isClient() && renderer != null) RENDERERS.add(new Tuple<>(cast(type), cast(renderer)));
-        WorkDogItems.REGISTRAR.register(name + "_spawn_egg", () -> new ForgeSpawnEggItem(() -> type, 0xFFFFFF, 0xFFFFFF, new Item.Properties().tab(WorkingDogs.ITEM_GROUP)));
+        WorkDogItems.REGISTRAR.register(name + "_spawn_egg", () -> new ForgeSpawnEggItem(() -> type, 0xFFFFFF, 0xFFFFFF, new Item.Properties().tab(WorkDog.ITEM_GROUP)));
         return type;
     }
 }

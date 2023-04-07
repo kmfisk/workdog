@@ -1,6 +1,6 @@
 package com.github.kmfisk.workdog.entity.core;
 
-import com.github.kmfisk.workdog.WorkingDogs;
+import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.entity.WDWolfEntity;
 import com.github.kmfisk.workdog.entity.goal.DogAvoidEntityGoal;
 import com.github.kmfisk.workdog.entity.goal.DogBirthGoal;
@@ -41,21 +41,21 @@ import net.minecraft.world.server.ServerWorld;
 import javax.annotation.Nullable;
 import java.util.Locale;
 
-public abstract class WorkingDogEntity extends TameableEntity {
-    public static final DataParameter<Boolean> GENDER = EntityDataManager.defineId(WorkingDogEntity.class, DataSerializers.BOOLEAN);
-    public static final DataParameter<Boolean> LONGHAIR = EntityDataManager.defineId(WorkingDogEntity.class, DataSerializers.BOOLEAN);
-    public static final DataParameter<Integer> VARIANT = EntityDataManager.defineId(WorkingDogEntity.class, DataSerializers.INT);
+public abstract class WorkDogEntity extends TameableEntity {
+    public static final DataParameter<Boolean> GENDER = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.BOOLEAN);
+    public static final DataParameter<Boolean> LONGHAIR = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.BOOLEAN);
+    public static final DataParameter<Integer> VARIANT = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.INT);
 
-    private static final DataParameter<Boolean> FIXED = EntityDataManager.defineId(WorkingDogEntity.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> IN_HEAT = EntityDataManager.defineId(WorkingDogEntity.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> IS_PREGNANT = EntityDataManager.defineId(WorkingDogEntity.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Integer> BREED_TIMER = EntityDataManager.defineId(WorkingDogEntity.class, DataSerializers.INT);
-    private static final DataParameter<Integer> PUPPIES = EntityDataManager.defineId(WorkingDogEntity.class, DataSerializers.INT);
+    private static final DataParameter<Boolean> FIXED = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> IN_HEAT = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> IS_PREGNANT = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Integer> BREED_TIMER = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.INT);
+    private static final DataParameter<Integer> PUPPIES = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.INT);
 
     private static final Ingredient FOOD = Ingredient.of(Items.BEEF); //todo: all raw meats.. tag stuff.. stupid ugh
     private DogAvoidEntityGoal<PlayerEntity> avoidPlayersGoal;
 
-    public WorkingDogEntity(EntityType<? extends TameableEntity> type, World world) {
+    public WorkDogEntity(EntityType<? extends TameableEntity> type, World world) {
         super(type, world);
     }
 
@@ -181,7 +181,7 @@ public abstract class WorkingDogEntity extends TameableEntity {
         return entityData.get(PUPPIES);
     }
 
-    public void addSire(WorkingDogEntity sire) {
+    public void addSire(WorkDogEntity sire) {
         if (!getPersistentData().contains("Sire") || (getPersistentData().contains("Sire") && getPersistentData().getCompound("Sire").isEmpty())) {
             CompoundNBT tags = new CompoundNBT();
             sire.save(tags);
@@ -292,11 +292,11 @@ public abstract class WorkingDogEntity extends TameableEntity {
     @Override
     public boolean canMate(AnimalEntity entity) {
         if (entity == this) return false;
-        if (!(entity instanceof WorkingDogEntity)) return false;
+        if (!(entity instanceof WorkDogEntity)) return false;
         if (entity.isBaby() || isBaby()) return false;
-        if (isOrderedToSit() || ((WorkingDogEntity) entity).isOrderedToSit()) return false;
+        if (isOrderedToSit() || ((WorkDogEntity) entity).isOrderedToSit()) return false;
 
-        WorkingDogEntity partner = (WorkingDogEntity) entity;
+        WorkDogEntity partner = (WorkDogEntity) entity;
         if (partner.isFixed() || isFixed()) return false;
 
         if (getGender() == Gender.MALE && getBreedTimer() == 0)
@@ -304,7 +304,7 @@ public abstract class WorkingDogEntity extends TameableEntity {
         else return false;
     }
 
-    public void setupChildVariant(WorkingDogEntity parent1, WorkingDogEntity parent2) {
+    public void setupChildVariant(WorkDogEntity parent1, WorkDogEntity parent2) {
         int variant;
         if (parent1.getType() == parent2.getType()) {
             if (random.nextBoolean()) {
@@ -322,7 +322,7 @@ public abstract class WorkingDogEntity extends TameableEntity {
         setVariant(variant);
     }
 
-    protected void setupChildData(WorkingDogEntity parent1, WorkingDogEntity parent2) {
+    protected void setupChildData(WorkDogEntity parent1, WorkDogEntity parent2) {
         setAge(-72000);
         setGender(Gender.fromBool(random.nextBoolean()));
         boolean longhair;
@@ -339,15 +339,15 @@ public abstract class WorkingDogEntity extends TameableEntity {
 
     @Override
     public void spawnChildFromBreeding(ServerWorld world, AnimalEntity entity) {
-        if (entity instanceof WorkingDogEntity) {
-            WorkingDogEntity partner = (WorkingDogEntity) entity;
-            WorkingDogEntity child;
+        if (entity instanceof WorkDogEntity) {
+            WorkDogEntity partner = (WorkDogEntity) entity;
+            WorkDogEntity child;
             if (getType() == partner.getType() || random.nextBoolean())
-                child = (WorkingDogEntity) getBreedOffspring(world, partner);
-            else child = (WorkingDogEntity) partner.getBreedOffspring(world, this);
+                child = (WorkDogEntity) getBreedOffspring(world, partner);
+            else child = (WorkDogEntity) partner.getBreedOffspring(world, this);
             final net.minecraftforge.event.entity.living.BabyEntitySpawnEvent event = new net.minecraftforge.event.entity.living.BabyEntitySpawnEvent(this, partner, child);
             final boolean cancelled = net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event);
-            child = (WorkingDogEntity) event.getChild();
+            child = (WorkDogEntity) event.getChild();
 
             if (cancelled) return;
 
@@ -372,8 +372,8 @@ public abstract class WorkingDogEntity extends TameableEntity {
 
     @Override
     protected void onOffspringSpawnedFromEgg(PlayerEntity player, MobEntity entity) {
-        if (entity instanceof WorkingDogEntity) {
-            WorkingDogEntity child = (WorkingDogEntity) entity;
+        if (entity instanceof WorkDogEntity) {
+            WorkDogEntity child = (WorkDogEntity) entity;
             child.setupChildVariant(this, this);
             child.setupChildData(this, this);
         }
@@ -475,7 +475,7 @@ public abstract class WorkingDogEntity extends TameableEntity {
         }
 
         public TextComponent getLocalizedName() {
-            return new TranslationTextComponent("data_book." + WorkingDogs.MOD_ID + ".gender." + name().toLowerCase(Locale.ROOT));
+            return new TranslationTextComponent("data_book." + WorkDog.MOD_ID + ".gender." + name().toLowerCase(Locale.ROOT));
         }
     }
 }

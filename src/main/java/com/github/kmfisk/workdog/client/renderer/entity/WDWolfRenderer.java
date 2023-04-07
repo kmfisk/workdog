@@ -1,6 +1,6 @@
 package com.github.kmfisk.workdog.client.renderer.entity;
 
-import com.github.kmfisk.workdog.WorkingDogs;
+import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.client.renderer.entity.model.WDWolfModel;
 import com.github.kmfisk.workdog.entity.WDWolfEntity;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
@@ -15,12 +15,12 @@ public class WDWolfRenderer extends WorkDogRenderer<WDWolfEntity, WDWolfModel> {
 
     @Override
     public void setupBabyTextureLocations(WDWolfEntity entity) {
-        baby_loc = new ResourceLocation(WorkingDogs.MOD_ID, "textures/entity/wolf/wolf_puppy_");
+        baby_loc = new ResourceLocation(WorkDog.MOD_ID, "textures/entity/wolf/wolf_puppy_");
     }
 
     @Override
     public void setupAdultTextureLocations(WDWolfEntity entity) {
-        adult_loc = new ResourceLocation(WorkingDogs.MOD_ID, "textures/entity/wolf/wolf_");
+        adult_loc = new ResourceLocation(WorkDog.MOD_ID, "textures/entity/wolf/wolf_");
     }
 
     @Override
