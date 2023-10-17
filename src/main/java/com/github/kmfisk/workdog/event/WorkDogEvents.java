@@ -3,6 +3,7 @@ package com.github.kmfisk.workdog.event;
 import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.config.WorkDogConfig;
 import com.github.kmfisk.workdog.entity.WorkDogEntities;
+import com.github.kmfisk.workdog.entity.core.HuntingDogEntity;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.WolfEntity;
@@ -11,6 +12,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LootingLevelEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -51,5 +53,10 @@ public class WorkDogEvents {
                 event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(WorkDogEntities.JACK_RUSSELL_TERRIER, 2, 1, 1));
             }
         }
+    }
+
+    @SubscribeEvent
+    public static void lootingLevelEvent(LootingLevelEvent event) {
+        HuntingDogEntity.lootingLevelEvent(event);
     }
 }

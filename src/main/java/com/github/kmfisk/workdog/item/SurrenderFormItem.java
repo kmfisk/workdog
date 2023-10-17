@@ -6,7 +6,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -38,6 +37,7 @@ public class SurrenderFormItem extends Item {
                 }
                 if (!target.level.isClientSide()) {
                     if (dog.isOrderedToSit()) dog.setOrderedToSit(false);
+                    dog.setMode(WorkDogEntity.Mode.WANDER);
                     dog.setTame(false);
                     dog.setOwnerUUID(null);
                     player.displayClientMessage(new TranslationTextComponent("chat.workdog.surrender_form.success", dog.getName()), true);

@@ -54,10 +54,11 @@ public abstract class WorkDogEntity extends TameableEntity {
     private static final DataParameter<Integer> BREED_TIMER = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.INT);
     private static final DataParameter<Integer> PUPPIES = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.INT);
 
+    private static final DataParameter<Integer> MODE = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.INT);
+
     private static final Ingredient FOOD = Ingredient.of(Items.BEEF); //todo: all raw meats.. tag stuff.. stupid ugh
     private DogAvoidEntityGoal<PlayerEntity> avoidPlayersGoal;
-    private final FollowOwnerGoal followGoal = new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false);
-//    private final WorkGoal workGoal;
+    protected final FollowOwnerGoal followGoal = new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false);
 
     public WorkDogEntity(EntityType<? extends TameableEntity> type, World world) {
         super(type, world);
@@ -87,12 +88,9 @@ public abstract class WorkDogEntity extends TameableEntity {
         }
     }
 
-    protected void reassessModeGoals(boolean follow, boolean work) {
+    public void reassessModeGoals(Mode mode) {
         this.goalSelector.removeGoal(followGoal);
-//        this.goalSelector.removeGoal(workGoal);
-
-        /*if (work) this.goalSelector.addGoal(6, workGoal);
-        else */if (follow) this.goalSelector.addGoal(6, followGoal);
+        if (mode == Mode.FOLLOW) this.goalSelector.addGoal(6, followGoal);
     }
 
     @Override
@@ -106,6 +104,7 @@ public abstract class WorkDogEntity extends TameableEntity {
         this.entityData.define(IS_PREGNANT, false);
         this.entityData.define(BREED_TIMER, 0);
         this.entityData.define(PUPPIES, 0);
+        this.entityData.define(MODE, 0);
     }
 
     @Override
@@ -224,6 +223,15 @@ public abstract class WorkDogEntity extends TameableEntity {
         return getPersistentData().getCompound("Sire");
     }
 
+    public void setMode(Mode mode) {
+        this.entityData.set(MODE, mode.ordinal());
+        reassessModeGoals(mode);
+    }
+
+    public Mode getMode() {
+        return Mode.fromOrdinal(this.entityData.get(MODE));
+    }
+
     @Override
     public void addAdditionalSaveData(CompoundNBT nbt) {
         super.addAdditionalSaveData(nbt);
@@ -239,6 +247,8 @@ public abstract class WorkDogEntity extends TameableEntity {
             nbt.put("Sire", getSire());
         }
         if (!isFixed()) nbt.putInt("Timer", getBreedTimer());
+
+        nbt.putInt("Mode", getMode().ordinal());
     }
 
     @Override
@@ -256,6 +266,8 @@ public abstract class WorkDogEntity extends TameableEntity {
             setSire(nbt.get("Sire"));
         }
         if (!isFixed()) setBreedTimer(nbt.getInt("Timer"));
+
+        setMode(Mode.fromOrdinal(nbt.getInt("Mode")));
     }
 
     @Override
@@ -411,15 +423,15 @@ public abstract class WorkDogEntity extends TameableEntity {
 
         // MODE TESTING ITEMS TODO: REMOVE
         if (stack.getItem() == Items.GUNPOWDER) {
-            reassessModeGoals(false, true);
+            setMode(Mode.WORK);
             player.displayClientMessage(new StringTextComponent("WORK MODE"), true);
             return ActionResultType.CONSUME;
         } else if (stack.getItem() == Items.SLIME_BALL) {
-            reassessModeGoals(true, false);
+            setMode(Mode.FOLLOW);
             player.displayClientMessage(new StringTextComponent("FOLLOW MODE"), true);
             return ActionResultType.CONSUME;
         } else if (stack.getItem() == Items.FEATHER) {
-            reassessModeGoals(false, false);
+            setMode(Mode.WANDER);
             player.displayClientMessage(new StringTextComponent("WANDER MODE"), true);
             return ActionResultType.CONSUME;
         }
@@ -430,6 +442,7 @@ public abstract class WorkDogEntity extends TameableEntity {
                 player.displayClientMessage(new StringTextComponent("Variant: " + getVariant() + " // Longhair: " + isLonghair()), true);
             else {
                 StringBuilder debugInfo = new StringBuilder();
+                debugInfo.append(getMode().name()).append(" MODE // ");
                 debugInfo.append(getGender() == Gender.MALE ? "MALE, " : "FEMALE, ");
                 if (isFixed()) debugInfo.append("fixed: ").append(getBreedTimer());
                 else if (getGender() == Gender.MALE) debugInfo.append("timer: ").append(getBreedTimer());
@@ -509,6 +522,25 @@ public abstract class WorkDogEntity extends TameableEntity {
 
         public TextComponent getLocalizedName() {
             return new TranslationTextComponent("data_book." + WorkDog.MOD_ID + ".gender." + name().toLowerCase(Locale.ROOT));
+        }
+    }
+
+    public enum Mode {
+        WORK,
+        FOLLOW,
+        WANDER;
+
+        public static Mode fromOrdinal(int ordinal) {
+            switch (ordinal) {
+                case 0:
+                    return WORK;
+                case 1:
+                    return FOLLOW;
+                case 2:
+                    return WANDER;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + ordinal);
+            }
         }
     }
 }

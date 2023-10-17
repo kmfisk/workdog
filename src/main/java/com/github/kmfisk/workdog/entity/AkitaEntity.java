@@ -104,6 +104,11 @@ public class AkitaEntity extends HuntingDogEntity {
         return baby;
     }
 
+    @Override
+    public int getLootingLevel() {
+        return 3;
+    }
+
     public enum AkitaVariant {
         BLACK(Arrays.asList(2, 5)),
         BLACK_WHITE_SOCKS(Arrays.asList(2, 3)),

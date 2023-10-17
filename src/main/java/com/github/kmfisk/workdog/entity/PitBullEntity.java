@@ -91,6 +91,11 @@ public class PitBullEntity extends HuntingDogEntity {
         return baby;
     }
 
+    @Override
+    public int getLootingLevel() {
+        return 1;
+    }
+
     public enum PitBullVariant {
         BLACK(Arrays.asList(1, 6)),
         BLACK_PINTO(Arrays.asList(0, 3)),
