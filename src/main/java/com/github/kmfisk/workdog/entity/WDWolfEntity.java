@@ -42,8 +42,6 @@ public class WDWolfEntity extends WorkDogEntity {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(4, new LeapAtTargetGoal(this, 0.4F));
-        this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.5D, true));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
         this.targetSelector.addGoal(2, new WolfTargetNearestGoal<>(this, LivingEntity.class, true,
                 (entity) -> WorkDogConfig.wolfPreyList.get().contains(Objects.requireNonNull(entity.getType().getRegistryName()).toString())));

@@ -12,9 +12,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.goal.SitGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
@@ -58,6 +56,8 @@ public abstract class WorkDogEntity extends TameableEntity {
 
     private static final Ingredient FOOD = Ingredient.of(Items.BEEF); //todo: all raw meats.. tag stuff.. stupid ugh
     private DogAvoidEntityGoal<PlayerEntity> avoidPlayersGoal;
+    private final FollowOwnerGoal followGoal = new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false);
+//    private final WorkGoal workGoal;
 
     public WorkDogEntity(EntityType<? extends TameableEntity> type, World world) {
         super(type, world);
@@ -67,10 +67,32 @@ public abstract class WorkDogEntity extends TameableEntity {
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new SwimGoal(this));
         this.goalSelector.addGoal(1, new SitGoal(this));
+        this.goalSelector.addGoal(2, new DogBirthGoal(this));
         this.goalSelector.addGoal(3, new DogTemptGoal(this, 0.6D, FOOD, true));
-        this.goalSelector.addGoal(6, new DogBirthGoal(this));
+        this.goalSelector.addGoal(4, new LeapAtTargetGoal(this, 0.4F));
+        this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.5D, true));
         this.goalSelector.addGoal(9, new DogBreedGoal(this, 1.2D));
         this.goalSelector.addGoal(10, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+    }
+
+    @Override
+    protected void reassessTameGoals() {
+        if (isBaby() || !(this instanceof WDWolfEntity)) {
+            if (avoidPlayersGoal == null)
+                avoidPlayersGoal = new DogAvoidEntityGoal<>(this, PlayerEntity.class, 16.0F, 0.8D, 1.33D);
+
+            this.goalSelector.removeGoal(avoidPlayersGoal);
+            if (!isTame()) this.goalSelector.addGoal(4, avoidPlayersGoal);
+        }
+    }
+
+    protected void reassessModeGoals(boolean follow, boolean work) {
+        this.goalSelector.removeGoal(followGoal);
+//        this.goalSelector.removeGoal(workGoal);
+
+        /*if (work) this.goalSelector.addGoal(6, workGoal);
+        else */if (follow) this.goalSelector.addGoal(6, followGoal);
     }
 
     @Override
@@ -387,7 +409,23 @@ public abstract class WorkDogEntity extends TameableEntity {
     public ActionResultType mobInteract(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getItemInHand(hand);
 
-        if (stack.getItem() == Items.STICK) { //todo: remove testing
+        // MODE TESTING ITEMS TODO: REMOVE
+        if (stack.getItem() == Items.GUNPOWDER) {
+            reassessModeGoals(false, true);
+            player.displayClientMessage(new StringTextComponent("WORK MODE"), true);
+            return ActionResultType.CONSUME;
+        } else if (stack.getItem() == Items.SLIME_BALL) {
+            reassessModeGoals(true, false);
+            player.displayClientMessage(new StringTextComponent("FOLLOW MODE"), true);
+            return ActionResultType.CONSUME;
+        } else if (stack.getItem() == Items.FEATHER) {
+            reassessModeGoals(false, false);
+            player.displayClientMessage(new StringTextComponent("WANDER MODE"), true);
+            return ActionResultType.CONSUME;
+        }
+
+        // BREEDING TESTING ITEMS TODO: REMOVE
+        if (stack.getItem() == Items.STICK) {
             if (player.isDiscrete())
                 player.displayClientMessage(new StringTextComponent("Variant: " + getVariant() + " // Longhair: " + isLonghair()), true);
             else {
@@ -404,17 +442,17 @@ public abstract class WorkDogEntity extends TameableEntity {
 
             return ActionResultType.CONSUME;
 
-        } else if (stack.getItem() == Items.BLAZE_POWDER && !isFixed() && getBreedTimer() != 0 && !getBreedingStatus("ispregnant")) { //todo: remove testing
+        } else if (stack.getItem() == Items.BLAZE_POWDER && !isFixed() && getBreedTimer() != 0 && !getBreedingStatus("ispregnant")) {
             if (getGender() == Gender.MALE) setBreedTimer(0);
             else if (getBreedingStatus("inheat")) setBreedTimer(20);
             else setBreedTimer(-20);
             return ActionResultType.CONSUME;
 
-        } else if (stack.getItem() == Items.MILK_BUCKET && getGender() == Gender.FEMALE && getBreedingStatus("ispregnant")) { //todo: remove testing
+        } else if (stack.getItem() == Items.MILK_BUCKET && getGender() == Gender.FEMALE && getBreedingStatus("ispregnant")) {
             setBreedTimer(20);
             return ActionResultType.CONSUME;
 
-        } else if (stack.getItem() == Items.BONE && isBaby()) { //todo: remove testing
+        } else if (stack.getItem() == Items.BONE && isBaby()) {
             ageUp(-getAge(), true);
             return ActionResultType.CONSUME;
         }
@@ -444,25 +482,15 @@ public abstract class WorkDogEntity extends TameableEntity {
                     navigation.stop();
                     setTarget(null);
                     setOrderedToSit(true);
+                    this.goalSelector.addGoal(6, followGoal);
                     level.broadcastEntityEvent(this, (byte) 7);
-                } else level.broadcastEntityEvent(this, (byte) 6);
 
+                } else level.broadcastEntityEvent(this, (byte) 6);
                 return ActionResultType.CONSUME;
             }
         }
 
         return ActionResultType.PASS;
-    }
-
-    @Override
-    protected void reassessTameGoals() {
-        if (isBaby() || !(this instanceof WDWolfEntity)) {
-            if (avoidPlayersGoal == null)
-                avoidPlayersGoal = new DogAvoidEntityGoal<>(this, PlayerEntity.class, 16.0F, 0.8D, 1.33D);
-
-            this.goalSelector.removeGoal(avoidPlayersGoal);
-            if (!isTame()) this.goalSelector.addGoal(4, avoidPlayersGoal);
-        }
     }
 
     public enum Gender {
