@@ -22,8 +22,8 @@ public abstract class ProtectionDogEntity extends WorkDogEntity {
     public void reassessModeGoals() {
         super.reassessModeGoals();
         this.goalSelector.removeGoal(protectorsFollowGoal);
-        this.goalSelector.removeGoal(ownerHurtByTargetGoal);
-        this.goalSelector.removeGoal(attackNearbyMobsGoal);
+        this.targetSelector.removeGoal(ownerHurtByTargetGoal);
+        this.targetSelector.removeGoal(attackNearbyMobsGoal);
         if (getMode() == Mode.WORK) {
             this.goalSelector.addGoal(6, protectorsFollowGoal);
             this.goalSelector.addGoal(10, wanderGoal);

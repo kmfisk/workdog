@@ -19,8 +19,8 @@ public abstract class HuntingDogEntity extends WorkDogEntity {
     @Override
     public void reassessModeGoals() {
         super.reassessModeGoals();
-        this.goalSelector.removeGoal(ownerHurtTargetGoal);
         this.goalSelector.removeGoal(huntersFollowGoal);
+        this.targetSelector.removeGoal(ownerHurtTargetGoal);
         if (getMode() == Mode.WORK) {
             this.goalSelector.addGoal(6, huntersFollowGoal);
             this.targetSelector.addGoal(2, ownerHurtTargetGoal);
