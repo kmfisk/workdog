@@ -106,7 +106,7 @@ public class AkitaEntity extends HuntingDogEntity {
 
     @Override
     public int getLootingLevel() {
-        return 3;
+        return 2;
     }
 
     public enum AkitaVariant {
