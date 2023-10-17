@@ -13,4 +13,5 @@ public class WorkDogItems {
 
     public static final RegistryObject<Item> PINK_JUICE = REGISTRAR.register("pink_juice", () -> new PinkJuiceItem(new Item.Properties().tab(WorkDog.ITEM_GROUP)));
     public static final RegistryObject<Item> STERILIZATION_POTION = REGISTRAR.register("sterilization_potion", () -> new SterilizationPotionItem(new Item.Properties().tab(WorkDog.ITEM_GROUP)));
+    public static final RegistryObject<Item> SURRENDER_FORM = REGISTRAR.register("surrender_form", () -> new SurrenderFormItem(new Item.Properties().tab(WorkDog.ITEM_GROUP)));
 }

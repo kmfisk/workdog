@@ -20,8 +20,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class SterilizationPotionItem extends Item {
-    public SterilizationPotionItem(Properties properties) {
+public class SurrenderFormItem extends Item {
+    public SurrenderFormItem(Properties properties) {
         super(properties);
     }
 
@@ -29,25 +29,19 @@ public class SterilizationPotionItem extends Item {
     public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity player, LivingEntity target, Hand hand) {
         if (target instanceof WorkDogEntity) {
             WorkDogEntity dog = (WorkDogEntity) target;
-            if ((!dog.isTame() || (dog.isTame() && dog.isOwnedBy(player))) && player.isCrouching() && !dog.isFixed()) {
+            if (dog.isTame() && dog.isOwnedBy(player) && player.isCrouching()) {
                 for (int i = 0; i < 7; ++i) {
                     double d0 = random.nextGaussian() * 0.02D;
                     double d1 = random.nextGaussian() * 0.02D;
                     double d2 = random.nextGaussian() * 0.02D;
-                    dog.level.addParticle(ParticleTypes.HAPPY_VILLAGER, dog.getRandomX(1.0D), dog.getRandomY() + 0.5D, dog.getRandomZ(1.0D), d0, d1, d2);
+                    dog.level.addParticle(ParticleTypes.SMOKE, dog.getRandomX(1.0D), dog.getRandomY() + 0.5D, dog.getRandomZ(1.0D), d0, d1, d2);
                 }
                 if (!target.level.isClientSide()) {
-                    dog.setFixed(true);
-                    player.displayClientMessage(new TranslationTextComponent(dog.getGender() == WorkDogEntity.Gender.FEMALE ? "chat.workdog.sterilization_potion.success_female" : "chat.workdog.sterilization_potion.success_male", dog.getName()), true);
-
-                    if (!player.isCreative()) {
-                        ItemStack emptyBottle = new ItemStack(Items.GLASS_BOTTLE);
-                        stack.shrink(1);
-                        if (stack.isEmpty())
-                            player.setItemInHand(hand, emptyBottle);
-                        else if (!player.inventory.add(emptyBottle))
-                            player.drop(emptyBottle, false);
-                    }
+                    if (dog.isOrderedToSit()) dog.setOrderedToSit(false);
+                    dog.setTame(false);
+                    dog.setOwnerUUID(null);
+                    player.displayClientMessage(new TranslationTextComponent("chat.workdog.surrender_form.success", dog.getName()), true);
+                    if (!player.isCreative()) stack.shrink(1);
                 }
             }
         }
@@ -57,6 +51,6 @@ public class SterilizationPotionItem extends Item {
     @OnlyIn(Dist.CLIENT)
     @Override
     public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(new TranslationTextComponent("tooltip.workdog.sterilization_potion.usage").withStyle(TextFormatting.GRAY));
+        tooltip.add(new TranslationTextComponent("tooltip.workdog.surrender_form.usage").withStyle(TextFormatting.GRAY));
     }
 }

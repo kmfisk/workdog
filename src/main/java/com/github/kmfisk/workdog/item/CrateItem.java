@@ -127,6 +127,6 @@ public class CrateItem extends Item {
             tooltip.add(owner.withStyle(TextFormatting.GRAY));
 
         } else
-            tooltip.add(new TranslationTextComponent("tooltip.workdog.crate.empty").withStyle(TextFormatting.AQUA));
+            tooltip.add(new TranslationTextComponent("tooltip.workdog.crate.empty").withStyle(TextFormatting.GRAY));
     }
 }

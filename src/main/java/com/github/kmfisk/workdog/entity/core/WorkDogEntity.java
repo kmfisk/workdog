@@ -18,6 +18,7 @@ import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
@@ -39,6 +40,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 public abstract class WorkDogEntity extends TameableEntity {
@@ -415,9 +418,9 @@ public abstract class WorkDogEntity extends TameableEntity {
             return ActionResultType.CONSUME;
         }
 
-        if (stack.getItem() == WorkDogItems.CRATE.get()) return ActionResultType.PASS;
-        if (stack.getItem() == WorkDogItems.PINK_JUICE.get()) return ActionResultType.PASS;
-        if (stack.getItem() == WorkDogItems.STERILIZATION_POTION.get()) return ActionResultType.PASS;
+        List<Item> functionalItems = Arrays.asList(WorkDogItems.CRATE.get(), WorkDogItems.PINK_JUICE.get(),
+                WorkDogItems.STERILIZATION_POTION.get(), WorkDogItems.SURRENDER_FORM.get());
+        if (functionalItems.contains(stack.getItem())) return ActionResultType.PASS;
 
         boolean isOwner = isOwnedBy(player);
         boolean canTame = isFood(stack) && !isTame() && (!(this instanceof WDWolfEntity) || isBaby());
