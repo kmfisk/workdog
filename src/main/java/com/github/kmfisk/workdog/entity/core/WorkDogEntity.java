@@ -8,15 +8,13 @@ import com.github.kmfisk.workdog.entity.goal.DogBirthGoal;
 import com.github.kmfisk.workdog.entity.goal.DogBreedGoal;
 import com.github.kmfisk.workdog.entity.goal.DogTemptGoal;
 import com.github.kmfisk.workdog.item.WorkDogItems;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -28,6 +26,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextComponent;
@@ -75,7 +74,6 @@ public abstract class WorkDogEntity extends TameableEntity {
         this.goalSelector.addGoal(4, new LeapAtTargetGoal(this, 0.4F));
         this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.5D, true));
         this.goalSelector.addGoal(9, new DogBreedGoal(this, 1.2D));
-//        this.goalSelector.addGoal(10, wanderGoal);
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
     }
 
@@ -426,6 +424,19 @@ public abstract class WorkDogEntity extends TameableEntity {
     }
 
     @Override
+    public boolean hurt(DamageSource damageSource, float amount) {
+        if (this.isInvulnerableTo(damageSource)) return false;
+        else {
+            Entity entity = damageSource.getEntity();
+            this.setOrderedToSit(false);
+            if (entity != null && !(entity instanceof PlayerEntity) && !(entity instanceof AbstractArrowEntity))
+                amount = (amount + 1.0F) / 2.0F;
+
+            return super.hurt(damageSource, amount);
+        }
+    }
+
+    @Override
     public ActionResultType mobInteract(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getItemInHand(hand);
 
@@ -456,7 +467,8 @@ public abstract class WorkDogEntity extends TameableEntity {
                 else if (getGender() == Gender.MALE) debugInfo.append("timer: ").append(getBreedTimer());
                 else if (getBreedingStatus("inheat")) debugInfo.append("in heat for: ").append(getBreedTimer());
                 else if (!getBreedingStatus("ispregnant")) debugInfo.append("heat starts in: ").append(getBreedTimer());
-                else debugInfo.append("pregnant for: ").append(getBreedTimer()).append(" // puppies: ").append(getPuppies());
+                else
+                    debugInfo.append("pregnant for: ").append(getBreedTimer()).append(" // puppies: ").append(getPuppies());
 
                 player.displayClientMessage(new StringTextComponent(debugInfo.toString()), true);
             }
