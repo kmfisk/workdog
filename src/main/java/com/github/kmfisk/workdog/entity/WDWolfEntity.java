@@ -9,6 +9,8 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
+import net.minecraft.entity.ai.goal.LeapAtTargetGoal;
+import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.TameableEntity;
@@ -40,6 +42,8 @@ public class WDWolfEntity extends WorkDogEntity {
     @Override
     protected void registerGoals() {
         super.registerGoals();
+        this.goalSelector.addGoal(4, new LeapAtTargetGoal(this, 0.4F));
+        this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.5D, true));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
         this.targetSelector.addGoal(2, new WolfTargetNearestGoal<>(this, LivingEntity.class, true,
                 (entity) -> WorkDogConfig.wolfPreyList.get().contains(Objects.requireNonNull(entity.getType().getRegistryName()).toString())));

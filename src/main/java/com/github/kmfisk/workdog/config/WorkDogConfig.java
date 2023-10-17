@@ -28,7 +28,7 @@ public class WorkDogConfig {
         wolfMaxGroup = builder.define("max", 5);
         pedigreeMode = builder.define("pedigreeMode", false);
         removeVanillaWolves = builder.define("removeVanilla", true);
-        wolfPreyList = builder.define("preyList", Arrays.asList("minecraft:sheep", "minecraft:pig", "minecraft:rabbit",
+        wolfPreyList = builder.defineList("preyList", Arrays.asList("minecraft:sheep", "minecraft:pig", "minecraft:rabbit",
                 "minecraft:cat", "minecraft:parrot", "simplycats:cat", "hotchicks:chicken", "hotchicks:cow",
                 "hotchicks:rabbit", "workdog:boston_terrier", "workdog:jack_russell_terrier"), entry -> true);
         builder.pop();
