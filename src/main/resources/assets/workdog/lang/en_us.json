@@ -1,4 +1,14 @@
 {
+  "itemGroup.workdog.group": "Working Dogs",
+
+  "entity.workdog.akita": "Akita",
+  "entity.workdog.border_collie": "Border Collie",
+  "entity.workdog.boston_terrier": "Boston Terrier",
+  "entity.workdog.german_shepherd": "German Shepherd",
+  "entity.workdog.jack_russell_terrier": "Jack Russell Terrier",
+  "entity.workdog.pit_bull": "Pit Bull",
+  "entity.workdog.wolf": "Wolf",
+
   "__comment": "Spawn Eggs",
   "item.workdog.akita_spawn_egg": "Akita Spawn Egg",
   "item.workdog.border_collie_spawn_egg": "Border Collie Spawn Egg",
@@ -9,6 +19,15 @@
   "item.workdog.pit_bull_spawn_egg": "Pit Bull Spawn Egg",
 
   "__comment": "Items",
+  "item.workdog.crate": "Crate",
+  "tooltip.workdog.crate.empty": "This crate can help capture and move your dogs.",
+  "tooltip.workdog.crate.owner": "Owned by %s",
+  "chat.workdog.crate.full": "This crate is occupied!",
+  "chat.workdog.crate.not_your_dog": "Hey, that's not your dog!",
+  "chat.workdog.crate.fail": "Whoa, you can't crate that!",
+  "chat.workdog.crate.capture": "%s was crated.",
+  "chat.workdog.crate.empty": "This crate is empty!",
+  "chat.workdog.crate.release": "%s was released.",
   "item.workdog.pink_juice": "Pink Juice",
   "tooltip.workdog.pink_juice.usage": "Creative mode only. A humane alternative for who are experimenting with dog breeding and genetics. Instantly deletes one dog from your world. WARNING - DOGS CANNOT BE RECOVERED, JUICE RESPONSIBLY!",
   "item.workdog.sterilization_potion": "Sterilization Potion",

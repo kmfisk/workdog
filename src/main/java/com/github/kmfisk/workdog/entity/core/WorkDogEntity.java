@@ -415,6 +415,7 @@ public abstract class WorkDogEntity extends TameableEntity {
             return ActionResultType.CONSUME;
         }
 
+        if (stack.getItem() == WorkDogItems.CRATE.get()) return ActionResultType.PASS;
         if (stack.getItem() == WorkDogItems.PINK_JUICE.get()) return ActionResultType.PASS;
         if (stack.getItem() == WorkDogItems.STERILIZATION_POTION.get()) return ActionResultType.PASS;
 
