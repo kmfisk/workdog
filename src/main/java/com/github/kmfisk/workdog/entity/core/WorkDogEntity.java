@@ -1,6 +1,7 @@
 package com.github.kmfisk.workdog.entity.core;
 
 import com.github.kmfisk.workdog.WorkDog;
+import com.github.kmfisk.workdog.config.WorkDogConfig;
 import com.github.kmfisk.workdog.entity.WDWolfEntity;
 import com.github.kmfisk.workdog.entity.goal.DogAvoidEntityGoal;
 import com.github.kmfisk.workdog.entity.goal.DogBirthGoal;
@@ -423,7 +424,7 @@ public abstract class WorkDogEntity extends TameableEntity {
         if (functionalItems.contains(stack.getItem())) return ActionResultType.PASS;
 
         boolean isOwner = isOwnedBy(player);
-        boolean canTame = isFood(stack) && !isTame() && (!(this instanceof WDWolfEntity) || isBaby());
+        boolean canTame = isFood(stack) && !isTame() && (!(this instanceof WDWolfEntity) || (isBaby() && !WorkDogConfig.pedigreeMode.get()));
         if (level.isClientSide) {
             return isOwner || canTame ? ActionResultType.SUCCESS : ActionResultType.PASS;
 
