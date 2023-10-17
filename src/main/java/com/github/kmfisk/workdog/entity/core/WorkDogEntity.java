@@ -58,10 +58,12 @@ public abstract class WorkDogEntity extends TameableEntity {
 
     private static final Ingredient FOOD = Ingredient.of(Items.BEEF); //todo: all raw meats.. tag stuff.. stupid ugh
     private DogAvoidEntityGoal<PlayerEntity> avoidPlayersGoal;
+    protected WaterAvoidingRandomWalkingGoal wanderGoal;
     protected final FollowOwnerGoal followGoal = new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false);
 
     public WorkDogEntity(EntityType<? extends TameableEntity> type, World world) {
         super(type, world);
+        reassessModeGoals();
     }
 
     @Override
@@ -73,7 +75,7 @@ public abstract class WorkDogEntity extends TameableEntity {
         this.goalSelector.addGoal(4, new LeapAtTargetGoal(this, 0.4F));
         this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.5D, true));
         this.goalSelector.addGoal(9, new DogBreedGoal(this, 1.2D));
-        this.goalSelector.addGoal(10, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
+//        this.goalSelector.addGoal(10, wanderGoal);
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
     }
 
@@ -88,9 +90,15 @@ public abstract class WorkDogEntity extends TameableEntity {
         }
     }
 
-    public void reassessModeGoals(Mode mode) {
+    public void reassessModeGoals() {
+        if (wanderGoal == null) wanderGoal = new WaterAvoidingRandomWalkingGoal(this, 1.0D);
+        this.goalSelector.removeGoal(wanderGoal);
         this.goalSelector.removeGoal(followGoal);
-        if (mode == Mode.FOLLOW) this.goalSelector.addGoal(6, followGoal);
+        if (getMode() == Mode.FOLLOW) {
+            this.goalSelector.addGoal(6, followGoal);
+            this.goalSelector.addGoal(10, wanderGoal);
+
+        } else if (getMode() == Mode.WANDER) this.goalSelector.addGoal(10, wanderGoal);
     }
 
     @Override
@@ -104,7 +112,7 @@ public abstract class WorkDogEntity extends TameableEntity {
         this.entityData.define(IS_PREGNANT, false);
         this.entityData.define(BREED_TIMER, 0);
         this.entityData.define(PUPPIES, 0);
-        this.entityData.define(MODE, 0);
+        this.entityData.define(MODE, 2);
     }
 
     @Override
@@ -225,7 +233,7 @@ public abstract class WorkDogEntity extends TameableEntity {
 
     public void setMode(Mode mode) {
         this.entityData.set(MODE, mode.ordinal());
-        reassessModeGoals(mode);
+        reassessModeGoals();
     }
 
     public Mode getMode() {

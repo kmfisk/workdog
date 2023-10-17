@@ -2,6 +2,7 @@ package com.github.kmfisk.workdog.entity.core;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ai.goal.FollowOwnerGoal;
 import net.minecraft.entity.ai.goal.OwnerHurtTargetGoal;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.util.DamageSource;
@@ -10,17 +11,19 @@ import net.minecraftforge.event.entity.living.LootingLevelEvent;
 
 public abstract class HuntingDogEntity extends WorkDogEntity {
     private final OwnerHurtTargetGoal ownerHurtTargetGoal = new OwnerHurtTargetGoal(this);
+    protected final FollowOwnerGoal huntersFollowGoal = new FollowOwnerGoal(this, 1.5D, 4.0F, 2.0F, false);
 
     public HuntingDogEntity(EntityType<? extends TameableEntity> type, World world) {
         super(type, world);
     }
 
     @Override
-    public void reassessModeGoals(Mode mode) {
-        super.reassessModeGoals(mode);
+    public void reassessModeGoals() {
+        super.reassessModeGoals();
         this.goalSelector.removeGoal(ownerHurtTargetGoal);
-        if (mode == Mode.WORK) {
-            this.goalSelector.addGoal(6, followGoal);
+        this.goalSelector.removeGoal(huntersFollowGoal);
+        if (getMode() == Mode.WORK) {
+            this.goalSelector.addGoal(6, huntersFollowGoal);
             this.targetSelector.addGoal(2, ownerHurtTargetGoal);
         }
     }
