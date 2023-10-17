@@ -42,6 +42,14 @@ public class WorkDogEvents {
                     && !biomeTypes.contains(BiomeDictionary.Type.HILLS) && !biomeTypes.contains(BiomeDictionary.Type.MOUNTAIN)) {
                 event.getSpawns().getSpawner(EntityClassification.CREATURE).add(wolfSpawner);
             }
+
+            if (biomeTypes.contains(BiomeDictionary.Type.PLAINS) && !biomeTypes.contains(BiomeDictionary.Type.HOT) && !biomeTypes.contains(BiomeDictionary.Type.COLD)) {
+                event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(WorkDogEntities.GERMAN_SHEPHERD, 2, 1, 1));
+            }
+
+            if (biomeTypes.contains(BiomeDictionary.Type.SWAMP)) {
+                event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(WorkDogEntities.JACK_RUSSELL_TERRIER, 2, 1, 1));
+            }
         }
     }
 }
