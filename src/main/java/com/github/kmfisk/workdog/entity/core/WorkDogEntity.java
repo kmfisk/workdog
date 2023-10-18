@@ -117,7 +117,9 @@ public abstract class WorkDogEntity extends TameableEntity {
     public ILivingEntityData finalizeSpawn(IServerWorld world, DifficultyInstance difficulty, SpawnReason reason, @Nullable ILivingEntityData spawnData, @Nullable CompoundNBT dataTag) {
         setGender(Gender.fromBool(random.nextBoolean()));
         setLonghair(random.nextFloat() <= getLonghairChance());
-        setVariant(random.nextInt(getVariantCount()));
+        int variant = random.nextInt(getVariantCount());
+        if (dataTag != null && dataTag.contains("Variant")) variant = dataTag.getInt("Variant");
+        setVariant(variant);
 
         if (getGender() == Gender.FEMALE && !isFixed()) setTimeCycle("end", random.nextInt(72000));
 

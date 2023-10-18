@@ -10,6 +10,7 @@
   "entity.workdog.wolf": "Wolf",
 
   "__comment": "Spawn Eggs",
+  "tooltip.workdog.spawn_egg.variant": "Variant #%d",
   "item.workdog.akita_spawn_egg": "Akita Spawn Egg",
   "item.workdog.border_collie_spawn_egg": "Border Collie Spawn Egg",
   "item.workdog.german_shepherd_spawn_egg": "German Shepherd Spawn Egg",

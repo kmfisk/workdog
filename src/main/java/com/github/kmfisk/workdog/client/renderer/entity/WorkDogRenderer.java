@@ -1,5 +1,6 @@
 package com.github.kmfisk.workdog.client.renderer.entity;
 
+import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -10,6 +11,7 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.util.ResourceLocation;
 
 public abstract class WorkDogRenderer<T extends MobEntity, M extends EntityModel<T>> extends MobRenderer<T, M> {
+    public static final ResourceLocation UNKNOWN_VARIANT = new ResourceLocation(WorkDog.MOD_ID, "textures/entity/unknown_variant.png");
     protected M adultModel;
     protected M babyModel;
     protected ResourceLocation baby_loc;
@@ -50,6 +52,8 @@ public abstract class WorkDogRenderer<T extends MobEntity, M extends EntityModel
             WorkDogEntity dog = (WorkDogEntity) entity;
             int i = dog.getVariant();
             if (variants == null || variants.length != dog.getVariantCount()) setupVariants();
+            if (i >= dog.getVariantCount()) return UNKNOWN_VARIANT;
+
             if (dog.isBaby()) {
                 if (getBabyLocation() == null) setupBabyTextureLocations(entity);
                 return new ResourceLocation(getBabyLocation() + getVariant(i) + ".png");

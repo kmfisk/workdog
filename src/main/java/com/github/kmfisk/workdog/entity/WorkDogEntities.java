@@ -3,6 +3,7 @@ package com.github.kmfisk.workdog.entity;
 import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.client.renderer.entity.*;
 import com.github.kmfisk.workdog.item.WorkDogItems;
+import com.github.kmfisk.workdog.item.WorkDogSpawnEggItem;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.item.Item;
@@ -61,7 +62,7 @@ public class WorkDogEntities {
         REGISTRAR.register(name, () -> type);
         if (attributes != null) ATTRIBUTES.add(new Tuple<>(cast(type), attributes));
         if (EffectiveSide.get().isClient() && renderer != null) RENDERERS.add(new Tuple<>(cast(type), cast(renderer)));
-        WorkDogItems.REGISTRAR.register(name + "_spawn_egg", () -> new ForgeSpawnEggItem(() -> type, 0xFFFFFF, 0xFFFFFF, new Item.Properties().tab(WorkDog.ITEM_GROUP)));
+        WorkDogItems.REGISTRAR.register(name + "_spawn_egg", () -> new WorkDogSpawnEggItem(() -> type, new Item.Properties().tab(WorkDog.ITEM_GROUP)));
         return type;
     }
 }
