@@ -58,7 +58,7 @@ public abstract class WorkDogEntity extends TameableEntity {
     private static final Ingredient FOOD = Ingredient.of(Items.BEEF); //todo: all raw meats.. tag stuff.. stupid ugh
     private DogAvoidEntityGoal<PlayerEntity> avoidPlayersGoal;
     protected WaterAvoidingRandomWalkingGoal wanderGoal;
-    protected final FollowOwnerGoal followGoal = new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false);
+    protected final FollowOwnerGoal followGoal = new FollowOwnerGoal(this, 1.33D, 10.0F, 2.0F, false);
 
     public WorkDogEntity(EntityType<? extends TameableEntity> type, World world) {
         super(type, world);

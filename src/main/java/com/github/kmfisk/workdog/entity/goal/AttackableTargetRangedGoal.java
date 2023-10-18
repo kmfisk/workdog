@@ -27,7 +27,7 @@ public class AttackableTargetRangedGoal<T extends LivingEntity> extends TargetGo
         this.randomInterval = 10;
         this.range = range;
         this.setFlags(EnumSet.of(Goal.Flag.TARGET));
-        this.targetConditions = (new EntityPredicate()).range(range).selector(targetConditions);
+        this.targetConditions = new EntityPredicate().range(range).selector(targetConditions);
     }
 
     @Override

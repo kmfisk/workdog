@@ -13,6 +13,7 @@ public class WorkDogConfig {
     public static ForgeConfigSpec.ConfigValue<Integer> wolfMinGroup;
     public static ForgeConfigSpec.ConfigValue<Integer> wolfMaxGroup;
     public static ForgeConfigSpec.ConfigValue<List<? extends String>> wolfPreyList;
+    public static ForgeConfigSpec.ConfigValue<List<? extends String>> herdersLivestockList;
 
     static {
         ForgeConfigSpec.Builder configBuilder = new ForgeConfigSpec.Builder();
@@ -31,6 +32,12 @@ public class WorkDogConfig {
         wolfPreyList = builder.defineList("preyList", Arrays.asList("minecraft:sheep", "minecraft:pig", "minecraft:rabbit",
                 "minecraft:cat", "minecraft:parrot", "simplycats:cat", "hotchicks:chicken", "hotchicks:cow",
                 "hotchicks:rabbit", "workdog:boston_terrier", "workdog:jack_russell_terrier"), entry -> true);
+        builder.pop();
+
+        builder.push("Herding");
+        herdersLivestockList = builder.defineList("herdersLivestockList", Arrays.asList("minecraft:sheep",
+                "minecraft:cow", "minecraft:pig", "minecraft:chicken", "minecraft:rabbit", "minecraft:llama",
+                "minecraft:trader_llama", "hotchicks:cow", "hotchicks:chicken", "hotchicks:rabbit"), entry -> true);
         builder.pop();
         builder.pop();
     }
