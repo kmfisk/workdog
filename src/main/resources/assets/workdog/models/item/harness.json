@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "workdog:item/harness",
+    "layer1": "workdog:item/harness_gold"
+  }
+}

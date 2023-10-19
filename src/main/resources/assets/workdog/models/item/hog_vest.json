@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "workdog:item/hog_vest",
+    "layer1": "workdog:item/hog_vest_gold"
+  }
+}

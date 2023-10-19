@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "workdog:item/collar",
+    "layer1": "workdog:item/collar_gold"
+  }
+}
