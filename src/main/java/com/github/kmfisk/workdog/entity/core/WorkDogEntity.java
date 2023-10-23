@@ -1,16 +1,15 @@
 package com.github.kmfisk.workdog.entity.core;
 
 import com.github.kmfisk.workdog.WorkDog;
-import com.github.kmfisk.workdog.client.gui.WorkDogScreen;
 import com.github.kmfisk.workdog.config.WorkDogConfig;
 import com.github.kmfisk.workdog.entity.WDWolfEntity;
 import com.github.kmfisk.workdog.entity.goal.DogAvoidEntityGoal;
 import com.github.kmfisk.workdog.entity.goal.DogBirthGoal;
 import com.github.kmfisk.workdog.entity.goal.DogBreedGoal;
 import com.github.kmfisk.workdog.entity.goal.DogTemptGoal;
+import com.github.kmfisk.workdog.inventory.WorkDogContainer;
 import com.github.kmfisk.workdog.item.WorkDogItems;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
@@ -18,10 +17,12 @@ import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.IInventoryChangedListener;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.container.SimpleNamedContainerProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -45,8 +46,7 @@ import net.minecraft.world.GameRules;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -502,6 +502,10 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
         return hasSaddlebag() ? 24 + 5 : 5;
     }
 
+    public int getInventoryColumns() { // also todo ^^^
+        return 5;
+    }
+
     protected void createInventory() {
         Inventory inv = inventory;
         inventory = new Inventory(getInventorySize());
@@ -546,10 +550,9 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
 //        }
     }
 
-    @OnlyIn(Dist.CLIENT)
     public void openInventory(PlayerEntity player) {
         if (!level.isClientSide && isTame() && isOwnedBy(player))
-            Minecraft.getInstance().setScreen(new WorkDogScreen(this, player));
+            NetworkHooks.openGui((ServerPlayerEntity) player, new SimpleNamedContainerProvider((id, playerInv, player1) -> new WorkDogContainer(id, playerInv, inventory, this), this.getDisplayName()));
     }
 
     @Override
@@ -630,45 +633,40 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
 
         boolean isOwner = isOwnedBy(player);
         boolean canTame = isFood(stack) && !isTame() && (!(this instanceof WDWolfEntity) || (isBaby() && !WorkDogConfig.pedigreeMode.get()));
-        if (level.isClientSide) {
-            return isOwner || canTame ? ActionResultType.SUCCESS : ActionResultType.PASS;
+        if (isTame() && isOwner) {
+            if (!isBaby()) {
+                if (player.isSecondaryUseActive()) {
+                    openInventory(player);
+                    return ActionResultType.sidedSuccess(level.isClientSide);
 
-        } else {
-            if (isTame() && isOwner) {
-                if (!isBaby()) {
-                    if (player.isSecondaryUseActive()) {
-                        openInventory(player);
-                        return ActionResultType.CONSUME;
-
-                    } else if (!hasSaddlebag() && stack.getItem() == WorkDogItems.SADDLEBAG.get()) {
-                        setSaddlebag(true);
-                        playChestEquipsSound();
-                        if (!player.abilities.instabuild) stack.shrink(1);
-                        createInventory();
-                        return ActionResultType.CONSUME;
-                    }
+                } else if (!hasSaddlebag() && stack.getItem() == WorkDogItems.SADDLEBAG.get()) {
+                    setSaddlebag(true);
+                    playChestEquipsSound();
+                    if (!player.abilities.instabuild) stack.shrink(1);
+                    createInventory();
+                    return ActionResultType.sidedSuccess(level.isClientSide);
                 }
+            }
 
-                setOrderedToSit(!isOrderedToSit());
-                jumping = false;
+            setOrderedToSit(!isOrderedToSit());
+            jumping = false;
+            navigation.stop();
+            setTarget(null);
+            return ActionResultType.sidedSuccess(level.isClientSide);
+
+        } else if (canTame) {
+            if (!player.abilities.instabuild) stack.shrink(1);
+
+            if (random.nextInt(3) == 0 && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, player)) {
+                tame(player);
                 navigation.stop();
                 setTarget(null);
-                return ActionResultType.CONSUME;
+                setOrderedToSit(true);
+                this.goalSelector.addGoal(6, followGoal);
+                level.broadcastEntityEvent(this, (byte) 7);
 
-            } else if (canTame) {
-                if (!player.abilities.instabuild) stack.shrink(1);
-
-                if (random.nextInt(3) == 0 && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, player)) {
-                    tame(player);
-                    navigation.stop();
-                    setTarget(null);
-                    setOrderedToSit(true);
-                    this.goalSelector.addGoal(6, followGoal);
-                    level.broadcastEntityEvent(this, (byte) 7);
-
-                } else level.broadcastEntityEvent(this, (byte) 6);
-                return ActionResultType.CONSUME;
-            }
+            } else level.broadcastEntityEvent(this, (byte) 6);
+            return ActionResultType.sidedSuccess(level.isClientSide);
         }
 
         return ActionResultType.PASS;
@@ -676,6 +674,11 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
 
     protected void playChestEquipsSound() {
         playSound(SoundEvents.DONKEY_CHEST, 1.0F, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
+    }
+
+    public boolean isArmor(ItemStack itemStack) {
+        return Arrays.asList(WorkDogItems.SADDLEBAG.get(), WorkDogItems.COLLAR.get(), WorkDogItems.HARNESS.get(),
+                WorkDogItems.HOG_VEST.get(), WorkDogItems.MUZZLE.get()).contains(itemStack);
     }
 
     private net.minecraftforge.common.util.LazyOptional<?> itemHandler = null;

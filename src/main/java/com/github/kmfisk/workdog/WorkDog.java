@@ -5,6 +5,7 @@ import com.github.kmfisk.workdog.client.color.ColorEvents;
 import com.github.kmfisk.workdog.config.WorkDogConfig;
 import com.github.kmfisk.workdog.data.WorkDogRecipeProvider;
 import com.github.kmfisk.workdog.entity.WorkDogEntities;
+import com.github.kmfisk.workdog.inventory.WDContainerTypes;
 import com.github.kmfisk.workdog.item.WorkDogItems;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.item.ItemGroup;
@@ -37,6 +38,7 @@ public class WorkDog {
         WorkDogEntities.REGISTRAR.register(bus);
         WorkDogBlocks.REGISTRAR.register(bus);
         WorkDogItems.REGISTRAR.register(bus);
+        WDContainerTypes.REGISTRAR.register(bus);
 
         bus.addListener(this::setup);
         bus.addListener(this::registerAttributes);
@@ -56,6 +58,7 @@ public class WorkDog {
     private void setupClient(final FMLClientSetupEvent event) {
         WorkDogEntities.registerRenderers();
         WorkDogBlocks.setRenderLayers();
+        WDContainerTypes.registerFactories();
     }
 
     private void registerAttributes(final EntityAttributeCreationEvent event) {
