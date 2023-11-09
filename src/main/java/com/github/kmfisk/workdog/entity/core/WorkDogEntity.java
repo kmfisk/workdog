@@ -9,7 +9,6 @@ import com.github.kmfisk.workdog.entity.goal.DogBreedGoal;
 import com.github.kmfisk.workdog.entity.goal.DogTemptGoal;
 import com.github.kmfisk.workdog.inventory.WorkDogContainer;
 import com.github.kmfisk.workdog.item.WorkDogItems;
-import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
@@ -65,8 +64,6 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
     private static final DataParameter<Integer> PUPPIES = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.INT);
 
     private static final DataParameter<Integer> MODE = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.INT);
-    private static final DataParameter<Byte> DATA_ID_FLAGS = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.BYTE);
-    private static final DataParameter<Boolean> SADDLEBAG = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.BOOLEAN);
 
     private static final Ingredient FOOD = Ingredient.of(Items.BEEF); //todo: all raw meats.. tag stuff.. stupid ugh
     protected Inventory inventory;
@@ -126,8 +123,6 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
         this.entityData.define(BREED_TIMER, 0);
         this.entityData.define(PUPPIES, 0);
         this.entityData.define(MODE, 2);
-        this.entityData.define(DATA_ID_FLAGS, (byte) 0);
-        this.entityData.define(SADDLEBAG, false);
     }
 
     @Override
@@ -257,22 +252,14 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
         return Mode.fromOrdinal(this.entityData.get(MODE));
     }
 
-    protected boolean getFlag(int p_110233_1_) {
-        return (entityData.get(DATA_ID_FLAGS) & p_110233_1_) != 0;
-    }
-
-    protected void setFlag(int p_110208_1_, boolean p_110208_2_) {
-        byte b0 = entityData.get(DATA_ID_FLAGS);
-        if (p_110208_2_) entityData.set(DATA_ID_FLAGS, (byte) (b0 | p_110208_1_));
-        else entityData.set(DATA_ID_FLAGS, (byte) (b0 & ~p_110208_1_));
-    }
-
     public boolean hasSaddlebag() {
-        return this.entityData.get(SADDLEBAG);
+        if (inventory == null) return false;
+        return !inventory.getItem(4).isEmpty();
     }
 
-    public void setSaddlebag(boolean hasSaddlebag) {
-        this.entityData.set(SADDLEBAG, hasSaddlebag);
+    public void equipSaddlebag(ItemStack saddlebag) {
+        inventory.setItem(4, saddlebag);
+        playSound(SoundEvents.DONKEY_CHEST, 1.0F, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
     }
 
     @Override
@@ -292,19 +279,31 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
         if (!isFixed()) nbt.putInt("Timer", getBreedTimer());
 
         nbt.putInt("Mode", getMode().ordinal());
-        nbt.putBoolean("HasSaddlebag", hasSaddlebag());
-        if (hasSaddlebag()) {
-            ListNBT listnbt = new ListNBT();
-            for (int i = 5; i < inventory.getContainerSize(); ++i) {
-                ItemStack itemstack = inventory.getItem(i);
-                if (!itemstack.isEmpty()) {
-                    CompoundNBT compoundnbt = new CompoundNBT();
-                    compoundnbt.putByte("Slot", (byte) i);
-                    itemstack.save(compoundnbt);
-                    listnbt.add(compoundnbt);
+
+        ListNBT equipmentListNBT = new ListNBT();
+        for (int i = 0; i < 5; i++) {
+            ItemStack itemStack = inventory.getItem(i);
+            if (!itemStack.isEmpty()) {
+                CompoundNBT compoundNBT = new CompoundNBT();
+                compoundNBT.putByte("Slot", (byte) i);
+                itemStack.save(compoundNBT);
+                equipmentListNBT.add(compoundNBT);
+            }
+        }
+        nbt.put("Equipment", equipmentListNBT);
+
+        if (!inventory.getItem(4).isEmpty()) {
+            ListNBT listNBT = new ListNBT();
+            for (int i = 5; i < inventory.getContainerSize(); i++) {
+                ItemStack itemStack = inventory.getItem(i);
+                if (!itemStack.isEmpty()) {
+                    CompoundNBT compoundNBT = new CompoundNBT();
+                    compoundNBT.putByte("Slot", (byte) i);
+                    itemStack.save(compoundNBT);
+                    listNBT.add(compoundNBT);
                 }
             }
-            nbt.put("Items", listnbt);
+            nbt.put("SaddlebagInventory", listNBT);
         }
     }
 
@@ -325,17 +324,25 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
         if (!isFixed()) setBreedTimer(nbt.getInt("Timer"));
 
         setMode(Mode.fromOrdinal(nbt.getInt("Mode")));
-        setSaddlebag(nbt.getBoolean("HasSaddlebag"));
-        if (hasSaddlebag()) {
-            ListNBT listnbt = nbt.getList("Items", 10);
+
+        ListNBT equipment = nbt.getList("Equipment", 10);
+        createInventory();
+        for (int i = 0; i < 5; i++) {
+            CompoundNBT compoundNBT = equipment.getCompound(i);
+            int slot = compoundNBT.getByte("Slot") & 255;
+            if (slot < inventory.getContainerSize()) inventory.setItem(slot, ItemStack.of(compoundNBT));
+        }
+
+        if (nbt.contains("SaddlebagInventory")) {
+            ListNBT listNBT = nbt.getList("SaddlebagInventory", 10);
             createInventory();
-            for (int i = 0; i < listnbt.size(); ++i) {
-                CompoundNBT compoundnbt = listnbt.getCompound(i);
-                int j = compoundnbt.getByte("Slot") & 255;
-                if (j >= 5 && j < inventory.getContainerSize()) inventory.setItem(j, ItemStack.of(compoundnbt));
+            for (int i = 0; i < listNBT.size(); i++) {
+                CompoundNBT compoundNBT = listNBT.getCompound(i);
+                int slot = compoundNBT.getByte("Slot") & 255;
+                if (slot >= 5 && slot < inventory.getContainerSize())
+                    inventory.setItem(slot, ItemStack.of(compoundNBT));
             }
         }
-        updateContainerEquipment();
     }
 
     @Override
@@ -498,12 +505,12 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
         }
     }
 
-    protected int getInventorySize() { // todo: LARGE dogs = 24, MEDIUM dogs = 15, SMALL dogs = 9
-        return hasSaddlebag() ? 24 + 5 : 5;
+    protected int getInventorySize() { // todo: LARGE dogs = 27, MEDIUM dogs = 18, SMALL dogs = 9
+        return hasSaddlebag() ? 27 + 5 : 5;
     }
 
     public int getInventoryColumns() { // also todo ^^^
-        return 5;
+        return hasSaddlebag() ? 9 : 0;
     }
 
     protected void createInventory() {
@@ -520,18 +527,11 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
         }
 
         inventory.addListener(this);
-        updateContainerEquipment();
         itemHandler = net.minecraftforge.common.util.LazyOptional.of(() -> new net.minecraftforge.items.wrapper.InvWrapper(inventory));
     }
 
-    protected void updateContainerEquipment() {
-        if (!level.isClientSide) setFlag(4, !inventory.getItem(0).isEmpty());
-    }
-
+    @Override
     public void containerChanged(IInventory inv) {
-//        boolean flag = isSaddled();
-        updateContainerEquipment();
-//        if (tickCount > 20 && !flag && isSaddled()) playSound(SoundEvents.HORSE_SADDLE, 0.5F, 1.0F);
     }
 
     @Override
@@ -544,10 +544,6 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
                     spawnAtLocation(itemstack);
             }
         }
-//        if (hasSaddlebag()) {
-//            if (!level.isClientSide) spawnAtLocation(WorkDogItems.SADDLEBAG.get());
-//            setSaddlebag(false);
-//        }
     }
 
     public void openInventory(PlayerEntity player) {
@@ -556,21 +552,37 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
     }
 
     @Override
-    public boolean setSlot(int slot, ItemStack itemStack) { // also todo see AbstractHorseEntity setSlot
-        if (slot == 499) { // todo: SADDLEBAG SLOT
-            if (this.hasSaddlebag() && itemStack.isEmpty()) {
-                this.setSaddlebag(false);
-                this.createInventory();
+    public boolean setSlot(int slot, ItemStack itemStack) {
+        if (slot >= 0 && slot < 5 && slot < inventory.getContainerSize()) {
+            if (slot == 0 && itemStack.getItem() != WorkDogItems.COLLAR.get()) return false;
+            else if (slot == 1 && itemStack.getItem() != WorkDogItems.HARNESS.get()) return false;
+            else if (slot == 2) {
+                boolean flag = false;
+                for (int i = 0; i < WorkDogItems.SERVICE_VESTS.size(); i++)
+                    if (itemStack.getItem() == WorkDogItems.SERVICE_VESTS.get(i).get()) flag = true;
+                if (!flag && itemStack.getItem() != WorkDogItems.HOG_VEST.get()) return false;
+            } else if (slot == 3 && itemStack.getItem() != WorkDogItems.MUZZLE.get()) return false;
+            else if (slot == 4 && itemStack.getItem() != WorkDogItems.SADDLEBAG.get()) return false;
+            else if (slot < 3 || canWearEquipment(itemStack)) {
+                inventory.setItem(slot, itemStack);
+                if (slot == 4) createInventory();
                 return true;
-            }
+            } else return false;
 
-            if (!this.hasSaddlebag() && itemStack.getItem() == Blocks.CHEST.asItem()) {
-                this.setSaddlebag(true);
-                this.createInventory();
+        } else {
+            int saddlebagInvSlot = slot + 5;
+            if (saddlebagInvSlot >= 5 && saddlebagInvSlot < inventory.getContainerSize()) {
+                inventory.setItem(saddlebagInvSlot, itemStack);
                 return true;
-            }
+
+            } else return false;
         }
-        return super.setSlot(slot, itemStack);
+
+        return false;
+    }
+
+    public boolean canWearEquipment(ItemStack stack) {
+        return true; // todo: breed-specific requirements
     }
 
     @Override
@@ -640,8 +652,7 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
                     return ActionResultType.sidedSuccess(level.isClientSide);
 
                 } else if (!hasSaddlebag() && stack.getItem() == WorkDogItems.SADDLEBAG.get()) {
-                    setSaddlebag(true);
-                    playChestEquipsSound();
+                    equipSaddlebag(stack);
                     if (!player.abilities.instabuild) stack.shrink(1);
                     createInventory();
                     return ActionResultType.sidedSuccess(level.isClientSide);
@@ -670,15 +681,6 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
         }
 
         return ActionResultType.PASS;
-    }
-
-    protected void playChestEquipsSound() {
-        playSound(SoundEvents.DONKEY_CHEST, 1.0F, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
-    }
-
-    public boolean isArmor(ItemStack itemStack) {
-        return Arrays.asList(WorkDogItems.SADDLEBAG.get(), WorkDogItems.COLLAR.get(), WorkDogItems.HARNESS.get(),
-                WorkDogItems.HOG_VEST.get(), WorkDogItems.MUZZLE.get()).contains(itemStack);
     }
 
     private net.minecraftforge.common.util.LazyOptional<?> itemHandler = null;
