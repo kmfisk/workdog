@@ -1,7 +1,6 @@
 package com.github.kmfisk.workdog.inventory;
 
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
-import com.github.kmfisk.workdog.item.WorkDogItems;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
@@ -9,8 +8,6 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class WorkDogContainer extends Container {
     private final IInventory container;
@@ -25,29 +22,25 @@ public class WorkDogContainer extends Container {
         this.container = dogInventory;
         this.dog = dog;
         dogInventory.startOpen(playerInventory.player);
-        // TODO
-        this.addSlot(new DogEquipmentSlot(dogInventory, 0, 50, 76));
-        this.addSlot(new DogEquipmentSlot(dogInventory, 1, 50, 96));
-        this.addSlot(new DogEquipmentSlot(dogInventory, 2, 50, 116));
-        this.addSlot(new DogEquipmentSlot(dogInventory, 3, 50, 136));
-        this.addSlot(new DogEquipmentSlot(dogInventory, 4, 50, 156));
+        for (int i = 0; i < 5; i++)
+            this.addSlot(new DogEquipmentSlot(dogInventory, i, 50, i * 20 + 76));
 
         if (dog != null && dog.hasSaddlebag()) {
-            for (int k = 0; k < 3; ++k) {
-                for (int l = 0; l < dog.getInventoryColumns(); ++l) {
-                    this.addSlot(new Slot(dogInventory, 5 + l + k * dog.getInventoryColumns(), 80 + l * 18, 18 + k * 18));
+            for (int i1 = 0; i1 < 3; ++i1) {
+                for (int j1 = 0; j1 < dog.getInventoryColumns(); ++j1) {
+                    this.addSlot(new Slot(dogInventory, j1 + i1 * dog.getInventoryColumns() + 5, 192 + j1 * 18, 18 + i1 * 18));
                 }
             }
         }
 
-        for (int i1 = 0; i1 < 3; ++i1) {
-            for (int k1 = 0; k1 < 9; ++k1) {
-                this.addSlot(new Slot(playerInventory, k1 + i1 * 9 + 9, 192 + k1 * 18, 102 + i1 * 18));
+        for (int i2 = 0; i2 < 3; ++i2) {
+            for (int j2 = 0; j2 < 9; ++j2) {
+                this.addSlot(new Slot(playerInventory, j2 + i2 * 9 + 9, 192 + j2 * 18, 102 + i2 * 18));
             }
         }
 
-        for (int j1 = 0; j1 < 9; ++j1) {
-            this.addSlot(new Slot(playerInventory, j1, 192 + j1 * 18, 160));
+        for (int i3 = 0; i3 < 9; ++i3) {
+            this.addSlot(new Slot(playerInventory, i3, 192 + i3 * 18, 160));
         }
     }
 

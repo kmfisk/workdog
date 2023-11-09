@@ -38,15 +38,13 @@ public class WorkDogScreen extends ContainerScreen<WorkDogContainer> {
         int j = (this.height - this.imageHeight) / 2;
         this.blit(matrixStack, i, j, 0, 0, this.imageWidth, this.imageHeight, 384, 256);
         WorkDogEntity dog = menu.dog;
-//        if (dog != null && dog.hasSaddlebag()) { todo: inventory
-//            this.blit(p_230450_1_, i + 79, j + 17, 0, this.imageHeight, abstractchestedhorseentity.getInventoryColumns() * 18, 54);
-//        }
+        if (dog != null && dog.hasSaddlebag())
+            this.blit(matrixStack, i + 191, j + 25, 0, 187, dog.getInventoryColumns() * 18, 54, 384, 256);
 
-//        if (dog.isSaddleable()) { todo: equipment
-//            this.blit(p_230450_1_, i + 7, j + 35 - 18, 18, this.imageHeight + 54, 18, 18);
-//        }
-//        if (dog.canWearArmor()) {
-//            this.blit(p_230450_1_, i + 7, j + 35, 0, this.imageHeight + 54, 18, 18);
-//        }
+        this.blit(matrixStack, i + 49, j + 75, 162, 205, 18, 18, 384, 256);
+        this.blit(matrixStack, i + 49, j + 95, 180, 205, 18, 18, 384, 256);
+        this.blit(matrixStack, i + 49, j + 115, 198, 205, 18, 18, 384, 256);
+        this.blit(matrixStack, i + 49, j + 135, 216, 205, 18, 18, 384, 256);
+        this.blit(matrixStack, i + 49, j + 155, 234, 205, 18, 18, 384, 256);
     }
 }
