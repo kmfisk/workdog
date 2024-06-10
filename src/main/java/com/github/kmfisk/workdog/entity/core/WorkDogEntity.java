@@ -473,7 +473,7 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
                         childBreedType = ((WorkDogEntity) newBreed).getBreedOffspring(world, this);
                 }
             } else childBreedType = sire.getBreedOffspring(world, this);
-            if (!purebred && random.nextInt(100) < 95 && getWorkGroupTag() != null) {
+            if (!purebred && random.nextInt(100) < 5 && getWorkGroupTag() != null) {
                 Tags.IOptionalNamedTag<EntityType<?>> newBreedTag = random.nextBoolean() && sire.getWorkGroupTag() != null ? sire.getWorkGroupTag() : getWorkGroupTag();
                 System.out.println("Tag " + newBreedTag.getName() + " contains " + newBreedTag.getValues().size() + " entries.");
                 Entity newBreed = newBreedTag.getRandomElement(random).create(world);
