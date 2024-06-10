@@ -38,6 +38,11 @@ public class WDWolfEntity extends WorkDogEntity {
     }
 
     @Override
+    public Tags.IOptionalNamedTag<EntityType<?>> getWorkGroupTag() {
+        return null;
+    }
+
+    @Override
     protected void registerGoals() {
         super.registerGoals();
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
@@ -95,8 +100,7 @@ public class WDWolfEntity extends WorkDogEntity {
     @Override
     public AgeableEntity getBreedOffspring(ServerWorld world, AgeableEntity entity) {
         if (entity instanceof WorkDogEntity) {
-            WorkDogEntity partner = (WorkDogEntity) entity;
-            WorkDogEntity baby = null;
+            WorkDogEntity baby = WorkDogEntities.WOLF.create(world);
             if (random.nextFloat() <= 0.05F) {
                 Biome biome = level.getBiome(blockPosition());
                 Set<BiomeDictionary.Type> biomeTypes = BiomeDictionary.getTypes(RegistryKey.create(Registry.BIOME_REGISTRY, biome.getRegistryName()));
@@ -108,13 +112,6 @@ public class WDWolfEntity extends WorkDogEntity {
                         (biomeTypes.contains(BiomeDictionary.Type.MOUNTAIN) && !biomeTypes.contains(BiomeDictionary.Type.HOT) && !biomeTypes.contains(BiomeDictionary.Type.FOREST))) {
                     baby = WorkDogEntities.AKITA.create(world);
                 }
-
-                if (baby != null) baby.setVariant(random.nextInt(baby.getVariantCount()));
-            }
-
-            if (baby == null) {
-                baby = WorkDogEntities.WOLF.create(world);
-                if (baby != null) baby.setupChildVariant(this, partner);
             }
 
             return baby;

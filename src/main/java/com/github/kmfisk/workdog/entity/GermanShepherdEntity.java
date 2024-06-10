@@ -78,9 +78,7 @@ public class GermanShepherdEntity extends ProtectionDogEntity {
     @Nullable
     @Override
     public AgeableEntity getBreedOffspring(ServerWorld world, AgeableEntity entity) {
-        GermanShepherdEntity baby = WorkDogEntities.GERMAN_SHEPHERD.create(world);
-        if (baby != null) baby.setupChildVariant(this, (WorkDogEntity) entity);
-        return baby;
+        return WorkDogEntities.GERMAN_SHEPHERD.create(world);
     }
 
     public enum GermanShepherdVariant {

@@ -33,10 +33,8 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.tags.EntityTypeTags;
+import net.minecraft.util.*;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -45,6 +43,7 @@ import net.minecraft.world.GameRules;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
@@ -53,6 +52,12 @@ import java.util.List;
 import java.util.Locale;
 
 public abstract class WorkDogEntity extends TameableEntity implements IInventoryChangedListener {
+    public static final Tags.IOptionalNamedTag<EntityType<?>> HERDING_DOGS = EntityTypeTags.createOptional(new ResourceLocation(WorkDog.MOD_ID, "herding"));
+    public static final Tags.IOptionalNamedTag<EntityType<?>> HUNTING_DOGS = EntityTypeTags.createOptional(new ResourceLocation(WorkDog.MOD_ID, "hunting"));
+    public static final Tags.IOptionalNamedTag<EntityType<?>> PROTECTION_DOGS = EntityTypeTags.createOptional(new ResourceLocation(WorkDog.MOD_ID, "protection"));
+    public static final Tags.IOptionalNamedTag<EntityType<?>> TERRIER_DOGS = EntityTypeTags.createOptional(new ResourceLocation(WorkDog.MOD_ID, "terrier"));
+    public static final Tags.IOptionalNamedTag<EntityType<?>> TOY_DOGS = EntityTypeTags.createOptional(new ResourceLocation(WorkDog.MOD_ID, "toy"));
+
     public static final DataParameter<Boolean> GENDER = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.BOOLEAN);
     public static final DataParameter<Boolean> LONGHAIR = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.BOOLEAN);
     public static final DataParameter<Integer> VARIANT = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.INT);
@@ -137,6 +142,9 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
 
         return super.finalizeSpawn(world, difficulty, reason, spawnData, dataTag);
     }
+
+    @Nullable
+    public abstract Tags.IOptionalNamedTag<EntityType<?>> getWorkGroupTag();
 
     public Gender getGender() {
         return Gender.fromBool(entityData.get(GENDER));
@@ -419,19 +427,20 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
 
     public void setupChildVariant(WorkDogEntity parent1, WorkDogEntity parent2) {
         int variant;
-        if (parent1.getType() == parent2.getType()) {
-            if (random.nextBoolean()) {
-                if (random.nextFloat() <= 0.6F) variant = parent2.getVariant();
-                else variant = getCarriedVariant(parent2.getVariantName());
-            } else {
-                if (random.nextFloat() <= 0.6F) variant = parent1.getVariant();
-                else variant = getCarriedVariant(parent1.getVariantName());
-            }
+        if (getType() != parent1.getType() && getType() != parent2.getType()) {
+            variant = random.nextInt(getVariantCount());
+
+        } else if (parent1.getType() == parent2.getType()) {
+            WorkDogEntity parent = random.nextBoolean() ? parent1 : parent2;
+            if (random.nextFloat() <= 0.6F) variant = parent.getVariant();
+            else variant = getCarriedVariant(parent.getVariantName());
 
         } else {
-            if (random.nextFloat() <= 0.6F) variant = parent1.getVariant();
-            else variant = getCarriedVariant(parent1.getVariantName());
+            WorkDogEntity parent = getType() == parent1.getType() ? parent1 : parent2;
+            if (random.nextFloat() <= 0.6F) variant = parent.getVariant();
+            else variant = getCarriedVariant(parent.getVariantName());
         }
+
         setVariant(variant);
     }
 
@@ -453,19 +462,34 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
     @Override
     public void spawnChildFromBreeding(ServerWorld world, AnimalEntity entity) {
         if (entity instanceof WorkDogEntity) {
-            WorkDogEntity partner = (WorkDogEntity) entity;
-            WorkDogEntity child;
-            if (getType() == partner.getType() || random.nextBoolean())
-                child = (WorkDogEntity) getBreedOffspring(world, partner);
-            else child = (WorkDogEntity) partner.getBreedOffspring(world, this);
-            final net.minecraftforge.event.entity.living.BabyEntitySpawnEvent event = new net.minecraftforge.event.entity.living.BabyEntitySpawnEvent(this, partner, child);
+            WorkDogEntity sire = (WorkDogEntity) entity;
+            AgeableEntity childBreedType;
+            boolean purebred = getType() == sire.getType();
+            if (purebred || random.nextBoolean()) {
+                childBreedType = getBreedOffspring(world, sire);
+                if (purebred && random.nextInt(100) < 2 && getWorkGroupTag() != null) {
+                    Entity newBreed = getWorkGroupTag().getRandomElement(random).create(world);
+                    if (newBreed instanceof WorkDogEntity)
+                        childBreedType = ((WorkDogEntity) newBreed).getBreedOffspring(world, this);
+                }
+            } else childBreedType = sire.getBreedOffspring(world, this);
+            if (!purebred && random.nextInt(100) < 95 && getWorkGroupTag() != null) {
+                Tags.IOptionalNamedTag<EntityType<?>> newBreedTag = random.nextBoolean() && sire.getWorkGroupTag() != null ? sire.getWorkGroupTag() : getWorkGroupTag();
+                System.out.println("Tag " + newBreedTag.getName() + " contains " + newBreedTag.getValues().size() + " entries.");
+                Entity newBreed = newBreedTag.getRandomElement(random).create(world);
+                if (newBreed instanceof WorkDogEntity)
+                    childBreedType = ((WorkDogEntity) newBreed).getBreedOffspring(world, this);
+            }
+            final net.minecraftforge.event.entity.living.BabyEntitySpawnEvent event = new net.minecraftforge.event.entity.living.BabyEntitySpawnEvent(this, sire, childBreedType);
             final boolean cancelled = net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event);
-            child = (WorkDogEntity) event.getChild();
+            childBreedType = event.getChild();
 
             if (cancelled) return;
 
-            if (child != null) {
-                child.setupChildData(this, partner);
+            if (childBreedType instanceof WorkDogEntity) {
+                WorkDogEntity child = (WorkDogEntity) childBreedType;
+                child.setupChildVariant(this, sire);
+                child.setupChildData(this, sire);
                 child.moveTo(getX(), getY(), getZ(), 0.0F, 0.0F);
                 world.addFreshEntityWithPassengers(child);
                 world.broadcastEntityEvent(this, (byte) 18);

@@ -86,9 +86,7 @@ public class PitBullEntity extends HuntingDogEntity {
     @Nullable
     @Override
     public AgeableEntity getBreedOffspring(ServerWorld world, AgeableEntity entity) {
-        PitBullEntity baby = WorkDogEntities.PIT_BULL.create(world);
-        if (baby != null) baby.setupChildVariant(this, (WorkDogEntity) entity);
-        return baby;
+        return WorkDogEntities.PIT_BULL.create(world);
     }
 
     @Override

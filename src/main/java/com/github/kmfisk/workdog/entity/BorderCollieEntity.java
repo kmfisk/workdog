@@ -86,9 +86,7 @@ public class BorderCollieEntity extends HerdingDogEntity {
     @Nullable
     @Override
     public AgeableEntity getBreedOffspring(ServerWorld world, AgeableEntity entity) {
-        BorderCollieEntity baby = WorkDogEntities.BORDER_COLLIE.create(world);
-        if (baby != null) baby.setupChildVariant(this, (WorkDogEntity) entity);
-        return baby;
+        return WorkDogEntities.BORDER_COLLIE.create(world);
     }
 
     public enum BorderCollieVariant {

@@ -72,9 +72,7 @@ public class BostonTerrierEntity extends ToyDogEntity {
     @Nullable
     @Override
     public AgeableEntity getBreedOffspring(ServerWorld world, AgeableEntity entity) {
-        BostonTerrierEntity baby = WorkDogEntities.BOSTON_TERRIER.create(world);
-        if (baby != null) baby.setupChildVariant(this, (WorkDogEntity) entity);
-        return baby;
+        return WorkDogEntities.BOSTON_TERRIER.create(world);
     }
 
     public enum BostonTerrierVariant {

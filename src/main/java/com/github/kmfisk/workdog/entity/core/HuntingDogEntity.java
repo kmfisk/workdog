@@ -1,11 +1,13 @@
 package com.github.kmfisk.workdog.entity.core;
 
+import com.github.kmfisk.workdog.tags.WorkDogTags;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.FollowOwnerGoal;
 import net.minecraft.entity.ai.goal.OwnerHurtTargetGoal;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.entity.living.LootingLevelEvent;
 
 public abstract class HuntingDogEntity extends WorkDogEntity {
@@ -14,6 +16,11 @@ public abstract class HuntingDogEntity extends WorkDogEntity {
 
     public HuntingDogEntity(EntityType<? extends TameableEntity> type, World world) {
         super(type, world);
+    }
+
+    @Override
+    public Tags.IOptionalNamedTag<EntityType<?>> getWorkGroupTag() {
+        return HUNTING_DOGS;
     }
 
     @Override

@@ -99,9 +99,7 @@ public class AkitaEntity extends HuntingDogEntity {
     @Nullable
     @Override
     public AgeableEntity getBreedOffspring(ServerWorld world, AgeableEntity entity) {
-        AkitaEntity baby = WorkDogEntities.AKITA.create(world);
-        if (baby != null) baby.setupChildVariant(this, (WorkDogEntity) entity);
-        return baby;
+        return WorkDogEntities.AKITA.create(world);
     }
 
     @Override

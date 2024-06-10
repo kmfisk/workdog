@@ -74,9 +74,7 @@ public class JackRussellTerrierEntity extends TerrierDogEntity {
     @Nullable
     @Override
     public AgeableEntity getBreedOffspring(ServerWorld world, AgeableEntity entity) {
-        JackRussellTerrierEntity baby = WorkDogEntities.JACK_RUSSELL_TERRIER.create(world);
-        if (baby != null) baby.setupChildVariant(this, (WorkDogEntity) entity);
-        return baby;
+        return WorkDogEntities.JACK_RUSSELL_TERRIER.create(world);
     }
 
     public enum JackRussellTerrierVariant {
