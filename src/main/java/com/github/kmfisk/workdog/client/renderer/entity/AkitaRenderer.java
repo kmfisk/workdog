@@ -6,6 +6,9 @@ import com.github.kmfisk.workdog.entity.AkitaEntity;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.ArrayList;
+import java.util.Locale;
+
 public class AkitaRenderer extends WorkDogRenderer<AkitaEntity, AkitaModel> {
     public AkitaRenderer(EntityRendererManager rendererManager) {
         super(rendererManager, new AkitaModel.Adult(), 0.5f);
@@ -25,11 +28,8 @@ public class AkitaRenderer extends WorkDogRenderer<AkitaEntity, AkitaModel> {
 
     @Override
     public void setupVariants() {
-        variants = new String[]{
-                "black", "black_white_socks", "black_pinto", "black_brown_pinto", "black_tan_pinto", "black_brindle",
-                "brown_brindle", "brown_pinto", "fawn", "fawn_brindle", "fawn_pinto", "gray_brindle", "gray_pinto",
-                "silver_brindle", "silver_pinto", "tan_brindle", "tan_pinto", "tiger_brindle", "red_sesame",
-                "gold_sesame", "white"
-        };
+        variants = new ArrayList<>();
+        for (AkitaEntity.AkitaVariant variant : AkitaEntity.AkitaVariant.values())
+            variants.add(variant.name().toLowerCase(Locale.ROOT));
     }
 }

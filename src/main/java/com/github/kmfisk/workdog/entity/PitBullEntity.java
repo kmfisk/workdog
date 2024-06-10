@@ -30,47 +30,9 @@ public class PitBullEntity extends HuntingDogEntity {
     }
 
     @Override
-    public String getVariantName() {
-        switch (getVariant()) {
-            case 0:
-                return PitBullVariant.BLACK.name();
-            case 1:
-                return PitBullVariant.BLACK_PINTO.name();
-            case 2:
-                return PitBullVariant.BLUE_BRINDLE.name();
-            case 3:
-                return PitBullVariant.BLUE_PINTO.name();
-            case 4:
-                return PitBullVariant.BROWN_BRINDLE.name();
-            case 5:
-                return PitBullVariant.BROWN_PINTO.name();
-            case 6:
-                return PitBullVariant.DARK_BLUE.name();
-            case 7:
-                return PitBullVariant.DARK_BROWN.name();
-            case 8:
-                return PitBullVariant.DARK_RED.name();
-            case 9:
-                return PitBullVariant.FAWN.name();
-            case 10:
-                return PitBullVariant.LIGHT_BLUE.name();
-            case 11:
-                return PitBullVariant.LIGHT_BROWN.name();
-            case 12:
-                return PitBullVariant.LIGHT_RED.name();
-            case 13:
-                return PitBullVariant.RED_PINTO.name();
-            case 14:
-                return PitBullVariant.WHITE.name();
-            default:
-                throw new IllegalStateException("Unexpected Pit Bull variant, value of: " + getVariant());
-        }
-    }
-
-    @Override
-    public int getCarriedVariant(String name) {
-        int size = PitBullVariant.getCarriedVariants(name).size();
-        return PitBullVariant.getCarriedVariants(name).get(random.nextInt(size));
+    public int getCarriedVariant(int variant) {
+        int size = PitBullVariant.getCarriedVariants(variant).size();
+        return PitBullVariant.getCarriedVariants(variant).get(random.nextInt(size));
     }
 
     @Override
@@ -109,7 +71,9 @@ public class PitBullEntity extends HuntingDogEntity {
         LIGHT_BROWN(Arrays.asList(7, 5)),
         LIGHT_RED(Arrays.asList(9, 8)),
         RED_PINTO(Arrays.asList(8, 14)),
-        WHITE(Collections.singletonList(14));
+        WHITE(Collections.singletonList(14)),
+        ALBINISTIC(Collections.singletonList(14)),
+        MELANISTIC(Collections.singletonList(0));
 
         private final List<Integer> carries;
 
@@ -117,8 +81,8 @@ public class PitBullEntity extends HuntingDogEntity {
             this.carries = carries;
         }
 
-        public static List<Integer> getCarriedVariants(String name) {
-            return PitBullEntity.PitBullVariant.valueOf(name).carries;
+        public static List<Integer> getCarriedVariants(int variant) {
+            return PitBullVariant.values()[variant].carries;
         }
     }
 }

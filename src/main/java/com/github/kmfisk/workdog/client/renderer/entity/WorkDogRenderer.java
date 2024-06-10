@@ -10,13 +10,15 @@ import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.List;
+
 public abstract class WorkDogRenderer<T extends MobEntity, M extends EntityModel<T>> extends MobRenderer<T, M> {
     public static final ResourceLocation UNKNOWN_VARIANT = new ResourceLocation(WorkDog.MOD_ID, "textures/entity/unknown_variant.png");
     protected M adultModel;
     protected M babyModel;
     protected ResourceLocation baby_loc;
     protected ResourceLocation adult_loc;
-    protected String[] variants;
+    protected List<String> variants;
 
     public WorkDogRenderer(EntityRendererManager rendererManager, M model, float shadowRadius) {
         super(rendererManager, model, shadowRadius);
@@ -43,7 +45,7 @@ public abstract class WorkDogRenderer<T extends MobEntity, M extends EntityModel
     }
 
     public String getVariant(int variant) {
-        return variants[variant];
+        return variants.get(variant);
     }
 
     @Override
@@ -51,7 +53,7 @@ public abstract class WorkDogRenderer<T extends MobEntity, M extends EntityModel
         if (entity instanceof WorkDogEntity) {
             WorkDogEntity dog = (WorkDogEntity) entity;
             int i = dog.getVariant();
-            if (variants == null || variants.length != dog.getVariantCount()) setupVariants();
+            if (variants == null || variants.size() != dog.getVariantCount()) setupVariants();
             if (i >= dog.getVariantCount()) return UNKNOWN_VARIANT;
 
             if (dog.isBaby()) {

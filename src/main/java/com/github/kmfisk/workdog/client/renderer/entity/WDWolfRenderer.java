@@ -6,6 +6,9 @@ import com.github.kmfisk.workdog.entity.WDWolfEntity;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.ArrayList;
+import java.util.Locale;
+
 public class WDWolfRenderer extends WorkDogRenderer<WDWolfEntity, WDWolfModel> {
     public WDWolfRenderer(EntityRendererManager rendererManager) {
         super(rendererManager, new WDWolfModel.Adult(), 0.5f);
@@ -25,8 +28,8 @@ public class WDWolfRenderer extends WorkDogRenderer<WDWolfEntity, WDWolfModel> {
 
     @Override
     public void setupVariants() {
-        variants = new String[]{
-                "black", "brown", "gray", "white"
-        };
+        variants = new ArrayList<>();
+        for (WDWolfEntity.WolfVariant variant : WDWolfEntity.WolfVariant.values())
+            variants.add(variant.name().toLowerCase(Locale.ROOT));
     }
 }

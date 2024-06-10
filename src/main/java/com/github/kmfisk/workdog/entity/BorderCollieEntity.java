@@ -1,7 +1,6 @@
 package com.github.kmfisk.workdog.entity;
 
 import com.github.kmfisk.workdog.entity.core.HerdingDogEntity;
-import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -30,47 +29,9 @@ public class BorderCollieEntity extends HerdingDogEntity {
     }
 
     @Override
-    public String getVariantName() {
-        switch (getVariant()) {
-            case 0:
-                return BorderCollieVariant.BLACK.name();
-            case 1:
-                return BorderCollieVariant.BLACK_SKIM.name();
-            case 2:
-                return BorderCollieVariant.BLACK_LIGHT.name();
-            case 3:
-                return BorderCollieVariant.BLACK_HEAVY.name();
-            case 4:
-                return BorderCollieVariant.BLACK_TRI.name();
-            case 5:
-                return BorderCollieVariant.BLUE_SKIM.name();
-            case 6:
-                return BorderCollieVariant.BLUE_LIGHT.name();
-            case 7:
-                return BorderCollieVariant.BLUE_HEAVY.name();
-            case 8:
-                return BorderCollieVariant.BLUE_MERLE.name();
-            case 9:
-                return BorderCollieVariant.CHOCOLATE_SKIM.name();
-            case 10:
-                return BorderCollieVariant.CHOCOLATE_LIGHT.name();
-            case 11:
-                return BorderCollieVariant.CHOCOLATE_HEAVY.name();
-            case 12:
-                return BorderCollieVariant.RED_MERLE.name();
-            case 13:
-                return BorderCollieVariant.TAN.name();
-            case 14:
-                return BorderCollieVariant.WHITE.name();
-            default:
-                throw new IllegalStateException("Unexpected Border Collie variant, value of: " + getVariant());
-        }
-    }
-
-    @Override
-    public int getCarriedVariant(String name) {
-        int size = BorderCollieVariant.getCarriedVariants(name).size();
-        return BorderCollieVariant.getCarriedVariants(name).get(random.nextInt(size));
+    public int getCarriedVariant(int variant) {
+        int size = BorderCollieVariant.getCarriedVariants(variant).size();
+        return BorderCollieVariant.getCarriedVariants(variant).get(random.nextInt(size));
     }
 
     @Override
@@ -104,7 +65,9 @@ public class BorderCollieEntity extends HerdingDogEntity {
         CHOCOLATE_HEAVY(Arrays.asList(12, 7)),
         RED_MERLE(Arrays.asList(11, 13)),
         TAN(Arrays.asList(14, 12)),
-        WHITE(Collections.singletonList(14));
+        WHITE(Collections.singletonList(14)),
+        ALBINISTIC(Collections.singletonList(14)),
+        MELANISTIC(Collections.singletonList(0));
 
         private final List<Integer> carries;
 
@@ -112,8 +75,8 @@ public class BorderCollieEntity extends HerdingDogEntity {
             this.carries = carries;
         }
 
-        public static List<Integer> getCarriedVariants(String name) {
-            return BorderCollieVariant.valueOf(name).carries;
+        public static List<Integer> getCarriedVariants(int variant) {
+            return BorderCollieVariant.values()[variant].carries;
         }
     }
 }

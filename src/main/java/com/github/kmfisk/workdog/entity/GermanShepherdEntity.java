@@ -30,39 +30,9 @@ public class GermanShepherdEntity extends ProtectionDogEntity {
     }
 
     @Override
-    public String getVariantName() {
-        switch (getVariant()) {
-            case 0:
-                return GermanShepherdVariant.BLACK.name();
-            case 1:
-                return GermanShepherdVariant.BLACK_AND_RED.name();
-            case 2:
-                return GermanShepherdVariant.BLACK_AND_SILVER.name();
-            case 3:
-                return GermanShepherdVariant.BLACK_AND_TAN.name();
-            case 4:
-                return GermanShepherdVariant.RED_SABLE.name();
-            case 5:
-                return GermanShepherdVariant.RED_SADDLEBACK.name();
-            case 6:
-                return GermanShepherdVariant.SILVER_SABLE.name();
-            case 7:
-                return GermanShepherdVariant.SILVER_SADDLEBACK.name();
-            case 8:
-                return GermanShepherdVariant.TAN_SABLE.name();
-            case 9:
-                return GermanShepherdVariant.TAN_SADDLEBACK.name();
-            case 10:
-                return GermanShepherdVariant.WHITE.name();
-            default:
-                throw new IllegalStateException("Unexpected German Shepherd variant, value of: " + getVariant());
-        }
-    }
-
-    @Override
-    public int getCarriedVariant(String name) {
-        int size = GermanShepherdVariant.getCarriedVariants(name).size();
-        return GermanShepherdVariant.getCarriedVariants(name).get(random.nextInt(size));
+    public int getCarriedVariant(int variant) {
+        int size = GermanShepherdVariant.getCarriedVariants(variant).size();
+        return GermanShepherdVariant.getCarriedVariants(variant).get(random.nextInt(size));
     }
 
     @Override
@@ -92,7 +62,9 @@ public class GermanShepherdEntity extends ProtectionDogEntity {
         SILVER_SADDLEBACK(Arrays.asList(2, 9)),
         TAN_SABLE(Arrays.asList(9, 7)),
         TAN_SADDLEBACK(Arrays.asList(3, 5)),
-        WHITE(Collections.singletonList(10));
+        WHITE(Collections.singletonList(10)),
+        ALBINISTIC(Collections.singletonList(10)),
+        MELANISTIC(Collections.singletonList(0));
 
         private final List<Integer> carries;
 
@@ -100,8 +72,8 @@ public class GermanShepherdEntity extends ProtectionDogEntity {
             this.carries = carries;
         }
 
-        public static List<Integer> getCarriedVariants(String name) {
-            return GermanShepherdEntity.GermanShepherdVariant.valueOf(name).carries;
+        public static List<Integer> getCarriedVariants(int variant) {
+            return GermanShepherdVariant.values()[variant].carries;
         }
     }
 }

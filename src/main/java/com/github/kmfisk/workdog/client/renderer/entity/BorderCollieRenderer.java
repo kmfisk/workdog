@@ -6,6 +6,9 @@ import com.github.kmfisk.workdog.entity.BorderCollieEntity;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.ArrayList;
+import java.util.Locale;
+
 public class BorderCollieRenderer extends WorkDogRenderer<BorderCollieEntity, BorderCollieModel> {
     public BorderCollieRenderer(EntityRendererManager rendererManager) {
         super(rendererManager, new BorderCollieModel.Adult(), 0.5f);
@@ -25,9 +28,8 @@ public class BorderCollieRenderer extends WorkDogRenderer<BorderCollieEntity, Bo
 
     @Override
     public void setupVariants() {
-        variants = new String[]{
-                "black", "black_skim", "black_light", "black_heavy", "black_tri", "blue_skim", "blue_light", "blue_heavy",
-                "blue_merle", "chocolate_skim", "chocolate_light", "chocolate_heavy", "red_merle", "tan", "white"
-        };
+        variants = new ArrayList<>();
+        for (BorderCollieEntity.BorderCollieVariant variant : BorderCollieEntity.BorderCollieVariant.values())
+            variants.add(variant.name().toLowerCase(Locale.ROOT));
     }
 }

@@ -6,6 +6,9 @@ import com.github.kmfisk.workdog.entity.JackRussellTerrierEntity;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.ArrayList;
+import java.util.Locale;
+
 public class JackRussellTerrierRenderer extends WorkDogRenderer<JackRussellTerrierEntity, JackRussellTerrierModel> {
     public JackRussellTerrierRenderer(EntityRendererManager rendererManager) {
         super(rendererManager, new JackRussellTerrierModel.Adult(), 0.5f);
@@ -25,9 +28,8 @@ public class JackRussellTerrierRenderer extends WorkDogRenderer<JackRussellTerri
 
     @Override
     public void setupVariants() {
-        variants = new String[]{
-                "black", "black_and_tan", "brown_ears", "brown_face", "brown_saddle", "heavy_tri", "mid_tri",
-                "light_tri", "white"
-        };
+        variants = new ArrayList<>();
+        for (JackRussellTerrierEntity.JackRussellTerrierVariant variant : JackRussellTerrierEntity.JackRussellTerrierVariant.values())
+            variants.add(variant.name().toLowerCase(Locale.ROOT));
     }
 }

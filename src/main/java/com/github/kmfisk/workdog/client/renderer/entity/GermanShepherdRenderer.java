@@ -6,6 +6,9 @@ import com.github.kmfisk.workdog.entity.GermanShepherdEntity;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.ArrayList;
+import java.util.Locale;
+
 public class GermanShepherdRenderer extends WorkDogRenderer<GermanShepherdEntity, GermanShepherdModel> {
     public GermanShepherdRenderer(EntityRendererManager rendererManager) {
         super(rendererManager, new GermanShepherdModel.Adult(), 0.5f);
@@ -25,9 +28,8 @@ public class GermanShepherdRenderer extends WorkDogRenderer<GermanShepherdEntity
 
     @Override
     public void setupVariants() {
-        variants = new String[]{
-                "black", "black_and_red", "black_and_silver", "black_and_tan", "red_sable", "red_saddleback",
-                "silver_sable", "silver_saddleback", "tan_sable", "tan_saddleback", "white"
-        };
+        variants = new ArrayList<>();
+        for (GermanShepherdEntity.GermanShepherdVariant variant : GermanShepherdEntity.GermanShepherdVariant.values())
+            variants.add(variant.name().toLowerCase(Locale.ROOT));
     }
 }

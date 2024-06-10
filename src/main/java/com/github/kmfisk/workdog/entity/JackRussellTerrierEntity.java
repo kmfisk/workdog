@@ -30,35 +30,9 @@ public class JackRussellTerrierEntity extends TerrierDogEntity {
     }
 
     @Override
-    public String getVariantName() {
-        switch (getVariant()) {
-            case 0:
-                return JackRussellTerrierVariant.BLACK.name();
-            case 1:
-                return JackRussellTerrierVariant.BLACK_AND_TAN.name();
-            case 2:
-                return JackRussellTerrierVariant.BROWN_EARS.name();
-            case 3:
-                return JackRussellTerrierVariant.BROWN_FACE.name();
-            case 4:
-                return JackRussellTerrierVariant.BROWN_SADDLE.name();
-            case 5:
-                return JackRussellTerrierVariant.HEAVY_TRI.name();
-            case 6:
-                return JackRussellTerrierVariant.MID_TRI.name();
-            case 7:
-                return JackRussellTerrierVariant.LIGHT_TRI.name();
-            case 8:
-                return JackRussellTerrierVariant.WHITE.name();
-            default:
-                throw new IllegalStateException("Unexpected Jack Russell Terrier variant, value of: " + getVariant());
-        }
-    }
-
-    @Override
-    public int getCarriedVariant(String name) {
-        int size = JackRussellTerrierVariant.getCarriedVariants(name).size();
-        return JackRussellTerrierVariant.getCarriedVariants(name).get(random.nextInt(size));
+    public int getCarriedVariant(int variant) {
+        int size = JackRussellTerrierVariant.getCarriedVariants(variant).size();
+        return JackRussellTerrierVariant.getCarriedVariants(variant).get(random.nextInt(size));
     }
 
     @Override
@@ -86,7 +60,9 @@ public class JackRussellTerrierEntity extends TerrierDogEntity {
         HEAVY_TRI(Arrays.asList(1, 7)),
         MID_TRI(Arrays.asList(5, 7)),
         LIGHT_TRI(Arrays.asList(8, 5)),
-        WHITE(Collections.singletonList(8));
+        WHITE(Collections.singletonList(8)),
+        ALBINISTIC(Collections.singletonList(8)),
+        MELANISTIC(Collections.singletonList(0));
 
         private final List<Integer> carries;
 
@@ -94,8 +70,8 @@ public class JackRussellTerrierEntity extends TerrierDogEntity {
             this.carries = carries;
         }
 
-        public static List<Integer> getCarriedVariants(String name) {
-            return JackRussellTerrierEntity.JackRussellTerrierVariant.valueOf(name).carries;
+        public static List<Integer> getCarriedVariants(int variant) {
+            return JackRussellTerrierVariant.values()[variant].carries;
         }
     }
 }

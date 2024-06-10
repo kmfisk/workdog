@@ -1,7 +1,6 @@
 package com.github.kmfisk.workdog.entity;
 
 import com.github.kmfisk.workdog.entity.core.HuntingDogEntity;
-import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -30,60 +29,9 @@ public class AkitaEntity extends HuntingDogEntity {
     }
 
     @Override
-    public String getVariantName() {
-        switch (getVariant()) {
-            case 0:
-                return AkitaVariant.BLACK.name();
-            case 1:
-                return AkitaVariant.BLACK_WHITE_SOCKS.name();
-            case 2:
-                return AkitaVariant.BLACK_PINTO.name();
-            case 3:
-                return AkitaVariant.BLACK_BROWN_PINTO.name();
-            case 4:
-                return AkitaVariant.BLACK_TAN_PINTO.name();
-            case 5:
-                return AkitaVariant.BLACK_BRINDLE.name();
-            case 6:
-                return AkitaVariant.BROWN_BRINDLE.name();
-            case 7:
-                return AkitaVariant.BROWN_PINTO.name();
-            case 8:
-                return AkitaVariant.FAWN.name();
-            case 9:
-                return AkitaVariant.FAWN_BRINDLE.name();
-            case 10:
-                return AkitaVariant.FAWN_PINTO.name();
-            case 11:
-                return AkitaVariant.GRAY_BRINDLE.name();
-            case 12:
-                return AkitaVariant.GRAY_PINTO.name();
-            case 13:
-                return AkitaVariant.SILVER_BRINDLE.name();
-            case 14:
-                return AkitaVariant.SILVER_PINTO.name();
-            case 15:
-                return AkitaVariant.TAN_BRINDLE.name();
-            case 16:
-                return AkitaVariant.TAN_PINTO.name();
-            case 17:
-                return AkitaVariant.TIGER_BRINDLE.name();
-            case 18:
-                return AkitaVariant.RED_SESAME.name();
-            case 19:
-                return AkitaVariant.GOLD_SESAME.name();
-            case 20:
-                return AkitaVariant.WHITE.name();
-
-            default:
-                throw new IllegalStateException("Unexpected Akita variant, value of: " + getVariant());
-        }
-    }
-
-    @Override
-    public int getCarriedVariant(String name) {
-        int size = AkitaVariant.getCarriedVariants(name).size();
-        return AkitaVariant.getCarriedVariants(name).get(random.nextInt(size));
+    public int getCarriedVariant(int variant) {
+        int size = AkitaVariant.getCarriedVariants(variant).size();
+        return AkitaVariant.getCarriedVariants(variant).get(random.nextInt(size));
     }
 
     @Override
@@ -128,7 +76,9 @@ public class AkitaEntity extends HuntingDogEntity {
         TIGER_BRINDLE(Arrays.asList(11, 15)),
         RED_SESAME(Arrays.asList(19, 17)),
         GOLD_SESAME(Arrays.asList(18, 16)),
-        WHITE(Collections.singletonList(20));
+        WHITE(Collections.singletonList(20)),
+        ALBINISTIC(Collections.singletonList(20)),
+        MELANISTIC(Collections.singletonList(0));
 
         private final List<Integer> carries;
 
@@ -136,8 +86,8 @@ public class AkitaEntity extends HuntingDogEntity {
             this.carries = carries;
         }
 
-        public static List<Integer> getCarriedVariants(String name) {
-            return AkitaVariant.valueOf(name).carries;
+        public static List<Integer> getCarriedVariants(int variant) {
+            return AkitaVariant.values()[variant].carries;
         }
     }
 }

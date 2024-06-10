@@ -174,9 +174,7 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
 
     public abstract int getVariantCount();
 
-    public abstract String getVariantName();
-
-    public abstract int getCarriedVariant(String name);
+    public abstract int getCarriedVariant(int variant);
 
     public int getVariant() {
         return entityData.get(VARIANT);
@@ -447,12 +445,12 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
         } else if (parent1.getType() == parent2.getType()) {
             WorkDogEntity parent = random.nextBoolean() ? parent1 : parent2;
             if (random.nextFloat() <= 0.6F) variant = parent.getVariant();
-            else variant = getCarriedVariant(parent.getVariantName());
+            else variant = getCarriedVariant(parent.getVariant());
 
         } else {
             WorkDogEntity parent = getType() == parent1.getType() ? parent1 : parent2;
             if (random.nextFloat() <= 0.6F) variant = parent.getVariant();
-            else variant = getCarriedVariant(parent.getVariantName());
+            else variant = getCarriedVariant(parent.getVariant());
         }
 
         setVariant(variant);
