@@ -344,72 +344,130 @@ public abstract class AkitaModel extends WorkDogModel<AkitaEntity> {
         }
 
         @Override
-        public void prepareMobModel(AkitaEntity entity, float speed, float walkSpeed, float partialTick) {
-            if (entity.isInSittingPose()) {
-                this.ArmBaseLeft.setPos(2.4F, 0.7F, -0.6F);
-                this.ArmBaseRight.setPos(-2.4F, 0.7F, -0.6F);
-                this.Body.setPos(0.0F, -3.1F, 2.5F);
-                this.Chest.setPos(0.0F, 11.0F, -5.7F);
-                this.LowerLegLeft.setPos(0.6F, 6.4F, 3.5F);
-                this.LowerLegRight.setPos(-0.6F, 6.4F, 3.5F);
-                this.Neck.setPos(0.0F, -2.2F, -1.4F);
-                this.setRotateAngle(ArmBaseLeft, 0.40980330836826856F, 0.0F, 0.0F);
-                this.setRotateAngle(ArmBaseRight, 0.40980330836826856F, 0.0F, 0.0F);
-                this.setRotateAngle(Body, -0.36425021489121656F, 0.0F, 0.0F);
-                this.setRotateAngle(Chest, -0.31869712141416456F, 0.0F, 0.0F);
-                this.setRotateAngle(FootLeft, 1.5025539530419183F, 0.0F, 0.0F);
-                this.setRotateAngle(FootRight, 1.5025539530419183F, 0.0F, 0.0F);
-                this.setRotateAngle(Hips, -0.31869712141416456F, 0.0F, 0.0F);
-                this.setRotateAngle(LowerLegLeft, -1.8668041679331349F, 0.0F, 0.0F);
-                this.setRotateAngle(LowerLegRight, -1.8668041679331349F, 0.0F, 0.0F);
-                this.setRotateAngle(Neck, 1.0016444577195458F, 0.0F, 0.0F);
-                this.setRotateAngle(Tail1, 1.8212510744560826F, 0.0F, 0.0F);
-                this.setRotateAngle(Tail2, 0.36425021489121656F, 0.5462880558742251F, -0.5009094953223726F);
-                this.setRotateAngle(Tail3, 0.6829473363053812F, 0.27314402793711257F, 0.0F);
-                this.setRotateAngle(Tail4, 1.0016444577195458F, 0.017453292519943295F, 0.18203784098300857F);
-                this.setRotateAngle(ThighLeft, -1.0927506446736497F, -0.136659280431156F, -0.18203784098300857F);
-                this.setRotateAngle(ThighRight, -1.0927506446736497F, 0.136659280431156F, 0.18203784098300857F);
-                this.setRotateAngle(UpperLegLeft, 2.41309222380736F, 0.0F, 0.0F);
-                this.setRotateAngle(UpperLegRight, 2.41309222380736F, 0.0F, 0.0F);
-                this.ThighLeft.setPos(2.7F, 3.0F, 4.9F);
-                this.ThighRight.setPos(-2.7F, 3.0F, 4.9F);
-                this.UpperLegLeft.setPos(0.0F, 6.9F, 2.6F);
-                this.UpperLegRight.setPos(0.0F, 6.9F, 2.6F);
+        public void setSittingPose(AkitaEntity entity, float speed, float walkSpeed, float partialTick) {
+            this.ArmBaseLeft.setPos(2.4F, 0.7F, -0.6F);
+            this.ArmBaseRight.setPos(-2.4F, 0.7F, -0.6F);
+            this.Body.setPos(0.0F, -3.1F, 2.5F);
+            this.Chest.setPos(0.0F, 11.0F, -5.7F);
+            this.LowerLegLeft.setPos(0.6F, 6.4F, 3.5F);
+            this.LowerLegRight.setPos(-0.6F, 6.4F, 3.5F);
+            this.Neck.setPos(0.0F, -2.2F, -1.4F);
+            this.setRotateAngle(ArmBaseLeft, 0.40980330836826856F, 0.0F, 0.0F);
+            this.setRotateAngle(ArmBaseRight, 0.40980330836826856F, 0.0F, 0.0F);
+            this.setRotateAngle(Body, -0.36425021489121656F, 0.0F, 0.0F);
+            this.setRotateAngle(Chest, -0.31869712141416456F, 0.0F, 0.0F);
+            this.setRotateAngle(FootLeft, 1.5025539530419183F, 0.0F, 0.0F);
+            this.setRotateAngle(FootRight, 1.5025539530419183F, 0.0F, 0.0F);
+            this.setRotateAngle(Hips, -0.31869712141416456F, 0.0F, 0.0F);
+            this.setRotateAngle(LowerLegLeft, -1.8668041679331349F, 0.0F, 0.0F);
+            this.setRotateAngle(LowerLegRight, -1.8668041679331349F, 0.0F, 0.0F);
+            this.setRotateAngle(Neck, 1.0016444577195458F, 0.0F, 0.0F);
+            this.setRotateAngle(Tail1, 1.8212510744560826F, 0.0F, 0.0F);
+            this.setRotateAngle(Tail2, 0.36425021489121656F, 0.5462880558742251F, -0.5009094953223726F);
+            this.setRotateAngle(Tail3, 0.6829473363053812F, 0.27314402793711257F, 0.0F);
+            this.setRotateAngle(Tail4, 1.0016444577195458F, 0.017453292519943295F, 0.18203784098300857F);
+            this.setRotateAngle(ThighLeft, -1.0927506446736497F, -0.136659280431156F, -0.18203784098300857F);
+            this.setRotateAngle(ThighRight, -1.0927506446736497F, 0.136659280431156F, 0.18203784098300857F);
+            this.setRotateAngle(UpperLegLeft, 2.41309222380736F, 0.0F, 0.0F);
+            this.setRotateAngle(UpperLegRight, 2.41309222380736F, 0.0F, 0.0F);
+            this.ThighLeft.setPos(2.7F, 3.0F, 4.9F);
+            this.ThighRight.setPos(-2.7F, 3.0F, 4.9F);
+            this.UpperLegLeft.setPos(0.0F, 6.9F, 2.6F);
+            this.UpperLegRight.setPos(0.0F, 6.9F, 2.6F);
+        }
 
-            } else if (entity.isLying()) {
+        @Override
+        public void setLyingPose(AkitaEntity entity, float speed, float walkSpeed, float partialTick) {
+            this.ArmBaseLeft.setPos(2.5F, -0.7F, -0.1F);
+            this.setRotateAngle(ArmBaseLeft, 0.18203784098300857F, -0.22759093446006054F, -0.31869712141416456F);
+            this.ForearmLeft.setPos(-0.1F, 3.5F, -3.0F);
+            this.setRotateAngle(ForearmLeft, 0.045553093477052F, 0.0F, 0.0F);
+            this.ArmLeft.setPos(0.2F, 7.0F, 1.5F);
+            this.setRotateAngle(ArmLeft, -1.6390387005478748F, 0.136659280431156F, 0.36425021489121656F);
+            this.HandLeft.setPos(-0.1F, 2.8F, 2.1F);
+            this.setRotateAngle(HandLeft, 1.6845917940249266F, 0.0F, 0.0F);
+            this.ArmBaseRight.setPos(-2.6F, -1.7F, -0.1F);
+            this.setRotateAngle(ArmBaseRight, 0.136659280431156F, 0.31869712141416456F, 0.0F);
+            this.ForearmRight.setPos(0.1F, 4.0F, -2.9F);
+            this.setRotateAngle(ForearmRight, 0.045553093477052F, 0.0F, 0.0F);
+            this.ArmRight.setPos(-0.8F, 6.6F, 1.5F);
+            this.setRotateAngle(ArmRight, -1.593485607070823F, 0.0F, 0.0F);
+            this.HandRight.setPos(0.1F, 2.9F, 2.0F);
+            this.setRotateAngle(HandRight, 1.593485607070823F, 0.0F, 0.0F);
+            this.ThighLeft.setPos(2.7F, 7.5F, 4.3F);
+            this.setRotateAngle(ThighLeft, -2.0943951023931953F, 0.045553093477052F, 0.18203784098300857F);
+            this.UpperLegLeft.setPos(0.0F, 6.1F, 3.0F);
+            this.setRotateAngle(UpperLegLeft, 2.231054382824351F, 0.22759093446006054F, 0.0F);
+            this.setRotateAngle(LowerLegLeft, -1.4570008595648662F, 0.0F, 0.0F);
+            this.setRotateAngle(FootLeft, 1.6845917940249266F, 0.0F, 0.0F);
+            this.ThighRight.setPos(-2.7F, 5.0F, 0.9F);
+            this.setRotateAngle(ThighRight, 0.136659280431156F, 0.36425021489121656F, -0.9105382707654417F);
+            this.UpperLegRight.setPos(0.0F, 7.0F, -2.4F);
+            this.setRotateAngle(UpperLegRight, 0.8651597102135892F, 0.0F, 0.0F);
+            this.setRotateAngle(LowerLegRight, -0.6373942428283291F, 0.0F, 0.0F);
+            this.setRotateAngle(FootRight, 1.6845917940249266F, 0.0F, 0.0F);
+            this.Tail1.setPos(0.0F, 3.0F, 3.9F);
+            this.setRotateAngle(Tail1, 1.1383037381507017F, 0.6829473363053812F, 1.6390387005478748F);
+            this.setRotateAngle(Tail3, 1.0471975511965976F, 0.22759093446006054F, 0.0F);
+            this.Head.setPos(0.0F, -4.6F, 0.0F);
+            this.setRotateAngle(Head, -1.9123572614101867F, 0.0F, 0.0F);
+            this.Chest.setPos(0.0F, 18.2F, -5.7F);
+            this.Body.setPos(-0.4F, -3.6F, 2.0F);
+            this.setRotateAngle(Body, -0.045553093477052F, -0.091106186954104F, -0.136659280431156F);
+            this.Hips.setPos(0.0F, 0.6F, 9.0F);
+            this.setRotateAngle(Hips, -0.18203784098300857F, 0.0F, -0.31869712141416456F);
+            this.Neck.setPos(0.0F, -0.2F, -2.3F);
+            this.setRotateAngle(Neck, 2.1399481958702475F, 0.0F, 0.0F);
+        }
 
-
-            } else {
-                this.ArmBaseLeft.setPos(2.4F, 1.3F, -0.1F);
-                this.ArmBaseRight.setPos(-2.4F, 1.3F, -0.1F);
-                this.Body.setPos(0.0F, -4.0F, 2.0F);
-                this.Chest.setPos(0.0F, 10.2F, -5.7F);
-                this.LowerLegLeft.setPos(0.0F, 4.0F, 3.5F);
-                this.LowerLegRight.setPos(0.0F, 4.0F, 3.5F);
-                this.Neck.setPos(0.0F, -2.2F, -0.3F);
-                this.setRotateAngle(ArmBaseLeft, 0.136659280431156F, 0.0F, 0.0F);
-                this.setRotateAngle(ArmBaseRight, 0.136659280431156F, 0.0F, 0.0F);
-                this.setRotateAngle(Body, 0.045553093477052F, 0.0F, 0.0F);
-                this.setRotateAngle(Chest, -0.045553093477052F, 0.0F, 0.0F);
-                this.setRotateAngle(FootLeft, 0.0F, 0.0F, 0.0F);
-                this.setRotateAngle(FootRight, 0.0F, 0.0F, 0.0F);
-                this.setRotateAngle(Hips, -0.18203784098300857F, 0.0F, 0.0F);
-                this.setRotateAngle(LowerLegLeft, -0.6373942428283291F, 0.0F, 0.0F);
-                this.setRotateAngle(LowerLegRight, -0.6373942428283291F, 0.0F, 0.0F);
-                this.setRotateAngle(Neck, 0.6829473363053812F, 0.0F, 0.0F);
-                this.setRotateAngle(Tail1, 1.1383037381507017F, 0.0F, 0.0F);
-                this.setRotateAngle(Tail2, 0.7740535232594852F, -0.008726646259971648F, 0.0F);
-                this.setRotateAngle(Tail3, 1.1838568316277536F, 0.22759093446006054F, 0.0F);
-                this.setRotateAngle(Tail4, 1.0471975511965976F, 0.017453292519943295F, 0.18203784098300857F);
-                this.setRotateAngle(ThighLeft, 0.27314402793711257F, 0.0F, 0.0F);
-                this.setRotateAngle(ThighRight, 0.27314402793711257F, 0.0F, 0.0F);
-                this.setRotateAngle(UpperLegLeft, 0.5009094953223726F, 0.0F, 0.0F);
-                this.setRotateAngle(UpperLegRight, 0.5462880558742251F, 0.0F, 0.0F);
-                this.ThighLeft.setPos(2.7F, 3.0F, 1.9F);
-                this.ThighRight.setPos(-2.7F, 3.0F, 1.9F);
-                this.UpperLegLeft.setPos(0.0F, 7.0F, -2.4F);
-                this.UpperLegRight.setPos(0.0F, 7.0F, -2.4F);
-            }
+        @Override
+        public void resetPose(AkitaEntity entity, float speed, float walkSpeed, float partialTick) {
+            this.ArmBaseLeft.setPos(2.4F, 1.3F, -0.1F);
+            this.ForearmLeft.setPos(-0.1F, 3.5F, -3.0F);
+            this.ArmLeft.setPos(0.0F, 5.0F, 1.5F);
+            this.HandLeft.setPos(-0.1F, 3.0F, 2.4F);
+            this.ArmBaseRight.setPos(-2.4F, 1.3F, -0.1F);
+            this.ForearmRight.setPos(0.1F, 3.5F, -3.0F);
+            this.ArmRight.setPos(0.0F, 5.0F, 1.5F);
+            this.HandRight.setPos(0.1F, 3.0F, 2.4F);
+            this.Head.setPos(0.0F, -4.2F, -0.9F);
+            this.setRotateAngle(Head, -0.5918411493512771F, 0.0F, 0.0F);
+            this.Body.setPos(0.0F, -4.0F, 2.0F);
+            this.Chest.setPos(0.0F, 10.2F, -5.7F);
+            this.Hips.setPos(0.0F, 0.0F, 9.0F);
+            this.setRotateAngle(Hips, -0.18203784098300857F, 0.0F, 0.0F);
+            this.LowerLegLeft.setPos(0.0F, 4.0F, 3.5F);
+            this.LowerLegRight.setPos(0.0F, 4.0F, 3.5F);
+            this.Neck.setPos(0.0F, -2.2F, -0.3F);
+            this.setRotateAngle(ArmBaseLeft, 0.136659280431156F, 0.0F, 0.0F);
+            this.setRotateAngle(ForearmLeft, -0.136659280431156F, 0.0F, 0.0F);
+            this.setRotateAngle(ArmLeft, -0.045553093477052F, 0.0F, 0.0F);
+            this.setRotateAngle(HandLeft, 0.091106186954104F, 0.0F, 0.0F);
+            this.setRotateAngle(ArmBaseRight, 0.136659280431156F, 0.0F, 0.0F);
+            this.setRotateAngle(ForearmRight, -0.136659280431156F, 0.0F, 0.0F);
+            this.setRotateAngle(ArmRight, -0.045553093477052F, 0.0F, 0.0F);
+            this.setRotateAngle(HandRight, 0.091106186954104F, 0.0F, 0.0F);
+            this.setRotateAngle(Body, 0.045553093477052F, 0.0F, 0.0F);
+            this.setRotateAngle(Chest, -0.045553093477052F, 0.0F, 0.0F);
+            this.setRotateAngle(FootLeft, 0.0F, 0.0F, 0.0F);
+            this.setRotateAngle(FootRight, 0.0F, 0.0F, 0.0F);
+            this.setRotateAngle(Hips, -0.18203784098300857F, 0.0F, 0.0F);
+            this.setRotateAngle(LowerLegLeft, -0.6373942428283291F, 0.0F, 0.0F);
+            this.setRotateAngle(LowerLegRight, -0.6373942428283291F, 0.0F, 0.0F);
+            this.setRotateAngle(Neck, 0.6829473363053812F, 0.0F, 0.0F);
+            this.Tail1.setPos(0.0F, 3.0F, 5.0F);
+            this.setRotateAngle(Tail1, 1.1383037381507017F, 0.0F, 0.0F);
+            this.setRotateAngle(Tail2, 0.7740535232594852F, -0.008726646259971648F, 0.0F);
+            this.setRotateAngle(Tail3, 1.1838568316277536F, 0.22759093446006054F, 0.0F);
+            this.setRotateAngle(Tail4, 1.0471975511965976F, 0.017453292519943295F, 0.18203784098300857F);
+            this.setRotateAngle(ThighLeft, 0.27314402793711257F, 0.0F, 0.0F);
+            this.setRotateAngle(ThighRight, 0.27314402793711257F, 0.0F, 0.0F);
+            this.setRotateAngle(UpperLegLeft, 0.5009094953223726F, 0.0F, 0.0F);
+            this.setRotateAngle(UpperLegRight, 0.5462880558742251F, 0.0F, 0.0F);
+            this.ThighLeft.setPos(2.7F, 3.0F, 1.9F);
+            this.ThighRight.setPos(-2.7F, 3.0F, 1.9F);
+            this.UpperLegLeft.setPos(0.0F, 7.0F, -2.4F);
+            this.UpperLegRight.setPos(0.0F, 7.0F, -2.4F);
         }
     }
 
@@ -578,43 +636,46 @@ public abstract class AkitaModel extends WorkDogModel<AkitaEntity> {
         }
 
         @Override
-        public void prepareMobModel(AkitaEntity entity, float speed, float walkSpeed, float partialTick) {
-            if (entity.isInSittingPose()) {
-                this.ArmLeft.setPos(1.3F, 1.2F, 0.2F);
-                this.ArmRight.setPos(-1.3F, 1.2F, 0.2F);
-                this.Neck.setPos(0.0F, -0.8F, -1.5F);
-                this.setRotateAngle(ArmLeft, 0.7740535232594852F, 0.0F, 0.0F);
-                this.setRotateAngle(ArmRight, 0.7740535232594852F, 0.0F, 0.0F);
-                this.setRotateAngle(Body, -0.31869712141416456F, 0.0F, 0.0F);
-                this.setRotateAngle(Chest, -0.7285004297824331F, 0.0F, 0.0F);
-                this.setRotateAngle(Head, -0.4553564018453205F, 0.0F, 0.0F);
-                this.setRotateAngle(Neck, 1.2292353921796064F, 0.0F, 0.0F);
+        public void setSittingPose(AkitaEntity entity, float speed, float walkSpeed, float partialTick) {
+            this.ArmLeft.setPos(1.3F, 1.2F, 0.2F);
+            this.ArmRight.setPos(-1.3F, 1.2F, 0.2F);
+            this.Neck.setPos(0.0F, -0.8F, -1.5F);
+            this.setRotateAngle(ArmLeft, 0.7740535232594852F, 0.0F, 0.0F);
+            this.setRotateAngle(ArmRight, 0.7740535232594852F, 0.0F, 0.0F);
+            this.setRotateAngle(Body, -0.31869712141416456F, 0.0F, 0.0F);
+            this.setRotateAngle(Chest, -0.7285004297824331F, 0.0F, 0.0F);
+            this.setRotateAngle(Head, -0.4553564018453205F, 0.0F, 0.0F);
+            this.setRotateAngle(Neck, 1.2292353921796064F, 0.0F, 0.0F);
 //                this.setRotateAngle(Tail, 1.0016444577195458F, 0.40980330836826856F, 0.5918411493512771F);
-                this.setRotateAngle(ThighLeft, -0.5462880558742251F, -0.36425021489121656F, 0.0F);
-                this.setRotateAngle(ThighRight, -0.5462880558742251F, 0.36425021489121656F, 0.0F);
-                this.Tail1.setPos(-0.3F, 1.0F, 3.2F);
-                this.ThighLeft.setPos(1.7F, 1.3F, 4.4F);
-                this.ThighRight.setPos(-1.7F, 1.3F, 4.4F);
+            this.setRotateAngle(ThighLeft, -0.5462880558742251F, -0.36425021489121656F, 0.0F);
+            this.setRotateAngle(ThighRight, -0.5462880558742251F, 0.36425021489121656F, 0.0F);
+            this.Tail1.setPos(-0.3F, 1.0F, 3.2F);
+            this.ThighLeft.setPos(1.7F, 1.3F, 4.4F);
+            this.ThighRight.setPos(-1.7F, 1.3F, 4.4F);
+        }
 
-            } else if (entity.isLying()) {
+        @Override
+        public void setLyingPose(AkitaEntity entity, float speed, float walkSpeed, float partialTick) {
 
-            } else {
-                this.ArmLeft.setPos(1.7F, 1.0F, -0.5F);
-                this.ArmRight.setPos(-1.7F, 1.0F, -0.5F);
-                this.Neck.setPos(0.0F, -1.3F, -0.7F);
-                this.setRotateAngle(ArmLeft, 0.136659280431156F, 0.0F, 0.0F);
-                this.setRotateAngle(ArmRight, 0.136659280431156F, 0.0F, 0.0F);
-                this.setRotateAngle(Body, 0.0F, 0.0F, 0.0F);
-                this.setRotateAngle(Chest, -0.045553093477052F, 0.0F, 0.0F);
-                this.setRotateAngle(Head, -0.5918411493512771F, 0.0F, 0.0F);
-                this.setRotateAngle(Neck, 0.6829473363053812F, 0.0F, 0.0F);
+        }
+
+        @Override
+        public void resetPose(AkitaEntity entity, float speed, float walkSpeed, float partialTick) {
+            this.ArmLeft.setPos(1.7F, 1.0F, -0.5F);
+            this.ArmRight.setPos(-1.7F, 1.0F, -0.5F);
+            this.Neck.setPos(0.0F, -1.3F, -0.7F);
+            this.setRotateAngle(ArmLeft, 0.136659280431156F, 0.0F, 0.0F);
+            this.setRotateAngle(ArmRight, 0.136659280431156F, 0.0F, 0.0F);
+            this.setRotateAngle(Body, 0.0F, 0.0F, 0.0F);
+            this.setRotateAngle(Chest, -0.045553093477052F, 0.0F, 0.0F);
+            this.setRotateAngle(Head, -0.5918411493512771F, 0.0F, 0.0F);
+            this.setRotateAngle(Neck, 0.6829473363053812F, 0.0F, 0.0F);
 //                this.setRotateAngle(Tail, -0.8196066167365371F, 0.0F, 0.0F);
-                this.setRotateAngle(ThighLeft, 0.0F, 0.0F, 0.0F);
-                this.setRotateAngle(ThighRight, 0.0F, 0.0F, 0.0F);
-                this.Tail1.setPos(0.0F, 2.0F, 4.0F);
-                this.ThighLeft.setPos(1.7F, 1.3F, 3.0F);
-                this.ThighRight.setPos(-1.7F, 1.3F, 3.0F);
-            }
+            this.setRotateAngle(ThighLeft, 0.0F, 0.0F, 0.0F);
+            this.setRotateAngle(ThighRight, 0.0F, 0.0F, 0.0F);
+            this.Tail1.setPos(0.0F, 2.0F, 4.0F);
+            this.ThighLeft.setPos(1.7F, 1.3F, 3.0F);
+            this.ThighRight.setPos(-1.7F, 1.3F, 3.0F);
         }
     }
 }

@@ -6,11 +6,26 @@ import net.minecraft.client.renderer.model.ModelRenderer;
 
 public abstract class WorkDogModel<E extends WorkDogEntity> extends SegmentedModel<E> {
     @Override
+    public void prepareMobModel(E entity, float speed, float walkSpeed, float partialTick) {
+        if (entity.isInSittingPose()) setSittingPose(entity, speed, walkSpeed, partialTick);
+        else if (entity.isLying()) setLyingPose(entity, speed, walkSpeed, partialTick);
+        else resetPose(entity, speed, walkSpeed, partialTick);
+    }
+
+    public abstract void setSittingPose(E entity, float speed, float walkSpeed, float partialTick);
+
+    public abstract void setLyingPose(E entity, float speed, float walkSpeed, float partialTick);
+
+    public abstract void resetPose(E entity, float speed, float walkSpeed, float partialTick);
+
+    @Override
     public void setupAnim(E entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 //        this.playMovementAnimation(entity, entity.tickCount, 0.3F, ageInTicks, netHeadYaw, headPitch);
-        if (!entity.isInSittingPose()) this.playMovementAnimation(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-        if ((limbSwingAmount <= 0.05F && !entity.isInWater()))
-            this.playIdleAnimation(entity, entity.tickCount, 0.3F, ageInTicks, netHeadYaw, headPitch);
+        if (!entity.isInSittingPose() && !entity.isLying()) {
+            this.playMovementAnimation(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+            if ((limbSwingAmount <= 0.05F && !entity.isInWater()))
+                this.playIdleAnimation(entity, entity.tickCount, 0.3F, ageInTicks, netHeadYaw, headPitch);
+        }
     }
 
     public abstract void playIdleAnimation(E entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch);
