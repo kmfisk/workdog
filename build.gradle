@@ -41,7 +41,7 @@ minecraft {
     runs {
         client {
             workingDirectory project.file('run')
-            property 'forge.logging.console.level', 'debug'
+            property 'forge.logging.console.level', 'info'
 
             mods {
                 workdog {
@@ -52,7 +52,7 @@ minecraft {
 
         server {
             workingDirectory project.file('run')
-            property 'forge.logging.console.level', 'debug'
+            property 'forge.logging.console.level', 'info'
 
             mods {
                 workdog {
