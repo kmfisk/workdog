@@ -453,6 +453,9 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
             else variant = getCarriedVariant(parent.getVariant());
         }
 
+        if (random.nextInt(100) < 1)
+            variant = getVariantCount() + (random.nextBoolean() ? 0 : 1);
+
         setVariant(variant);
     }
 

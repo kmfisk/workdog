@@ -1,6 +1,5 @@
 package com.github.kmfisk.workdog.item;
 
-import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.client.util.ITooltipFlag;
@@ -45,7 +44,7 @@ public class WorkDogSpawnEggItem extends ForgeSpawnEggItem {
             int setVariant;
 
             if (entity instanceof WorkDogEntity)
-                maxVariants = ((WorkDogEntity) entity).getVariantCount() - 1;
+                maxVariants = ((WorkDogEntity) entity).getVariantCount() + 1;
 
             if (maxVariants > 0) {
                 if (itemStack.getTag() != null && itemStack.getTag().contains("Variant")) {

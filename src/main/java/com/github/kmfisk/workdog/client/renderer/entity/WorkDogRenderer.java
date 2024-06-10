@@ -53,8 +53,8 @@ public abstract class WorkDogRenderer<T extends MobEntity, M extends EntityModel
         if (entity instanceof WorkDogEntity) {
             WorkDogEntity dog = (WorkDogEntity) entity;
             int i = dog.getVariant();
-            if (variants == null || variants.size() != dog.getVariantCount()) setupVariants();
-            if (i >= dog.getVariantCount()) return UNKNOWN_VARIANT;
+            if (variants == null || variants.size() != dog.getVariantCount() + 2) setupVariants();
+            if (i >= dog.getVariantCount() + 2) return UNKNOWN_VARIANT;
 
             if (dog.isBaby()) {
                 if (getBabyLocation() == null) setupBabyTextureLocations(entity);
