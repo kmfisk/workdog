@@ -668,7 +668,7 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
             return ActionResultType.CONSUME;
 
         } else if (stack.getItem() == Items.MILK_BUCKET && getGender() == Gender.FEMALE && getBreedingStatus("ispregnant")) {
-            setBreedTimer(20);
+            setBreedTimer(player.isDiscrete() ? WorkDogConfig.pregnancyTimer.get() / 10 + 20 : 20);
             return ActionResultType.CONSUME;
 
         } else if (stack.getItem() == Items.BONE && isBaby()) {
@@ -696,10 +696,13 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
                 }
             }
 
-            setOrderedToSit(!isOrderedToSit());
-            jumping = false;
-            navigation.stop();
-            setTarget(null);
+            if (!isLying()) {
+                setOrderedToSit(!isOrderedToSit());
+                jumping = false;
+                navigation.stop();
+                setTarget(null);
+            }
+            
             return ActionResultType.sidedSuccess(level.isClientSide);
 
         } else if (canTame) {
