@@ -35,7 +35,6 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.util.*;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -44,8 +43,6 @@ import net.minecraft.world.GameRules;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.fml.network.NetworkHooks;
 
@@ -65,11 +62,12 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
     public static final DataParameter<Boolean> LONGHAIR = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.BOOLEAN);
     public static final DataParameter<Integer> VARIANT = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.INT);
 
-    private static final DataParameter<Boolean> FIXED = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> INFERTILE = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> IN_HEAT = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> IS_PREGNANT = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Integer> BREED_TIMER = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.INT);
     private static final DataParameter<Integer> PUPPIES = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.INT);
+    private static final DataParameter<Integer> LITTERS = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.INT);
 
     private static final DataParameter<Boolean> IS_LYING = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.BOOLEAN);
 
@@ -127,11 +125,12 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
         this.entityData.define(GENDER, false);
         this.entityData.define(LONGHAIR, false);
         this.entityData.define(VARIANT, 0);
-        this.entityData.define(FIXED, false);
+        this.entityData.define(INFERTILE, false);
         this.entityData.define(IN_HEAT, false);
         this.entityData.define(IS_PREGNANT, false);
         this.entityData.define(BREED_TIMER, 0);
         this.entityData.define(PUPPIES, 0);
+        this.entityData.define(LITTERS, 0);
         this.entityData.define(IS_LYING, false);
         this.entityData.define(MODE, 2);
     }
@@ -144,7 +143,7 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
         if (dataTag != null && dataTag.contains("Variant")) variant = dataTag.getInt("Variant");
         setVariant(variant);
 
-        if (getGender() == Gender.FEMALE && !isFixed()) setTimeCycle("end", WorkDogConfig.heatCooldown.get());
+        if (getGender() == Gender.FEMALE && !isInfertile()) setTimeCycle("end", WorkDogConfig.heatCooldown.get());
 
         return super.finalizeSpawn(world, difficulty, reason, spawnData, dataTag);
     }
@@ -184,12 +183,12 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
         entityData.set(VARIANT, variant);
     }
 
-    public void setFixed(boolean fixed) {
-        this.entityData.set(FIXED, fixed);
+    public void setInfertile(boolean infertile) {
+        this.entityData.set(INFERTILE, infertile);
     }
 
-    public boolean isFixed() {
-        return this.entityData.get(FIXED);
+    public boolean isInfertile() {
+        return this.entityData.get(INFERTILE);
     }
 
     public void setTimeCycle(String s, int time) {
@@ -255,6 +254,14 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
         return getPersistentData().getCompound("Sire");
     }
 
+    public void setLitters(int litters) {
+        entityData.set(LITTERS, litters);
+    }
+
+    public int getLitters() {
+        return entityData.get(LITTERS);
+    }
+
     public void setLying(boolean lying) {
         this.entityData.set(IS_LYING, lying);
     }
@@ -289,14 +296,17 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
         nbt.putBoolean("Longhair", isLonghair());
         nbt.putInt("Variant", getVariant());
 
-        nbt.putBoolean("Fixed", isFixed());
-        if (getGender() == Gender.FEMALE && !isFixed()) {
-            nbt.putBoolean("InHeat", getBreedingStatus("inheat"));
-            nbt.putBoolean("IsPregnant", getBreedingStatus("ispregnant"));
-            nbt.putInt("Puppies", getPuppies());
-            nbt.put("Sire", getSire());
+        nbt.putBoolean("Infertile", isInfertile());
+        if (getGender() == Gender.FEMALE) {
+            nbt.putInt("Litters", getLitters());
+            if (!isInfertile()) {
+                nbt.putBoolean("InHeat", getBreedingStatus("inheat"));
+                nbt.putBoolean("IsPregnant", getBreedingStatus("ispregnant"));
+                nbt.putInt("Puppies", getPuppies());
+                nbt.put("Sire", getSire());
+            }
         }
-        if (!isFixed()) nbt.putInt("Timer", getBreedTimer());
+        if (!isInfertile()) nbt.putInt("Timer", getBreedTimer());
 
         nbt.putInt("Mode", getMode().ordinal());
 
@@ -334,14 +344,17 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
         setLonghair(nbt.getBoolean("Longhair"));
         setVariant(nbt.getInt("Variant"));
 
-        setFixed(nbt.getBoolean("Fixed"));
-        if (getGender() == Gender.FEMALE && !isFixed()) {
-            setBreedingStatus("inheat", nbt.getBoolean("InHeat"));
-            setBreedingStatus("ispregnant", nbt.getBoolean("IsPregnant"));
-            setPuppies(nbt.getInt("Puppies"));
-            setSire(nbt.get("Sire"));
+        setInfertile(nbt.getBoolean("Infertile"));
+        if (getGender() == Gender.FEMALE) {
+            setLitters(nbt.getInt("Litters"));
+            if (!isInfertile()) {
+                setBreedingStatus("inheat", nbt.getBoolean("InHeat"));
+                setBreedingStatus("ispregnant", nbt.getBoolean("IsPregnant"));
+                setPuppies(nbt.getInt("Puppies"));
+                setSire(nbt.get("Sire"));
+            }
         }
-        if (!isFixed()) setBreedTimer(nbt.getInt("Timer"));
+        if (!isInfertile()) setBreedTimer(nbt.getInt("Timer"));
 
         setMode(Mode.fromOrdinal(nbt.getInt("Mode")));
 
@@ -368,7 +381,7 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
     @Override
     public void tick() {
         super.tick();
-        if (!level.isClientSide && !isBaby() && !isFixed() && getGender() == Gender.FEMALE) { //if female & adult & not fixed
+        if (!level.isClientSide && !isBaby() && !isInfertile() && getGender() == Gender.FEMALE) { //if female & adult & not infertile
             if (getBreedingStatus("inheat")) //if in heat
                 if (getBreedTimer() <= 0) { //and timer is finished (reaching 0 after being in positives)
                     if (!getBreedingStatus("ispregnant")) //and not pregnant
@@ -391,7 +404,7 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
     public void baseTick() {
         super.baseTick();
 
-        if (!isBaby() && !isFixed()) { //if not a child & not fixed
+        if (!isBaby() && !isInfertile()) { //if not a child & not infertile
             int breedTimer = getBreedTimer();
             if (getGender() == Gender.FEMALE) {
                 if (getBreedingStatus("inheat") || getBreedingStatus("ispregnant")) {
@@ -430,7 +443,7 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
         if (isOrderedToSit() || ((WorkDogEntity) entity).isOrderedToSit()) return false;
 
         WorkDogEntity partner = (WorkDogEntity) entity;
-        if (partner.isFixed() || isFixed()) return false;
+        if (partner.isInfertile() || isInfertile()) return false;
 
         if (getGender() == Gender.MALE && getBreedTimer() == 0)
             return (partner.getGender() == Gender.FEMALE && partner.getBreedingStatus("inheat"));
@@ -650,7 +663,8 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
                 StringBuilder debugInfo = new StringBuilder();
                 debugInfo.append(getMode().name()).append(" MODE // ");
                 debugInfo.append(getGender() == Gender.MALE ? "MALE, " : "FEMALE, ");
-                if (isFixed()) debugInfo.append("fixed: ").append(getBreedTimer());
+                if (getGender() == Gender.FEMALE) debugInfo.append("litters: ").append(getLitters()).append(", ");
+                if (isInfertile()) debugInfo.append("fixed/infertile: ").append(getBreedTimer());
                 else if (getGender() == Gender.MALE) debugInfo.append("timer: ").append(getBreedTimer());
                 else if (getBreedingStatus("inheat")) debugInfo.append("in heat for: ").append(getBreedTimer());
                 else if (!getBreedingStatus("ispregnant")) debugInfo.append("heat starts in: ").append(getBreedTimer());
@@ -662,7 +676,7 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
 
             return ActionResultType.CONSUME;
 
-        } else if (stack.getItem() == Items.BLAZE_POWDER && !isFixed() && getBreedTimer() != 0 && !getBreedingStatus("ispregnant")) {
+        } else if (stack.getItem() == Items.BLAZE_POWDER && !isInfertile() && getBreedTimer() != 0 && !getBreedingStatus("ispregnant")) {
             if (getGender() == Gender.MALE) setBreedTimer(0);
             else if (getBreedingStatus("inheat")) setBreedTimer(20);
             else setBreedTimer(-20);
@@ -703,7 +717,7 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
                 navigation.stop();
                 setTarget(null);
             }
-            
+
             return ActionResultType.sidedSuccess(level.isClientSide);
 
         } else if (canTame) {

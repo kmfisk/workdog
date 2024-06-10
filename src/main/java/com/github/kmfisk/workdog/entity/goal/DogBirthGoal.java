@@ -27,7 +27,7 @@ public class DogBirthGoal extends Goal {
         if (mother.getGender() != WorkDogEntity.Gender.FEMALE || !mother.getBreedingStatus("ispregnant") || mother.getBreedingStatus("inheat"))
             return false;
 
-        else if (mother.getBreedTimer() >= WorkDogConfig.pregnancyTimer.get() / 10 || mother.isFixed())
+        else if (mother.getBreedTimer() >= WorkDogConfig.pregnancyTimer.get() / 10 || mother.isInfertile())
             return false;
 
         else return !mother.isTame() || mother.getOwner() != null;
@@ -35,7 +35,7 @@ public class DogBirthGoal extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        return mother.getBreedingStatus("ispregnant") && !mother.isFixed();
+        return mother.getBreedingStatus("ispregnant") && !mother.isInfertile();
     }
 
     @Override
@@ -67,6 +67,10 @@ public class DogBirthGoal extends Goal {
             mother.setPuppies(0); // resets puppy counter
             mother.setBreedingStatus("ispregnant", false); // ends pregnancy
             mother.setTimeCycle("end", WorkDogConfig.heatCooldown.get()); // sets out of heat timer
+
+            int litters = mother.getLitters() + 1;
+            mother.setLitters(litters);
+            if (litters >= 5 && mother.getRandom().nextInt(4) == 0) mother.setInfertile(true);
         }
     }
 }

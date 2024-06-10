@@ -29,7 +29,7 @@ public class SterilizationPotionItem extends Item {
     public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity player, LivingEntity target, Hand hand) {
         if (target instanceof WorkDogEntity) {
             WorkDogEntity dog = (WorkDogEntity) target;
-            if ((!dog.isTame() || (dog.isTame() && dog.isOwnedBy(player))) && player.isCrouching() && !dog.isFixed()) {
+            if ((!dog.isTame() || (dog.isTame() && dog.isOwnedBy(player))) && player.isCrouching() && !dog.isInfertile()) {
                 for (int i = 0; i < 7; ++i) {
                     double d0 = random.nextGaussian() * 0.02D;
                     double d1 = random.nextGaussian() * 0.02D;
@@ -37,7 +37,7 @@ public class SterilizationPotionItem extends Item {
                     dog.level.addParticle(ParticleTypes.HAPPY_VILLAGER, dog.getRandomX(1.0D), dog.getRandomY() + 0.5D, dog.getRandomZ(1.0D), d0, d1, d2);
                 }
                 if (!target.level.isClientSide()) {
-                    dog.setFixed(true);
+                    dog.setInfertile(true);
                     player.displayClientMessage(new TranslationTextComponent(dog.getGender() == WorkDogEntity.Gender.FEMALE ? "chat.workdog.sterilization_potion.success_female" : "chat.workdog.sterilization_potion.success_male", dog.getName()), true);
 
                     if (!player.isCreative()) {

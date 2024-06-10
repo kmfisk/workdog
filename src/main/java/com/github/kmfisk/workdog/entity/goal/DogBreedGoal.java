@@ -30,7 +30,7 @@ public class DogBreedGoal extends Goal {
     @Override
     public boolean canUse() {
         if (dog.getGender() == WorkDogEntity.Gender.FEMALE) return false;
-        if (dog.isFixed()) return false;
+        if (dog.isInfertile()) return false;
 
         nearbyDogs = level.getEntitiesOfClass(WorkDogEntity.class, dog.getBoundingBox().inflate(NEARBY_RADIUS_CHECK));
         /*if (nearbyDogs.size() >= SCConfig.breeding_limit.get()) todo: breeding limit?
@@ -42,7 +42,7 @@ public class DogBreedGoal extends Goal {
 
         target = getNearbyMate();
         if (target != null && dog.getSensing().canSee(target) && target.getBreedingStatus("inheat")) {
-            if (target.isFixed()) return false;
+            if (target.isInfertile()) return false;
             if (!target.isTame()) return true;
             LivingEntity targetOwner = target.getOwner();
             return /*todo: !ownerExceedsLimit(target, targetOwner) &&*/ !ownerIsOffline(target, targetOwner);
@@ -54,7 +54,7 @@ public class DogBreedGoal extends Goal {
     @Override
     public boolean canContinueToUse() {
         if (dog.isOrderedToSit() || target.isOrderedToSit()) return false;
-        if (dog.isFixed() || target.isFixed()) return false;
+        if (dog.isInfertile() || target.isInfertile()) return false;
 
         boolean maleCooldownCheck = dog.getGender() == WorkDogEntity.Gender.MALE && dog.getBreedTimer() == 0;
         boolean femaleHeatCheck = target.getGender() == WorkDogEntity.Gender.FEMALE && target.getBreedingStatus("inheat");
