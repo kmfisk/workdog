@@ -138,7 +138,7 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
         if (dataTag != null && dataTag.contains("Variant")) variant = dataTag.getInt("Variant");
         setVariant(variant);
 
-        if (getGender() == Gender.FEMALE && !isFixed()) setTimeCycle("end", random.nextInt(72000));
+        if (getGender() == Gender.FEMALE && !isFixed()) setTimeCycle("end", WorkDogConfig.heatCooldown.get());
 
         return super.finalizeSpawn(world, difficulty, reason, spawnData, dataTag);
     }
@@ -360,16 +360,16 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
             if (getBreedingStatus("inheat")) //if in heat
                 if (getBreedTimer() <= 0) { //and timer is finished (reaching 0 after being in positives)
                     if (!getBreedingStatus("ispregnant")) //and not pregnant
-                        setTimeCycle("end", 72000); //sets out of heat for 16 (default) minecraft days
+                        setTimeCycle("end", WorkDogConfig.heatCooldown.get()); //sets out of heat for 3 (default) minecraft days
                     else { //or if IS pregnant
-                        setTimeCycle("pregnant", 72000); //and heat time runs out, starts pregnancy timer for birth
+                        setTimeCycle("pregnant", WorkDogConfig.pregnancyTimer.get()); //and heat time runs out, starts pregnancy timer for birth
                         setBreedingStatus("inheat", false); //sets out of heat
                     }
                 }
             if (!getBreedingStatus("inheat")) { //if not in heat
                 if (getBreedTimer() >= 0) { //and timer is finished (reaching 0 after being in negatives)
                     if (!getBreedingStatus("ispregnant")) //and not pregnant
-                        setTimeCycle("start", 48000); //sets in heat for 2 minecraft days
+                        setTimeCycle("start", WorkDogConfig.heatTimer.get()); //sets in heat for 2 minecraft days
                 }
             }
         }
@@ -475,7 +475,6 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
             } else childBreedType = sire.getBreedOffspring(world, this);
             if (!purebred && random.nextInt(100) < 5 && getWorkGroupTag() != null) {
                 Tags.IOptionalNamedTag<EntityType<?>> newBreedTag = random.nextBoolean() && sire.getWorkGroupTag() != null ? sire.getWorkGroupTag() : getWorkGroupTag();
-                System.out.println("Tag " + newBreedTag.getName() + " contains " + newBreedTag.getValues().size() + " entries.");
                 Entity newBreed = newBreedTag.getRandomElement(random).create(world);
                 if (newBreed instanceof WorkDogEntity)
                     childBreedType = ((WorkDogEntity) newBreed).getBreedOffspring(world, this);

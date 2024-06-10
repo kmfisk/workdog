@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class HerdLivestockGoal extends Goal {
-    private static final EntityPredicate LIVESTOCK_TARGETING = new EntityPredicate().range(16.0D).selector((entity) -> WorkDogConfig.herdersLivestockList.get().contains(Objects.requireNonNull(entity.getType().getRegistryName()).toString()));
+    private static final EntityPredicate LIVESTOCK_TARGETING = new EntityPredicate().range(16.0D).selector((entity) -> WorkDogConfig.herderLivestockList.get().contains(Objects.requireNonNull(entity.getType().getRegistryName()).toString()));
     protected final HerdingDogEntity herder;
     protected final World level;
     protected MobEntity livestock;

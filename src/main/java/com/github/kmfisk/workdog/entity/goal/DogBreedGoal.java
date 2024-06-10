@@ -1,5 +1,6 @@
 package com.github.kmfisk.workdog.entity.goal;
 
+import com.github.kmfisk.workdog.config.WorkDogConfig;
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
 import net.minecraft.entity.EntityPredicate;
 import net.minecraft.entity.LivingEntity;
@@ -113,6 +114,6 @@ public class DogBreedGoal extends Goal {
         target.setPuppies(target.getRandom().nextFloat() <= 0.1F ? 0 : litterSize);
         target.addSire(dog); // save sire nbt data to mother dog for each puppy added to litterSize
         target.setBreedingStatus("inheat", false); // 100% chance ends heat
-        target.setTimeCycle("pregnancy", 72000); // starts pregnancy timer
+        target.setTimeCycle("pregnancy", WorkDogConfig.pregnancyTimer.get()); // starts pregnancy timer
     }
 }

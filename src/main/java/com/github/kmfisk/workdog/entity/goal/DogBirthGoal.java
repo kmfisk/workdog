@@ -1,5 +1,6 @@
 package com.github.kmfisk.workdog.entity.goal;
 
+import com.github.kmfisk.workdog.config.WorkDogConfig;
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -55,6 +56,6 @@ public class DogBirthGoal extends Goal {
         mother.getPersistentData().remove("Sire"); // deletes just used sire data
         mother.setPuppies(0); // resets puppy counter
         mother.setBreedingStatus("ispregnant", false); // ends pregnancy
-        mother.setTimeCycle("end", 72000); // sets out of heat timer
+        mother.setTimeCycle("end", WorkDogConfig.heatCooldown.get()); // sets out of heat timer
     }
 }
