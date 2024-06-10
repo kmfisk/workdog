@@ -109,6 +109,11 @@ public class DogBreedGoal extends Goal {
     }
 
     private void startPregnancy() {
+        int dogLitters = dog.getLitters() + 1;
+        dog.setLitters(dogLitters);
+        if (WorkDogConfig.pedigreeMode.get() && dogLitters >= 5 && dog.getRandom().nextBoolean())
+            dog.setInfertile(true);
+
         int litterSize = level.random.nextInt(4) + 1; // at least 1 puppies, max of 4
         target.setBreedingStatus("ispregnant", true);
         target.setPuppies(target.getRandom().nextFloat() <= 0.1F ? 0 : litterSize);

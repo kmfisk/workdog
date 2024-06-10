@@ -70,7 +70,8 @@ public class DogBirthGoal extends Goal {
 
             int litters = mother.getLitters() + 1;
             mother.setLitters(litters);
-            if (litters >= 5 && mother.getRandom().nextInt(4) == 0) mother.setInfertile(true);
+            if (litters >= 5 && (mother.getRandom().nextInt(4) == 0 || WorkDogConfig.pedigreeMode.get() && mother.getRandom().nextBoolean()))
+                mother.setInfertile(true);
         }
     }
 }

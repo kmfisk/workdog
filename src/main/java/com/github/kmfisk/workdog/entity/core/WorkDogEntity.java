@@ -297,8 +297,8 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
         nbt.putInt("Variant", getVariant());
 
         nbt.putBoolean("Infertile", isInfertile());
+        nbt.putInt("Litters", getLitters());
         if (getGender() == Gender.FEMALE) {
-            nbt.putInt("Litters", getLitters());
             if (!isInfertile()) {
                 nbt.putBoolean("InHeat", getBreedingStatus("inheat"));
                 nbt.putBoolean("IsPregnant", getBreedingStatus("ispregnant"));
@@ -345,8 +345,8 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
         setVariant(nbt.getInt("Variant"));
 
         setInfertile(nbt.getBoolean("Infertile"));
+        setLitters(nbt.getInt("Litters"));
         if (getGender() == Gender.FEMALE) {
-            setLitters(nbt.getInt("Litters"));
             if (!isInfertile()) {
                 setBreedingStatus("inheat", nbt.getBoolean("InHeat"));
                 setBreedingStatus("ispregnant", nbt.getBoolean("IsPregnant"));
