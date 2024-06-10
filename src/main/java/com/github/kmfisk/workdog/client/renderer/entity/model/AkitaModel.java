@@ -260,7 +260,7 @@ public abstract class AkitaModel extends WorkDogModel<AkitaEntity> {
             float degree = 1.0f;
             this.Neck.xRot = MathHelper.cos((limbSwing * speed * 0.1F) + (float) Math.PI) * (degree * 0.2F) * limbSwingAmount * 0.5F + (entity.isInSittingPose() ? 1.0F : 0.68F);
             this.Head.xRot = MathHelper.cos(1.0F + (limbSwing * speed * 0.1F) + (float) Math.PI) * (degree * -0.3F) * limbSwingAmount * 0.5F + -0.59F;
-            if (!entity.isInSittingPose()) {
+            if (!entity.isInSittingPose() && !entity.isLying()) {
                 this.Tail1.xRot = MathHelper.cos(1.0F + (limbSwing * speed * 0.1F) + (float) Math.PI) * (degree * 0.3F) * limbSwingAmount * 0.5F + 1.2F;
                 this.Tail1.yRot = MathHelper.cos((limbSwing * speed * 0.1F) + (float) Math.PI) * (degree * -0.5F) * limbSwingAmount * 0.5F;
                 this.Tail2.zRot = MathHelper.cos((limbSwing * speed * 0.1F) + (float) Math.PI) * (degree * 0.3F) * limbSwingAmount * 0.5F;
@@ -375,6 +375,9 @@ public abstract class AkitaModel extends WorkDogModel<AkitaEntity> {
                 this.ThighRight.setPos(-2.7F, 3.0F, 4.9F);
                 this.UpperLegLeft.setPos(0.0F, 6.9F, 2.6F);
                 this.UpperLegRight.setPos(0.0F, 6.9F, 2.6F);
+
+            } else if (entity.isLying()) {
+
 
             } else {
                 this.ArmBaseLeft.setPos(2.4F, 1.3F, -0.1F);
@@ -549,7 +552,7 @@ public abstract class AkitaModel extends WorkDogModel<AkitaEntity> {
             float degree = 1.0f;
             this.Neck.xRot = MathHelper.cos((limbSwing * speed * 0.1F) + (float) Math.PI) * (degree * 0.2F) * limbSwingAmount * 0.5F + (entity.isInSittingPose() ? 1.23F : 0.68F);
             this.Head.xRot = MathHelper.cos(1.0F + (limbSwing * speed * 0.1F) + (float) Math.PI) * (degree * -0.3F) * limbSwingAmount * 0.5F + -0.59F;
-            if (!entity.isInSittingPose()) {
+            if (!entity.isInSittingPose() && !entity.isLying()) {
                 this.Tail1.xRot = MathHelper.cos(1.0F + (limbSwing * speed * 0.1F) + (float) Math.PI) * (degree * 0.3F) * limbSwingAmount * 0.5F + -0.82F;
                 this.Tail1.yRot = MathHelper.cos((limbSwing * speed * 0.1F) + (float) Math.PI) * (degree * -0.5F) * limbSwingAmount * 0.5F;
                 this.Tail2.zRot = MathHelper.cos((limbSwing * speed * 0.1F) + (float) Math.PI) * (degree * 0.3F) * limbSwingAmount * 0.5F;
@@ -592,6 +595,8 @@ public abstract class AkitaModel extends WorkDogModel<AkitaEntity> {
                 this.Tail1.setPos(-0.3F, 1.0F, 3.2F);
                 this.ThighLeft.setPos(1.7F, 1.3F, 4.4F);
                 this.ThighRight.setPos(-1.7F, 1.3F, 4.4F);
+
+            } else if (entity.isLying()) {
 
             } else {
                 this.ArmLeft.setPos(1.7F, 1.0F, -0.5F);

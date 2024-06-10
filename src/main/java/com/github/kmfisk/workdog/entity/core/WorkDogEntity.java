@@ -35,6 +35,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.util.*;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -43,6 +44,8 @@ import net.minecraft.world.GameRules;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.fml.network.NetworkHooks;
 
@@ -67,6 +70,8 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
     private static final DataParameter<Boolean> IS_PREGNANT = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Integer> BREED_TIMER = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.INT);
     private static final DataParameter<Integer> PUPPIES = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.INT);
+
+    private static final DataParameter<Boolean> IS_LYING = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.BOOLEAN);
 
     private static final DataParameter<Integer> MODE = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.INT);
 
@@ -127,6 +132,7 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
         this.entityData.define(IS_PREGNANT, false);
         this.entityData.define(BREED_TIMER, 0);
         this.entityData.define(PUPPIES, 0);
+        this.entityData.define(IS_LYING, false);
         this.entityData.define(MODE, 2);
     }
 
@@ -249,6 +255,14 @@ public abstract class WorkDogEntity extends TameableEntity implements IInventory
 
     public CompoundNBT getSire() {
         return getPersistentData().getCompound("Sire");
+    }
+
+    public void setLying(boolean lying) {
+        this.entityData.set(IS_LYING, lying);
+    }
+
+    public boolean isLying() {
+        return this.entityData.get(IS_LYING);
     }
 
     public void setMode(Mode mode) {

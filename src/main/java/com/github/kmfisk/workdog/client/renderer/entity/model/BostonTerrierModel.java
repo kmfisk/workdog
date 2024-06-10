@@ -318,6 +318,9 @@ public abstract class BostonTerrierModel extends WorkDogModel<BostonTerrierEntit
                 this.UpperLegLeft.setPos(-0.1F, 4.0F, 0.8F);
                 this.UpperLegRight.setPos(0.1F, 4.0F, 0.8F);
 
+            } else if (entity.isLying()) {
+
+
             } else {
                 this.ArmBaseLeft.setPos(2.0F, 0.5F, 0.2F);
                 this.ArmBaseRight.setPos(-2.0F, 0.5F, 0.2F);
@@ -507,6 +510,9 @@ public abstract class BostonTerrierModel extends WorkDogModel<BostonTerrierEntit
                 this.setRotateAngle(ThighRight, -0.5462880558742251F, 0.36425021489121656F, 0.0F);
                 this.ThighLeft.setPos(1.7F, 1.3F, 4.4F);
                 this.ThighRight.setPos(-1.7F, 1.3F, 4.4F);
+
+            } else if (entity.isLying()) {
+
 
             } else {
                 this.ArmLeft.setPos(1.7F, 0.7F, -0.5F);

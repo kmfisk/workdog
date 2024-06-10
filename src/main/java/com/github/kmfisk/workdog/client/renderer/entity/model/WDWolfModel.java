@@ -257,7 +257,7 @@ public abstract class WDWolfModel extends WorkDogModel<WDWolfEntity> {
             float degree = 1.0f;
             this.Neck.xRot = MathHelper.cos((limbSwing * speed * 0.1F) + (float) Math.PI) * (degree * 0.2F) * limbSwingAmount * 0.5F + 0.81F;
             this.Head.xRot = MathHelper.cos(1.0F + (limbSwing * speed * 0.1F) + (float) Math.PI) * (degree * -0.3F) * limbSwingAmount * 0.5F + (entity.isInSittingPose() ? -0.45F : -0.59F);
-            if (!entity.isInSittingPose()) {
+            if (!entity.isInSittingPose() && !entity.isLying()) {
                 this.Tail1.xRot = MathHelper.cos(1.0F + (limbSwing * speed * 0.1F) + (float) Math.PI) * (degree * 0.3F) * limbSwingAmount * 0.5F + 0.54F;
                 this.Tail1.yRot = MathHelper.cos((limbSwing * speed * 0.1F) + (float) Math.PI) * (degree * -0.5F) * limbSwingAmount * 0.5F;
                 this.Tail2.zRot = MathHelper.cos((limbSwing * speed * 0.1F) + (float) Math.PI) * (degree * 0.3F) * limbSwingAmount * 0.5F;
@@ -369,6 +369,9 @@ public abstract class WDWolfModel extends WorkDogModel<WDWolfEntity> {
                 this.ThighRight.setPos(-2.2F, 2.9F, 6.4F);
                 this.UpperLegLeft.setPos(0.0F, 5.8F, 1.6F);
                 this.UpperLegRight.setPos(0.0F, 5.8F, 1.6F);
+
+            } else if (entity.isLying()) {
+
 
             } else {
                 this.Body.setPos(0.0F, -3.7F, 2.0F);
@@ -517,7 +520,7 @@ public abstract class WDWolfModel extends WorkDogModel<WDWolfEntity> {
             float degree = 1.0f;
             this.Neck.xRot = MathHelper.cos((limbSwing * speed * 0.1F) + (float) Math.PI) * (degree * 0.2F) * limbSwingAmount * 0.5F + (entity.isInSittingPose() ? 1.23F : 0.72F);
             this.Head.xRot = MathHelper.cos(1.0F + (limbSwing * speed * 0.1F) + (float) Math.PI) * (degree * -0.3F) * limbSwingAmount * 0.5F + (entity.isInSittingPose() ? -0.45F : -0.63F);
-            if (!entity.isInSittingPose()) {
+            if (!entity.isInSittingPose() && !entity.isLying()) {
                 this.Tail1.xRot = MathHelper.cos(1.0F + (limbSwing * speed * 0.1F) + (float) Math.PI) * (degree * 0.3F) * limbSwingAmount * 0.5F + -1.04F;
                 this.Tail1.yRot = MathHelper.cos((limbSwing * speed * 0.1F) + (float) Math.PI) * (degree * -0.5F) * limbSwingAmount * 0.5F;
             }
@@ -560,6 +563,9 @@ public abstract class WDWolfModel extends WorkDogModel<WDWolfEntity> {
                 this.ThighLeft.setPos(1.7F, 1.3F, 4.4F);
                 this.ThighRight.setPos(-1.7F, 1.3F, 4.4F);
 
+            } else if (entity.isLying()) {
+
+                
             } else {
                 this.ArmLeft.setPos(1.7F, 1.3F, -0.5F);
                 this.ArmRight.setPos(-1.7F, 1.3F, -0.5F);
