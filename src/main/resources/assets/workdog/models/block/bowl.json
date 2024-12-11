@@ -2,7 +2,6 @@
   "parent": "block/block",
   "ambientocclusion": false,
   "textures": {
-    "0": "block/white_concrete",
     "1": "block/water_still",
     "2": "block/podzol_top",
     "particle": "#0"

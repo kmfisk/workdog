@@ -1,0 +1,19 @@
+{
+  "multipart": [
+    { "when": { "facing": "north" },
+      "apply": { "model": "workdog:block/pinkbowl" }
+    },
+
+    { "when": { "facing": "south" },
+      "apply": { "model": "workdog:block/pinkbowl", "y": 180 }
+    },
+
+    { "when": { "facing": "east" },
+      "apply": { "model": "workdog:block/pinkbowl", "y": 90 }
+    },
+
+    { "when": { "facing": "west" },
+      "apply": { "model": "workdog:block/pinkbowl", "y": 270 }
+    }
+  ]
+}

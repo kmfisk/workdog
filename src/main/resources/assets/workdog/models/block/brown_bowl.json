@@ -1,0 +1,6 @@
+{
+  "parent": "workdog:block/bowl",
+  "textures": {
+    "0": "block/brown_concrete"
+  }
+}

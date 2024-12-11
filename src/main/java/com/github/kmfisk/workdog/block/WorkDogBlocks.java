@@ -27,13 +27,14 @@ public class WorkDogBlocks {
 
     public static final Map<String, RegistryObject<Block>> BEDS = new HashMap<>();
     public static final Map<String, RegistryObject<Block>> FANCY_BEDS = new HashMap<>();
-    public static final RegistryObject<Block> BOWL = registerWithItem("bowl", () -> new BowlBlock(AbstractBlock.Properties.of(Material.STONE).noOcclusion()));
+    public static final Map<String, RegistryObject<Block>> BOWLS = new HashMap<>();
 
     static {
         for (int i = 0; i < 16; i++) {
             DyeColor color = DyeColor.byId(i);
             BEDS.put(color.getName(), registerWithItem(color.getName() + "_bed", () -> new DogBedBlock(AbstractBlock.Properties.of(Material.WOOL).noOcclusion())));
             FANCY_BEDS.put(color.getName(), registerWithItem(color.getName() + "_fancy_bed", () -> new DogBedBlock(AbstractBlock.Properties.of(Material.WOOL).noOcclusion())));
+            BOWLS.put(color.getName(), registerWithItem(color.getName() + "_bowl", () -> new BowlBlock(AbstractBlock.Properties.of(Material.STONE).noOcclusion())));
         }
     }
 
