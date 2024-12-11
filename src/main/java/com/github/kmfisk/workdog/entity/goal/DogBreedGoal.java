@@ -114,11 +114,17 @@ public class DogBreedGoal extends Goal {
         if (WorkDogConfig.pedigreeMode.get() && dogLitters >= 5 && dog.getRandom().nextBoolean())
             dog.setInfertile(true);
 
-        int litterSize = level.random.nextInt(4) + 1; // at least 1 puppies, max of 4
-        target.setBreedingStatus("ispregnant", true);
-        target.setPuppies(target.getRandom().nextFloat() <= 0.1F ? 0 : litterSize);
-        target.addSire(dog); // save sire nbt data to mother dog for each puppy added to litterSize
         target.setBreedingStatus("inheat", false); // 100% chance ends heat
-        target.setTimeCycle("pregnancy", WorkDogConfig.pregnancyTimer.get()); // starts pregnancy timer
+
+        if (target.getRandom().nextFloat() <= 0.1F) { // 10% chance false pregnancy
+            target.setTimeCycle("end", WorkDogConfig.heatCooldown.get()); // sets out of heat timer
+            level.broadcastEntityEvent(target, (byte) 6); // smoke particles
+        } else {
+            int litterSize = level.random.nextInt(4) + 1; // at least 1 puppy, max of 4
+            target.setBreedingStatus("ispregnant", true);
+            target.setPuppies(litterSize);
+            target.addSire(dog); // save sire nbt data to mother dog for each puppy added to litterSize
+            target.setTimeCycle("pregnancy", WorkDogConfig.pregnancyTimer.get()); // starts pregnancy timer
+        }
     }
 }
