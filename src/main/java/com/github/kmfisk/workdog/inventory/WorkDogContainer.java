@@ -25,13 +25,13 @@ public class WorkDogContainer extends Container {
         for (int i = 0; i < 5; i++)
             this.addSlot(new DogEquipmentSlot(dogInventory, i, 50, i * 20 + 76));
 
-        if (dog != null && dog.hasSaddlebag()) {
+        /*if (dog != null && dog.hasSaddlebag()) { todo
             for (int i1 = 0; i1 < 3; ++i1) {
                 for (int j1 = 0; j1 < dog.getInventoryColumns(); ++j1) {
                     this.addSlot(new Slot(dogInventory, j1 + i1 * dog.getInventoryColumns() + 5, 192 + j1 * 18, 18 + i1 * 18));
                 }
             }
-        }
+        }*/
 
         for (int i2 = 0; i2 < 3; ++i2) {
             for (int j2 = 0; j2 < 9; ++j2) {

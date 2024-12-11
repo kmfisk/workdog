@@ -38,8 +38,8 @@ public class WorkDogScreen extends ContainerScreen<WorkDogContainer> {
         int j = (this.height - this.imageHeight) / 2;
         this.blit(matrixStack, i, j, 0, 0, this.imageWidth, this.imageHeight, 384, 256);
         WorkDogEntity dog = menu.dog;
-        if (dog != null && dog.hasSaddlebag())
-            this.blit(matrixStack, i + 191, j + 25, 0, 187, dog.getInventoryColumns() * 18, 54, 384, 256);
+//        if (dog != null && dog.hasSaddlebag()) todo
+//            this.blit(matrixStack, i + 191, j + 25, 0, 187, dog.getInventoryColumns() * 18, 54, 384, 256);
 
         this.blit(matrixStack, i + 49, j + 75, 162, 205, 18, 18, 384, 256);
         this.blit(matrixStack, i + 49, j + 95, 180, 205, 18, 18, 384, 256);
