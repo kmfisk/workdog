@@ -1,7 +1,6 @@
 package com.github.kmfisk.workdog.entity.core;
 
 import com.github.kmfisk.workdog.entity.goal.AttackableTargetRangedGoal;
-import com.github.kmfisk.workdog.tags.WorkDogTags;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.FollowOwnerGoal;

@@ -1,6 +1,5 @@
 package com.github.kmfisk.workdog.entity.core;
 
-import com.github.kmfisk.workdog.tags.WorkDogTags;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.FollowOwnerGoal;
 import net.minecraft.entity.ai.goal.OwnerHurtTargetGoal;
