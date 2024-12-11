@@ -2,14 +2,13 @@ package com.github.kmfisk.workdog.entity;
 
 import com.github.kmfisk.workdog.config.WorkDogConfig;
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
-import com.github.kmfisk.workdog.entity.goal.AttackableTargetRangedGoal;
-import com.github.kmfisk.workdog.entity.goal.WolfTargetNearestGoal;
+import com.github.kmfisk.workdog.entity.goal.*;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -44,7 +43,13 @@ public class WDWolfEntity extends WorkDogEntity {
 
     @Override
     protected void registerGoals() {
-        super.registerGoals();
+        this.goalSelector.addGoal(1, new SwimGoal(this));
+        this.goalSelector.addGoal(1, new SitGoal(this));
+        this.goalSelector.addGoal(2, new DogBirthGoal(this));
+        this.goalSelector.addGoal(3, new DogTemptGoal(this, 0.6D));
+        this.goalSelector.addGoal(4, new LeapAtTargetGoal(this, 0.4F));
+        this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.5D, true));
+        this.goalSelector.addGoal(9, new DogBreedGoal(this, 1.2D));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
         this.targetSelector.addGoal(2, new WolfTargetNearestGoal<>(this, LivingEntity.class, true,
                 (entity) -> WorkDogConfig.wolfPreyList.get().contains(Objects.requireNonNull(entity.getType().getRegistryName()).toString())));
