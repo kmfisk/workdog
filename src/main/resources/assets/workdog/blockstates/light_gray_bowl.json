@@ -1,19 +1,19 @@
 {
   "multipart": [
     { "when": { "facing": "north" },
-      "apply": { "model": "workdog:block/light_graybowl" }
+      "apply": { "model": "workdog:block/light_gray_bowl" }
     },
 
     { "when": { "facing": "south" },
-      "apply": { "model": "workdog:block/light_graybowl", "y": 180 }
+      "apply": { "model": "workdog:block/light_gray_bowl", "y": 180 }
     },
 
     { "when": { "facing": "east" },
-      "apply": { "model": "workdog:block/light_graybowl", "y": 90 }
+      "apply": { "model": "workdog:block/light_gray_bowl", "y": 90 }
     },
 
     { "when": { "facing": "west" },
-      "apply": { "model": "workdog:block/light_graybowl", "y": 270 }
+      "apply": { "model": "workdog:block/light_gray_bowl", "y": 270 }
     }
   ]
 }
