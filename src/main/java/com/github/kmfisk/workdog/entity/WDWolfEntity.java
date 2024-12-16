@@ -49,6 +49,7 @@ public class WDWolfEntity extends WorkDogEntity {
         this.goalSelector.addGoal(3, new DogTemptGoal(this, 0.6D));
         this.goalSelector.addGoal(4, new LeapAtTargetGoal(this, 0.4F));
         this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.5D, true));
+        this.goalSelector.addGoal(6, new FollowMotherGoal(this, 1.1D));
         this.goalSelector.addGoal(9, new DogBreedGoal(this, 1.2D));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
         this.targetSelector.addGoal(2, new WolfTargetNearestGoal<>(this, LivingEntity.class, true,

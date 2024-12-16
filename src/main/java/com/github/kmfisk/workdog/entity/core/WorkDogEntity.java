@@ -3,10 +3,7 @@ package com.github.kmfisk.workdog.entity.core;
 import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.config.WorkDogConfig;
 import com.github.kmfisk.workdog.entity.WDWolfEntity;
-import com.github.kmfisk.workdog.entity.goal.DogAvoidEntityGoal;
-import com.github.kmfisk.workdog.entity.goal.DogBirthGoal;
-import com.github.kmfisk.workdog.entity.goal.DogBreedGoal;
-import com.github.kmfisk.workdog.entity.goal.DogTemptGoal;
+import com.github.kmfisk.workdog.entity.goal.*;
 import com.github.kmfisk.workdog.item.WorkDogItems;
 import com.google.common.collect.Lists;
 import net.minecraft.entity.*;
@@ -89,6 +86,7 @@ public abstract class WorkDogEntity extends TameableEntity {
         this.goalSelector.addGoal(3, new DogTemptGoal(this, 0.6D));
         this.goalSelector.addGoal(4, new LeapAtTargetGoal(this, 0.4F));
         this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.5D, true));
+        this.goalSelector.addGoal(6, new FollowMotherGoal(this, 1.1D));
         this.goalSelector.addGoal(9, new DogBreedGoal(this, 1.2D));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
     }
@@ -186,13 +184,13 @@ public abstract class WorkDogEntity extends TameableEntity {
         return list;
     }
 
-    public void addParentUUID(@Nullable UUID uuid) {
+    public void setParentUUID(@Nullable UUID uuid) {
         if (entityData.get(PARENT_ID_0).isPresent()) entityData.set(PARENT_ID_1, Optional.ofNullable(uuid));
         else entityData.set(PARENT_ID_0, Optional.ofNullable(uuid));
     }
 
-    public boolean trusts(UUID uuid) {
-        return getParentUUIDs().contains(uuid);
+    public boolean isMother(UUID uuid) {
+        return getParentUUIDs().get(0).equals(uuid);
     }
 
     public void setInfertile(boolean infertile) {
@@ -329,7 +327,7 @@ public abstract class WorkDogEntity extends TameableEntity {
 
         ListNBT parentNbtList = nbt.getList("Parents", 11);
         for (INBT inbt : parentNbtList) {
-            addParentUUID(NBTUtil.loadUUID(inbt));
+            setParentUUID(NBTUtil.loadUUID(inbt));
         }
 
         setInfertile(nbt.getBoolean("Infertile"));
@@ -465,8 +463,8 @@ public abstract class WorkDogEntity extends TameableEntity {
         setLonghair(longhair);
         if (WorkDogConfig.nameBabies.get() && (parent1.hasCustomName() || parent2.hasCustomName()))
             setCustomName(new TranslationTextComponent("name.workdog.name_babies", parent1.hasCustomName() ? parent1.getCustomName() : parent2.getCustomName()));
-        addParentUUID(parent1.getUUID());
-        addParentUUID(parent2.getUUID());
+        setParentUUID(parent1.getUUID());
+        setParentUUID(parent2.getUUID());
     }
 
     @Override
