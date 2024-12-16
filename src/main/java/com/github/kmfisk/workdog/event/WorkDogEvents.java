@@ -39,18 +39,20 @@ public class WorkDogEvents {
         MobSpawnInfo.Spawners wolfSpawner = new MobSpawnInfo.Spawners(WorkDogEntities.WOLF, WorkDogConfig.wolfSpawnChance.get(), WorkDogConfig.wolfMinGroup.get(), WorkDogConfig.wolfMaxGroup.get());
         Set<BiomeDictionary.Type> biomeTypes = BiomeDictionary.getTypes(RegistryKey.create(Registry.BIOME_REGISTRY, event.getName()));
         if (biomeTypes.contains(BiomeDictionary.Type.OVERWORLD)) {
-            if (biomeTypes.contains(BiomeDictionary.Type.FOREST)
-                    && !biomeTypes.contains(BiomeDictionary.Type.WET) && !biomeTypes.contains(BiomeDictionary.Type.JUNGLE)
-                    && !biomeTypes.contains(BiomeDictionary.Type.HILLS) && !biomeTypes.contains(BiomeDictionary.Type.MOUNTAIN)) {
+            if (biomeTypes.contains(BiomeDictionary.Type.FOREST) && !biomeTypes.contains(BiomeDictionary.Type.WET) && !biomeTypes.contains(BiomeDictionary.Type.JUNGLE) && !biomeTypes.contains(BiomeDictionary.Type.HILLS) && !biomeTypes.contains(BiomeDictionary.Type.MOUNTAIN)) {
                 event.getSpawns().getSpawner(EntityClassification.CREATURE).add(wolfSpawner);
             }
 
             if (biomeTypes.contains(BiomeDictionary.Type.PLAINS) && !biomeTypes.contains(BiomeDictionary.Type.HOT) && !biomeTypes.contains(BiomeDictionary.Type.COLD)) {
-                event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(WorkDogEntities.GERMAN_SHEPHERD, 2, 1, 1));
+                if (WorkDogConfig.straySpawns.get()) {
+                    event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(WorkDogEntities.GERMAN_SHEPHERD, WorkDogConfig.straySpawnChance.get(), 1, 1));
+                }
             }
 
             if (biomeTypes.contains(BiomeDictionary.Type.SWAMP)) {
-                event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(WorkDogEntities.JACK_RUSSELL_TERRIER, 2, 1, 1));
+                if (WorkDogConfig.straySpawns.get()) {
+                    event.getSpawns().getSpawner(EntityClassification.CREATURE).add(new MobSpawnInfo.Spawners(WorkDogEntities.JACK_RUSSELL_TERRIER, WorkDogConfig.straySpawnChance.get(), 1, 1));
+                }
             }
         }
     }

@@ -140,9 +140,7 @@ public abstract class WorkDogEntity extends TameableEntity {
         int variant = random.nextInt(getVariantCount());
         if (dataTag != null && dataTag.contains("Variant")) variant = dataTag.getInt("Variant");
         setVariant(variant);
-
         if (getGender() == Gender.FEMALE && !isInfertile()) setTimeCycle("end", WorkDogConfig.heatCooldown.get());
-
         return super.finalizeSpawn(world, difficulty, reason, spawnData, dataTag);
     }
 
@@ -406,6 +404,15 @@ public abstract class WorkDogEntity extends TameableEntity {
         return FOOD.test(stack);
     }
 
+    public boolean canTame(PlayerEntity player, ItemStack stack) {
+        if (isTame()) return false;
+        if (WorkDogConfig.tamedLimit.get() != 0 && player.getPersistentData().getInt("DogCount") >= WorkDogConfig.tamedLimit.get())
+            return false;
+        if (!(this instanceof WDWolfEntity) || (isBaby() && !WorkDogConfig.pedigreeMode.get()))
+            return isFood(stack);
+        return false;
+    }
+
     @Override
     public boolean canMate(AnimalEntity entity) {
         if (entity == this) return false;
@@ -444,7 +451,7 @@ public abstract class WorkDogEntity extends TameableEntity {
     }
 
     protected void setupChildData(WorkDogEntity parent1, WorkDogEntity parent2) {
-        setAge(-72000);
+        setAge(-WorkDogConfig.puppyMatureTimer.get());
         setGender(Gender.fromBool(random.nextBoolean()));
         boolean longhair;
         if (parent1.isLonghair() && parent2.isLonghair())
@@ -456,6 +463,8 @@ public abstract class WorkDogEntity extends TameableEntity {
         if (getLonghairChance() == 1.0F) longhair = true;
         else if (getLonghairChance() == 0.0F) longhair = false;
         setLonghair(longhair);
+        if (WorkDogConfig.nameBabies.get() && (parent1.hasCustomName() || parent2.hasCustomName()))
+            setCustomName(new TranslationTextComponent("name.workdog.name_babies", parent1.hasCustomName() ? parent1.getCustomName() : parent2.getCustomName()));
         addParentUUID(parent1.getUUID());
         addParentUUID(parent2.getUUID());
     }
@@ -589,7 +598,6 @@ public abstract class WorkDogEntity extends TameableEntity {
         if (functionalItems.contains(stack.getItem())) return ActionResultType.PASS;
 
         boolean isOwner = isOwnedBy(player);
-        boolean canTame = isFood(stack) && !isTame() && (!(this instanceof WDWolfEntity) || (isBaby() && !WorkDogConfig.pedigreeMode.get()));
         if (isTame() && isOwner) {
             if (!isLying()) {
                 setOrderedToSit(!isOrderedToSit());
@@ -600,7 +608,7 @@ public abstract class WorkDogEntity extends TameableEntity {
 
             return ActionResultType.sidedSuccess(level.isClientSide);
 
-        } else if (canTame) {
+        } else if (canTame(player, stack)) {
             if (!player.abilities.instabuild) stack.shrink(1);
 
             if (random.nextInt(3) == 0 && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, player)) {

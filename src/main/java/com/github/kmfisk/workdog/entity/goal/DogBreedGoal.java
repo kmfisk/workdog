@@ -33,11 +33,11 @@ public class DogBreedGoal extends Goal {
         if (dog.isInfertile()) return false;
 
         nearbyDogs = level.getEntitiesOfClass(WorkDogEntity.class, dog.getBoundingBox().inflate(NEARBY_RADIUS_CHECK));
-        /*if (nearbyDogs.size() >= SCConfig.breeding_limit.get()) todo: breeding limit?
-            return false;*/
+        if (nearbyDogs.size() >= WorkDogConfig.breedingLimit.get())
+            return false;
 
         LivingEntity dogOwner = dog.getOwner();
-        if (/*todo: ownerExceedsLimit(dog, dogOwner) ||*/ ownerIsOffline(dog, dogOwner) || dog.getBreedTimer() > 0)
+        if (ownerExceedsLimit(dog, dogOwner) || ownerIsOffline(dog, dogOwner) || dog.getBreedTimer() > 0)
             return false;
 
         target = getNearbyMate();
@@ -45,7 +45,7 @@ public class DogBreedGoal extends Goal {
             if (target.isInfertile()) return false;
             if (!target.isTame()) return true;
             LivingEntity targetOwner = target.getOwner();
-            return /*todo: !ownerExceedsLimit(target, targetOwner) &&*/ !ownerIsOffline(target, targetOwner);
+            return !ownerExceedsLimit(target, targetOwner) && !ownerIsOffline(target, targetOwner);
         }
 
         return false;
@@ -62,12 +62,12 @@ public class DogBreedGoal extends Goal {
         nearbyDogs = level.getEntitiesOfClass(WorkDogEntity.class, dog.getBoundingBox().inflate(NEARBY_RADIUS_CHECK));
 
         return maleCooldownCheck && target.isAlive() && femaleHeatCheck && breedDelay < 60
-                /*todo: && nearbyDogs.size() < SCConfig.breeding_limit.get()*/ && dog.getSensing().canSee(target);
+                && nearbyDogs.size() < WorkDogConfig.breedingLimit.get() && dog.getSensing().canSee(target);
     }
 
-    /*private boolean ownerExceedsLimit(WorkingDogEntity tamedDog, LivingEntity owner) { todo: taming limits?
-        return tamedDog != null && tamedDog.isTame() && SCConfig.tamed_limit.get() != 0 && owner != null && owner.getPersistentData().getInt("CatCount") >= SCConfig.tamed_limit.get();
-    }*/
+    private boolean ownerExceedsLimit(WorkDogEntity tamedDog, LivingEntity owner) {
+        return tamedDog != null && tamedDog.isTame() && WorkDogConfig.tamedLimit.get() != 0 && owner != null && owner.getPersistentData().getInt("DogCount") >= WorkDogConfig.tamedLimit.get();
+    }
 
     private boolean ownerIsOffline(WorkDogEntity tamedDog, LivingEntity owner) {
         return tamedDog != null && tamedDog.isTame() && owner == null;
