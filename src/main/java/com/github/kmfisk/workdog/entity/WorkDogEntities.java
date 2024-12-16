@@ -62,7 +62,7 @@ public class WorkDogEntities {
         REGISTRAR.register(name, () -> type);
         if (attributes != null) ATTRIBUTES.add(new Tuple<>(cast(type), attributes));
         if (EffectiveSide.get().isClient() && renderer != null) RENDERERS.add(new Tuple<>(cast(type), cast(renderer)));
-        WorkDogItems.REGISTRAR.register(name + "_spawn_egg", () -> new WorkDogSpawnEggItem(() -> type, new Item.Properties().tab(WorkDog.ITEM_GROUP)));
+        WorkDogItems.SPAWN_EGGS.put(type, WorkDogItems.REGISTRAR.register(name + "_spawn_egg", () -> new WorkDogSpawnEggItem(() -> type, new Item.Properties().tab(WorkDog.ITEM_GROUP))));
         return type;
     }
 }

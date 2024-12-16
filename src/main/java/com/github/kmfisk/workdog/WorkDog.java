@@ -7,11 +7,14 @@ import com.github.kmfisk.workdog.data.WorkDogRecipeProvider;
 import com.github.kmfisk.workdog.entity.WorkDogEntities;
 import com.github.kmfisk.workdog.inventory.WDContainerTypes;
 import com.github.kmfisk.workdog.item.WorkDogItems;
+import com.github.kmfisk.workdog.entity.merchant.villager.WorkDogVillagerTrades;
+import com.github.kmfisk.workdog.entity.merchant.villager.WorkDogVillagers;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -34,11 +37,14 @@ public class WorkDog {
 
     public WorkDog() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+        MinecraftForge.EVENT_BUS.addListener(WorkDogVillagerTrades::onVillagerTradesEvent);
 
         WorkDogEntities.REGISTRAR.register(bus);
         WorkDogBlocks.REGISTRAR.register(bus);
         WorkDogItems.REGISTRAR.register(bus);
         WDContainerTypes.REGISTRAR.register(bus);
+        WorkDogVillagers.POI_TYPES.register(bus);
+        WorkDogVillagers.PROFESSIONS.register(bus);
 
         bus.addListener(this::setup);
         bus.addListener(this::registerAttributes);
@@ -52,7 +58,10 @@ public class WorkDog {
     }
 
     private void setup(final FMLClientSetupEvent event) {
-        WorkDogEntities.registerSpawnPlacements();
+        event.enqueueWork(() -> {
+            WorkDogEntities.registerSpawnPlacements();
+            WorkDogVillagers.registerTrades();
+        });
     }
 
     private void setupClient(final FMLClientSetupEvent event) {

@@ -4,6 +4,7 @@ import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.item.WorkDogItems;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
@@ -12,6 +13,7 @@ import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -23,7 +25,7 @@ import java.util.function.Supplier;
 public class WorkDogBlocks {
     public static final DeferredRegister<Block> REGISTRAR = DeferredRegister.create(ForgeRegistries.BLOCKS, WorkDog.MOD_ID);
 
-    public static final RegistryObject<Block> KENNEL_EQUIPMENT = registerWithItem("kennel_equipment", () -> new KennelEquipmentBlock(AbstractBlock.Properties.of(Material.WOOD).noOcclusion()));
+    public static final RegistryObject<Block> KENNEL_EQUIPMENT = registerWithItem("kennel_equipment", () -> new KennelEquipmentBlock(AbstractBlock.Properties.of(Material.WOOD).strength(2.0F, 3.0F).harvestTool(ToolType.PICKAXE).sound(SoundType.WOOD).noOcclusion()));
 
     public static final Map<String, RegistryObject<Block>> BEDS = new HashMap<>();
     public static final Map<String, RegistryObject<Block>> FANCY_BEDS = new HashMap<>();

@@ -1,5 +1,7 @@
 {
   "itemGroup.workdog.group": "Working Dogs",
+  "entity.minecraft.villager.workdog.kennel_hand": "Kennel Hand",
+  "entity.minecraft.villager.kennel_hand": "Kennel Hand",
 
   "entity.workdog.akita": "Akita",
   "entity.workdog.border_collie": "Border Collie",
