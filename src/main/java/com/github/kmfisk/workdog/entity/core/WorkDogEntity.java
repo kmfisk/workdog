@@ -8,6 +8,7 @@ import com.github.kmfisk.workdog.entity.goal.DogBirthGoal;
 import com.github.kmfisk.workdog.entity.goal.DogBreedGoal;
 import com.github.kmfisk.workdog.entity.goal.DogTemptGoal;
 import com.github.kmfisk.workdog.item.WorkDogItems;
+import com.google.common.collect.Lists;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.ExperienceOrbEntity;
@@ -15,13 +16,14 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.inventory.IInventoryChangedListener;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -42,9 +44,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 public abstract class WorkDogEntity extends TameableEntity {
     public static final Tags.IOptionalNamedTag<EntityType<?>> HERDING_DOGS = EntityTypeTags.createOptional(new ResourceLocation(WorkDog.MOD_ID, "herding"));
@@ -56,6 +56,9 @@ public abstract class WorkDogEntity extends TameableEntity {
     public static final DataParameter<Boolean> GENDER = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.BOOLEAN);
     public static final DataParameter<Boolean> LONGHAIR = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.BOOLEAN);
     public static final DataParameter<Integer> VARIANT = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.INT);
+
+    private static final DataParameter<Optional<UUID>> PARENT_ID_0 = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.OPTIONAL_UUID);
+    private static final DataParameter<Optional<UUID>> PARENT_ID_1 = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.OPTIONAL_UUID);
 
     private static final DataParameter<Boolean> INFERTILE = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> IN_HEAT = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.BOOLEAN);
@@ -118,6 +121,8 @@ public abstract class WorkDogEntity extends TameableEntity {
         this.entityData.define(GENDER, false);
         this.entityData.define(LONGHAIR, false);
         this.entityData.define(VARIANT, 0);
+        this.entityData.define(PARENT_ID_0, Optional.empty());
+        this.entityData.define(PARENT_ID_1, Optional.empty());
         this.entityData.define(INFERTILE, false);
         this.entityData.define(IN_HEAT, false);
         this.entityData.define(IS_PREGNANT, false);
@@ -174,6 +179,22 @@ public abstract class WorkDogEntity extends TameableEntity {
 
     public void setVariant(int variant) {
         entityData.set(VARIANT, variant);
+    }
+
+    public List<UUID> getParentUUIDs() {
+        List<UUID> list = Lists.newArrayList();
+        list.add(entityData.get(PARENT_ID_0).orElse(null));
+        list.add(entityData.get(PARENT_ID_1).orElse(null));
+        return list;
+    }
+
+    public void addParentUUID(@Nullable UUID uuid) {
+        if (entityData.get(PARENT_ID_0).isPresent()) entityData.set(PARENT_ID_1, Optional.ofNullable(uuid));
+        else entityData.set(PARENT_ID_0, Optional.ofNullable(uuid));
+    }
+
+    public boolean trusts(UUID uuid) {
+        return getParentUUIDs().contains(uuid);
     }
 
     public void setInfertile(boolean infertile) {
@@ -279,6 +300,13 @@ public abstract class WorkDogEntity extends TameableEntity {
         nbt.putBoolean("Longhair", isLonghair());
         nbt.putInt("Variant", getVariant());
 
+        List<UUID> list = getParentUUIDs();
+        ListNBT parentNbtList = new ListNBT();
+        for (UUID uuid : list) {
+            if (uuid != null) parentNbtList.add(NBTUtil.createUUID(uuid));
+        }
+        nbt.put("Parents", parentNbtList);
+
         nbt.putBoolean("Infertile", isInfertile());
         nbt.putInt("Litters", getLitters());
         if (getGender() == Gender.FEMALE) {
@@ -300,6 +328,11 @@ public abstract class WorkDogEntity extends TameableEntity {
         setGender(Gender.fromBool(nbt.getBoolean("Gender")));
         setLonghair(nbt.getBoolean("Longhair"));
         setVariant(nbt.getInt("Variant"));
+
+        ListNBT parentNbtList = nbt.getList("Parents", 11);
+        for (INBT inbt : parentNbtList) {
+            addParentUUID(NBTUtil.loadUUID(inbt));
+        }
 
         setInfertile(nbt.getBoolean("Infertile"));
         setLitters(nbt.getInt("Litters"));
@@ -423,6 +456,8 @@ public abstract class WorkDogEntity extends TameableEntity {
         if (getLonghairChance() == 1.0F) longhair = true;
         else if (getLonghairChance() == 0.0F) longhair = false;
         setLonghair(longhair);
+        addParentUUID(parent1.getUUID());
+        addParentUUID(parent2.getUUID());
     }
 
     @Override
