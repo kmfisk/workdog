@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " TT",
+    "TRF",
+    "TTT"
+  ],
+  "key": {
+    "R": [
+      {"item": "minecraft:green_dye"}
+    ],
+    "T": [
+      {"item": "minecraft:leather"}
+    ],
+    "F": [
+      {"item": "minecraft:string"}
+    ]
+  },
+  "result": {
+    "item": "workdog:green_service_vest"
+  }
+}
