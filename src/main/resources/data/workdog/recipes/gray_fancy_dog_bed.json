@@ -6,14 +6,14 @@
   ],
   "key": {
     "W": [
-      {"tag": "minecraft:carpets"}
+      {"item": "minecraft:gray_wool"}
     ],
     "T": [
-      {"item": "minecraft:white_wool"}
+      {"item": "minecraft:gray_glazed_terracotta"}
     ]
   },
   "result": {
-    "item": "workdog:white_dog_bed"
+    "item": "workdog:gray_fancy_dog_bed"
   }
 }
 

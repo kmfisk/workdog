@@ -9,11 +9,11 @@
       {"tag": "minecraft:carpets"}
     ],
     "T": [
-      {"item": "minecraft:white_wool"}
+      {"item": "minecraft:brown_wool"}
     ]
   },
   "result": {
-    "item": "workdog:white_dog_bed"
+    "item": "workdog:brown_dog_bed"
   }
 }
 
