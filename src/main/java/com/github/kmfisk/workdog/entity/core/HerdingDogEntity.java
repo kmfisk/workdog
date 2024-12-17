@@ -3,13 +3,14 @@ package com.github.kmfisk.workdog.entity.core;
 import com.github.kmfisk.workdog.entity.goal.FollowHerderGoal;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.FollowOwnerGoal;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.Tags;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.github.kmfisk.workdog.tags.WorkDogTags.HERDING_DOGS;
 
 public abstract class HerdingDogEntity extends WorkDogEntity {
     public List<MobEntity> herding = new ArrayList<>();

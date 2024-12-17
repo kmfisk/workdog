@@ -1,6 +1,5 @@
 package com.github.kmfisk.workdog.entity.core;
 
-import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.config.WorkDogConfig;
 import com.github.kmfisk.workdog.entity.WDWolfEntity;
 import com.github.kmfisk.workdog.entity.goal.*;
@@ -17,7 +16,6 @@ import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
@@ -26,11 +24,9 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.DifficultyInstance;
@@ -47,12 +43,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public abstract class WorkDogEntity extends TameableEntity {
-    public static final Tags.IOptionalNamedTag<EntityType<?>> HERDING_DOGS = EntityTypeTags.createOptional(new ResourceLocation(WorkDog.MOD_ID, "herding"));
-    public static final Tags.IOptionalNamedTag<EntityType<?>> HUNTING_DOGS = EntityTypeTags.createOptional(new ResourceLocation(WorkDog.MOD_ID, "hunting"));
-    public static final Tags.IOptionalNamedTag<EntityType<?>> PROTECTION_DOGS = EntityTypeTags.createOptional(new ResourceLocation(WorkDog.MOD_ID, "protection"));
-    public static final Tags.IOptionalNamedTag<EntityType<?>> TERRIER_DOGS = EntityTypeTags.createOptional(new ResourceLocation(WorkDog.MOD_ID, "terrier"));
-    public static final Tags.IOptionalNamedTag<EntityType<?>> TOY_DOGS = EntityTypeTags.createOptional(new ResourceLocation(WorkDog.MOD_ID, "toy"));
-
     public static final DataParameter<Boolean> GENDER = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.BOOLEAN);
     public static final DataParameter<Boolean> LONGHAIR = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.BOOLEAN);
     public static final DataParameter<Integer> VARIANT = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.INT);

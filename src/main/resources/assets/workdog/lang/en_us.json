@@ -21,6 +21,17 @@
   "item.workdog.boston_terrier_spawn_egg": "Boston Terrier Spawn Egg",
   "item.workdog.pit_bull_spawn_egg": "Pit Bull Spawn Egg",
 
+  "__comment": "Advancements",
+  "advancements.workdog.workingdogs.title": "Working Dogs",
+  "advancements.workdog.he_dont_bite.title": "He Don't Bite",
+  "advancements.workdog.hunt_like_a_hound.title": "Hunt Like A Hound",
+  "advancements.workdog.idk_how_he_got_out.title": "I don't know how he got out",
+  "advancements.workdog.emotional_support_animal.title": "Emotional Support Animal",
+  "advancements.workdog.michael_vick.title": "Michael Vick?",
+  "advancements.workdog.someone_call_peta.title": "Someone Call PETA",
+  "advancements.workdog.fragile_masculinity.title": "Fragile Masculinity",
+  "advancements.workdog.the_gay_agenda.title": "The Gay Agenda",
+
   "__comment": "Tooltips & Messages",
   "name.workdog.name_babies": "%s's baby",
   "name.workdog.pregnant": "Pregnant: %d",

@@ -10,6 +10,8 @@ import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.Tags;
 
+import static com.github.kmfisk.workdog.tags.WorkDogTags.PROTECTION_DOGS;
+
 public abstract class ProtectionDogEntity extends WorkDogEntity {
     private final FollowOwnerGoal protectorsFollowGoal = new FollowOwnerGoal(this, 1.5D, 4.0F, 2.0F, false);
     private final OwnerHurtByTargetGoal ownerHurtByTargetGoal = new OwnerHurtByTargetGoal(this);

@@ -9,6 +9,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.entity.living.LootingLevelEvent;
 
+import static com.github.kmfisk.workdog.tags.WorkDogTags.HUNTING_DOGS;
+
 public abstract class HuntingDogEntity extends WorkDogEntity {
     private final OwnerHurtTargetGoal ownerHurtTargetGoal = new OwnerHurtTargetGoal(this);
     private final FollowOwnerGoal huntersFollowGoal = new FollowOwnerGoal(this, 1.5D, 4.0F, 2.0F, false);
