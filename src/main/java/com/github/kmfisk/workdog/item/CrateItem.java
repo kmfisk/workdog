@@ -4,7 +4,6 @@ import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -32,20 +31,18 @@ public class CrateItem extends Item {
     @Override
     public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity player, LivingEntity target, Hand hand) {
         if (target instanceof WorkDogEntity) {
-            if (((TameableEntity) target).getOwner() == player) {
-                if (stack.hasTag()) {
-                    player.displayClientMessage(new TranslationTextComponent("chat.workdog.crate.full"), true);
-                    return ActionResultType.PASS;
+            if (stack.hasTag()) {
+                player.displayClientMessage(new TranslationTextComponent("chat.workdog.crate.full"), true);
+                return ActionResultType.PASS;
+            }
 
-                } else {
-                    if (player.level.isClientSide) return ActionResultType.SUCCESS;
-
-                    ItemStack capturedEntityItem = caughtEntityItem(target, player);
-                    player.setItemInHand(hand, capturedEntityItem);
-                    return ActionResultType.CONSUME;
-                }
-            } else
-                player.displayClientMessage(new TranslationTextComponent("chat.workdog.crate.not_your_dog"), true);
+            WorkDogEntity dog = (WorkDogEntity) target;
+            if (!dog.isTame() || dog.getOwner() == player) {
+                if (player.level.isClientSide) return ActionResultType.SUCCESS;
+                ItemStack capturedEntityItem = caughtEntityItem(dog, player);
+                player.setItemInHand(hand, capturedEntityItem);
+                return ActionResultType.CONSUME;
+            } else player.displayClientMessage(new TranslationTextComponent("chat.workdog.crate.not_your_dog"), true);
 
         } else
             player.displayClientMessage(new TranslationTextComponent("chat.workdog.crate.fail"), true);
@@ -53,21 +50,21 @@ public class CrateItem extends Item {
         return super.interactLivingEntity(stack, player, target, hand);
     }
 
-    private ItemStack caughtEntityItem(LivingEntity target, PlayerEntity player) {
-        target.stopRiding();
-        target.ejectPassengers();
-        target.revive();
+    private ItemStack caughtEntityItem(WorkDogEntity dog, PlayerEntity player) {
+        dog.stopRiding();
+        dog.ejectPassengers();
+        dog.revive();
 
         CompoundNBT tags = new CompoundNBT();
-        target.save(tags);
+        dog.save(tags);
 
-        ResourceLocation key = EntityType.getKey(target.getType());
+        ResourceLocation key = EntityType.getKey(dog.getType());
         tags.putString("id", key.toString());
-        tags.putString("OwnerName", player.getName().getString());
-        if (target.hasCustomName()) tags.putString("DisplayName", target.getDisplayName().getString());
+        if (dog.isTame()) tags.putString("OwnerName", player.getName().getString());
+        if (dog.hasCustomName()) tags.putString("DisplayName", dog.getDisplayName().getString());
 
-        target.remove();
-        player.displayClientMessage(new TranslationTextComponent("chat.workdog.crate.capture", target.getDisplayName()), true);
+        dog.remove();
+        player.displayClientMessage(new TranslationTextComponent("chat.workdog.crate.capture", dog.getDisplayName()), true);
 
         ItemStack newStack = new ItemStack(this);
         newStack.setTag(tags);
@@ -123,8 +120,10 @@ public class CrateItem extends Item {
             TranslationTextComponent entityId = new TranslationTextComponent(Util.makeDescriptionId("entity", new ResourceLocation(nbt.getString("id"))));
             tooltip.add(entityId.withStyle(TextFormatting.BLUE));
 
-            TranslationTextComponent owner = new TranslationTextComponent("tooltip.workdog.crate.owner", nbt.getString("OwnerName"));
-            tooltip.add(owner.withStyle(TextFormatting.GRAY));
+            if (nbt.contains("OwnerName")) {
+                TranslationTextComponent owner = new TranslationTextComponent("tooltip.workdog.crate.owner", nbt.getString("OwnerName"));
+                tooltip.add(owner.withStyle(TextFormatting.GRAY));
+            }
 
         } else
             tooltip.add(new TranslationTextComponent("tooltip.workdog.crate.empty").withStyle(TextFormatting.GRAY));
