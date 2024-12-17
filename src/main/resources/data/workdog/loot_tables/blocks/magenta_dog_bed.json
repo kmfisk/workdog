@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "workdog:magenta_bed"
+          "name": "workdog:magenta_dog_bed"
         }
       ],
       "conditions": [

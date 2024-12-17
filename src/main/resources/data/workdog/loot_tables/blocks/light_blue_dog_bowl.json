@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "workdog:light_blue_bowl"
+          "name": "workdog:light_blue_dog_bowl"
         }
       ],
       "conditions": [
