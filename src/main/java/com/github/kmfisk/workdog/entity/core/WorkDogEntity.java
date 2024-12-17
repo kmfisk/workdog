@@ -6,6 +6,7 @@ import com.github.kmfisk.workdog.entity.goal.*;
 import com.github.kmfisk.workdog.item.WorkDogItems;
 import com.github.kmfisk.workdog.tags.WorkDogTags;
 import com.google.common.collect.Lists;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.item.ExperienceOrbEntity;
@@ -24,10 +25,8 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.GameRules;
@@ -582,6 +581,37 @@ public abstract class WorkDogEntity extends TameableEntity {
         }
 
         return ActionResultType.PASS;
+    }
+
+    @Override
+    protected void playStepSound(BlockPos pos, BlockState state) {
+        playSound(SoundEvents.WOLF_STEP, 0.15F, 1.0F);
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAmbientSound() {
+        /*if (isAngry()) return SoundEvents.WOLF_GROWL;
+        else*/ if (random.nextInt(3) == 0)
+            return isTame() && getHealth() < 10.0F ? SoundEvents.WOLF_WHINE : SoundEvents.WOLF_PANT;
+        else return SoundEvents.WOLF_AMBIENT;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        return SoundEvents.WOLF_HURT;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getDeathSound() {
+        return SoundEvents.WOLF_DEATH;
+    }
+
+    @Override
+    protected float getSoundVolume() {
+        return 0.4f;
     }
 
     public enum Gender {
