@@ -11,7 +11,7 @@ public class WorkDogVillagerTrades {
     public static void onVillagerTradesEvent(VillagerTradesEvent event) {
         if (!WorkDogConfig.pedigreeMode.get()) {
             if (event.getType() == VillagerProfession.FARMER) {
-                event.getTrades().get(3).add(new VillagerTrades.ItemsForEmeraldsTrade(WorkDogItems.SPAWN_EGGS.get(WorkDogEntities.BORDER_COLLIE).get(), 48, 1, 16, 4));
+                event.getTrades().get(3).add(new VillagerTrades.ItemsForEmeraldsTrade(WorkDogItems.SPAWN_EGGS.get(WorkDogEntities.BORDER_COLLIE).get(), 48, 1, 3, 15));
             }
         }
     }
