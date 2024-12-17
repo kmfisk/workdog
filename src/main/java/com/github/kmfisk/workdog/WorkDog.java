@@ -20,6 +20,7 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
@@ -59,11 +60,9 @@ public class WorkDog {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, WorkDogConfig.CONFIG_SPEC);
     }
 
-    private void setup(final FMLClientSetupEvent event) {
-        event.enqueueWork(() -> {
-            WorkDogEntities.registerSpawnPlacements();
-            WorkDogVillagers.registerTrades();
-        });
+    private void setup(final FMLCommonSetupEvent event) {
+        WorkDogEntities.registerSpawnPlacements();
+        event.enqueueWork(WorkDogVillagers::registerTrades);
     }
 
     private void setupClient(final FMLClientSetupEvent event) {
