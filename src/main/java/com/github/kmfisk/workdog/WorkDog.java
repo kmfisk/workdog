@@ -5,14 +5,13 @@ import com.github.kmfisk.workdog.client.color.ColorEvents;
 import com.github.kmfisk.workdog.config.WorkDogConfig;
 import com.github.kmfisk.workdog.data.WorkDogRecipeProvider;
 import com.github.kmfisk.workdog.entity.WorkDogEntities;
-import com.github.kmfisk.workdog.inventory.WDContainerTypes;
-import com.github.kmfisk.workdog.item.WorkDogItems;
 import com.github.kmfisk.workdog.entity.merchant.villager.WorkDogVillagerTrades;
 import com.github.kmfisk.workdog.entity.merchant.villager.WorkDogVillagers;
+import com.github.kmfisk.workdog.inventory.WDContainerTypes;
+import com.github.kmfisk.workdog.item.WorkDogItems;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
@@ -52,7 +51,10 @@ public class WorkDog {
 
         bus.addListener(this::setupClient);
 
-        if (FMLEnvironment.dist == Dist.CLIENT) bus.addListener(ColorEvents::registerColorHandlerBlocks);
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            bus.addListener(ColorEvents::registerColorHandlerBlocks);
+            bus.addListener(ColorEvents::registerColorHandlerItems);
+        }
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, WorkDogConfig.CONFIG_SPEC);
     }
