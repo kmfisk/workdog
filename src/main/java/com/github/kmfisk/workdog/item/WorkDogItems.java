@@ -30,10 +30,10 @@ public class WorkDogItems {
     public static final RegistryObject<Item> HOG_VEST = REGISTRAR.register("hog_vest", () -> new Item(new Item.Properties().tab(WorkDog.ITEM_GROUP)));
     public static final RegistryObject<Item> MUZZLE = REGISTRAR.register("muzzle", () -> new Item(new Item.Properties().tab(WorkDog.ITEM_GROUP)));
     public static final RegistryObject<Item> SADDLEBAG = REGISTRAR.register("saddlebag", () -> new Item(new Item.Properties().tab(WorkDog.ITEM_GROUP)));
-    /*public static final Map<String, RegistryObject<Item>> SERVICE_VESTS = Util.make(new HashMap<>(), list -> {
+    public static final Map<String, RegistryObject<Item>> SERVICE_VESTS = Util.make(new HashMap<>(), list -> {
         for (int i = 0; i < DyeColor.values().length; i++) {
             DyeColor color = DyeColor.byId(i);
             list.put(color.getName(), REGISTRAR.register(color.getName() + "_service_vest", () -> new Item(new Item.Properties().tab(WorkDog.ITEM_GROUP))));
         }
-    });*/
+    });
 }
