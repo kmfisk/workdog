@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "FCW",
+    "CCC"
+  ],
+  "key": {
+    "F": [
+      {"tag": "forge:raw_meat"}
+    ],
+    "W": [
+      {
+        "type": "forge:nbt",
+        "item": "minecraft:potion",
+        "nbt": "{Potion:\"minecraft:water\"}"
+      }
+    ],
+    "C": [
+      {"item": "minecraft:brown_concrete"}
+    ]
+  },
+  "result": {
+    "item": "workdog:brown_dog_bowl"
+  }
+}
+
+
