@@ -71,7 +71,6 @@ public abstract class WorkDogEntity extends TameableEntity {
 
     private static final DataParameter<Integer> MODE = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.INT);
 
-    private static final Ingredient FOOD = Ingredient.of(WorkDogTags.RAW_MEAT);
     private DogAvoidEntityGoal<PlayerEntity> avoidPlayersGoal;
     protected WaterAvoidingRandomWalkingGoal wanderGoal;
     protected final FollowOwnerGoal followGoal = new FollowOwnerGoal(this, 1.33D, 10.0F, 2.0F, false);
