@@ -540,15 +540,15 @@ public abstract class WorkDogEntity extends TameableEntity {
             if (stack.getItem() == Items.STICK) {
                 if (getMode() == Mode.WANDER) { //if (stack.getItem() == Items.SLIME_BALL)
                     setMode(Mode.FOLLOW);
-                    player.displayClientMessage(new StringTextComponent("FOLLOW MODE"), true);
+                    player.displayClientMessage(new TranslationTextComponent("chat.workdog.follow_mode", getName()), true);
                     return ActionResultType.sidedSuccess(level.isClientSide);
                 } else if (getMode() == Mode.FOLLOW) { //if (stack.getItem() == Items.GUNPOWDER) {
                     setMode(Mode.WORK);
-                    player.displayClientMessage(new StringTextComponent("WORK MODE"), true);
+                    player.displayClientMessage(new TranslationTextComponent("chat.workdog.work_mode", getName()), true);
                     return ActionResultType.sidedSuccess(level.isClientSide);
                 } else if (getMode() == Mode.WORK) { //if (stack.getItem() == Items.FEATHER)
                     setMode(Mode.WANDER);
-                    player.displayClientMessage(new StringTextComponent("WANDER MODE"), true);
+                    player.displayClientMessage(new TranslationTextComponent("chat.workdog.wander_mode", getName()), true);
                     return ActionResultType.sidedSuccess(level.isClientSide);
                 }
             } else if (isFood(stack) && getHealth() < getMaxHealth()) {
