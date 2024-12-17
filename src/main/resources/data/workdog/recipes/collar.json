@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "TTT",
+    "T T",
+    "TRT"
+  ],
+  "key": {
+    "R": [
+      { "item": "minecraft:gold_ingot" }
+    ],
+    "T": [
+      { "item": "minecraft:leather" }
+    ]
+  },
+  "result": {
+    "item": "workdog:collar",
+    "count": 2
+  }
+}
