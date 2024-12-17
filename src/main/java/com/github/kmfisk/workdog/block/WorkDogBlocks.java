@@ -6,6 +6,7 @@ import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.material.MaterialColor;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.item.BlockItem;
@@ -25,7 +26,7 @@ import java.util.function.Supplier;
 public class WorkDogBlocks {
     public static final DeferredRegister<Block> REGISTRAR = DeferredRegister.create(ForgeRegistries.BLOCKS, WorkDog.MOD_ID);
 
-    public static final RegistryObject<Block> KENNEL_EQUIPMENT = registerWithItem("kennel_equipment", () -> new KennelEquipmentBlock(AbstractBlock.Properties.of(Material.WOOD).strength(2.0F, 3.0F).harvestTool(ToolType.PICKAXE).sound(SoundType.WOOD).noOcclusion()));
+    public static final RegistryObject<Block> KENNEL_EQUIPMENT = registerWithItem("kennel_equipment", () -> new KennelEquipmentBlock(AbstractBlock.Properties.of(Material.HEAVY_METAL, MaterialColor.METAL).requiresCorrectToolForDrops().strength(2.0F, 6.0F).sound(SoundType.STONE).noOcclusion()));
 
     public static final Map<String, RegistryObject<Block>> BEDS = new HashMap<>();
     public static final Map<String, RegistryObject<Block>> FANCY_BEDS = new HashMap<>();
@@ -34,9 +35,9 @@ public class WorkDogBlocks {
     static {
         for (int i = 0; i < 16; i++) {
             DyeColor color = DyeColor.byId(i);
-            BEDS.put(color.getName(), registerWithItem(color.getName() + "_bed", () -> new DogBedBlock(AbstractBlock.Properties.of(Material.WOOL).noOcclusion())));
-            FANCY_BEDS.put(color.getName(), registerWithItem(color.getName() + "_fancy_bed", () -> new DogBedBlock(AbstractBlock.Properties.of(Material.WOOL).noOcclusion())));
-            BOWLS.put(color.getName(), registerWithItem(color.getName() + "_bowl", () -> new BowlBlock(AbstractBlock.Properties.of(Material.STONE).noOcclusion())));
+            BEDS.put(color.getName(), registerWithItem(color.getName() + "_bed", () -> new DogBedBlock(AbstractBlock.Properties.of(Material.WOOL).sound(SoundType.WOOD).strength(0.2F).noOcclusion())));
+            FANCY_BEDS.put(color.getName(), registerWithItem(color.getName() + "_fancy_bed", () -> new DogBedBlock(AbstractBlock.Properties.of(Material.WOOL).sound(SoundType.WOOD).strength(0.2F).noOcclusion())));
+            BOWLS.put(color.getName(), registerWithItem(color.getName() + "_bowl", () -> new BowlBlock(AbstractBlock.Properties.of(Material.DECORATION).instabreak().noOcclusion())));
         }
     }
 
