@@ -31,7 +31,7 @@ public class WorkDog {
     public static final ItemGroup ITEM_GROUP = new ItemGroup(MOD_ID + ".group") {
         @Override
         public ItemStack makeIcon() {
-            return new ItemStack(Items.BONE);
+            return new ItemStack(WorkDogItems.CRATE.get());
         }
     };
 
