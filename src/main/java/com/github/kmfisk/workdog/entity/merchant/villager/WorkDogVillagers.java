@@ -52,7 +52,7 @@ public class WorkDogVillagers {
                 new VillagerTrades.ItemsForEmeraldsTrade(new ItemStack(WorkDogItems.SPAWN_EGGS.get(WorkDogEntities.BOSTON_TERRIER).get()), 16, 1, 3, 15, 0.2f),
                 new VillagerTrades.ItemsForEmeraldsTrade(new ItemStack(WorkDogItems.SPAWN_EGGS.get(WorkDogEntities.JACK_RUSSELL_TERRIER).get()), 32, 1, 3, 15, 0.2f),
                 new VillagerTrades.ItemsForEmeraldsTrade(new ItemStack(WorkDogItems.SPAWN_EGGS.get(WorkDogEntities.BORDER_COLLIE).get()), 48, 1, 3, 15, 0.2f),
-                new VillagerTrades.ItemsForEmeraldsTrade(new ItemStack(WorkDogItems.SPAWN_EGGS.get(WorkDogEntities.PIT_BULL).get()), 48, 1, 3, 15, 0.2f),
+                new VillagerTrades.ItemsForEmeraldsTrade(new ItemStack(WorkDogItems.SPAWN_EGGS.get(WorkDogEntities.PIT_BULL).get()), 64, 1, 3, 15, 0.2f),
                 new VillagerTrades.ItemsForEmeraldsTrade(new ItemStack(WorkDogItems.SPAWN_EGGS.get(WorkDogEntities.AKITA).get()), 64, 1, 3, 15, 0.2f),
                 new VillagerTrades.ItemsForEmeraldsTrade(new ItemStack(WorkDogItems.SPAWN_EGGS.get(WorkDogEntities.GERMAN_SHEPHERD).get()), 64, 1, 3, 15, 0.2f)};
         VillagerTrades.TRADES.put(KENNEL_HAND.get(), toIntMap(ImmutableMap.of(1, novice, 2, apprentice, 3, journeyman, 4, expert, 5, master)));
