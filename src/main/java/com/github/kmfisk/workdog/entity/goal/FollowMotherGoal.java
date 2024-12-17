@@ -45,7 +45,7 @@ public class FollowMotherGoal extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        if (puppy.getAge() >= 0) return false;
+        if (puppy.getAge() >= 0 || puppy.isOrderedToSit()) return false;
         else if (!mother.isAlive()) return false;
         else {
             double d0 = puppy.distanceToSqr(mother);
