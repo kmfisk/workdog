@@ -20,7 +20,7 @@ public class BostonTerrierEntity extends ToyDogEntity {
     }
 
     public static AttributeModifierMap.MutableAttribute registerAttributes() {
-        return createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.175F).add(Attributes.MAX_HEALTH, 6.0F).add(Attributes.ATTACK_DAMAGE, 1.0F);
+        return createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.2F).add(Attributes.MAX_HEALTH, 6.0F).add(Attributes.ATTACK_DAMAGE, 1.0F);
     }
 
     @Override
