@@ -65,7 +65,7 @@ public class PitBullEntity extends HuntingDogEntity {
         BROWN_PINTO(Arrays.asList(11, 14)),
         DARK_BLUE(Arrays.asList(10, 3)),
         DARK_BROWN(Arrays.asList(11, 5)),
-        DARK_RED(Arrays.asList(11, 5)),
+        DARK_RED(Arrays.asList(12, 13)),
         FAWN(Arrays.asList(12, 13)),
         LIGHT_BLUE(Arrays.asList(6, 3)),
         LIGHT_BROWN(Arrays.asList(7, 5)),
