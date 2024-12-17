@@ -5,6 +5,7 @@ import com.github.kmfisk.workdog.config.WorkDogConfig;
 import com.github.kmfisk.workdog.entity.WDWolfEntity;
 import com.github.kmfisk.workdog.entity.goal.*;
 import com.github.kmfisk.workdog.item.WorkDogItems;
+import com.github.kmfisk.workdog.tags.WorkDogTags;
 import com.google.common.collect.Lists;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
@@ -68,7 +69,7 @@ public abstract class WorkDogEntity extends TameableEntity {
 
     private static final DataParameter<Integer> MODE = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.INT);
 
-    private static final Ingredient FOOD = Ingredient.of(Items.BEEF, Items.PORKCHOP, Items.MUTTON, Items.CHICKEN, Items.RABBIT);
+    private static final Ingredient FOOD = Ingredient.of(WorkDogTags.RAW_MEAT);
     private DogAvoidEntityGoal<PlayerEntity> avoidPlayersGoal;
     protected WaterAvoidingRandomWalkingGoal wanderGoal;
     protected final FollowOwnerGoal followGoal = new FollowOwnerGoal(this, 1.33D, 10.0F, 2.0F, false);
@@ -399,7 +400,7 @@ public abstract class WorkDogEntity extends TameableEntity {
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return FOOD.test(stack);
+        return WorkDogTags.RAW_MEAT.contains(stack.getItem());
     }
 
     public boolean canTame(PlayerEntity player, ItemStack stack) {
@@ -540,23 +541,8 @@ public abstract class WorkDogEntity extends TameableEntity {
     public ActionResultType mobInteract(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getItemInHand(hand);
 
-        // MODE TESTING ITEMS TODO: REMOVE
-        if (stack.getItem() == Items.GUNPOWDER) {
-            setMode(Mode.WORK);
-            player.displayClientMessage(new StringTextComponent("WORK MODE"), true);
-            return ActionResultType.CONSUME;
-        } else if (stack.getItem() == Items.SLIME_BALL) {
-            setMode(Mode.FOLLOW);
-            player.displayClientMessage(new StringTextComponent("FOLLOW MODE"), true);
-            return ActionResultType.CONSUME;
-        } else if (stack.getItem() == Items.FEATHER) {
-            setMode(Mode.WANDER);
-            player.displayClientMessage(new StringTextComponent("WANDER MODE"), true);
-            return ActionResultType.CONSUME;
-        }
-
         // BREEDING TESTING ITEMS TODO: REMOVE
-        if (stack.getItem() == Items.STICK) {
+        /*if (stack.getItem() == Items.STICK) {
             if (player.isDiscrete())
                 player.displayClientMessage(new StringTextComponent("Variant: " + getVariant() + " // Longhair: " + isLonghair()), true);
             else {
@@ -582,14 +568,7 @@ public abstract class WorkDogEntity extends TameableEntity {
             else setBreedTimer(-20);
             return ActionResultType.CONSUME;
 
-        } else if (stack.getItem() == Items.MILK_BUCKET && getGender() == Gender.FEMALE && getBreedingStatus("ispregnant")) {
-            setBreedTimer(player.isDiscrete() ? WorkDogConfig.pregnancyTimer.get() / 10 + 20 : 20);
-            return ActionResultType.CONSUME;
-
-        } else if (stack.getItem() == Items.BONE && isBaby()) {
-            ageUp(-getAge(), true);
-            return ActionResultType.CONSUME;
-        }
+        }*/
 
         List<Item> functionalItems = Arrays.asList(WorkDogItems.CRATE.get(), WorkDogItems.PINK_JUICE.get(),
                 WorkDogItems.STERILIZATION_POTION.get(), WorkDogItems.SURRENDER_FORM.get());
@@ -597,14 +576,32 @@ public abstract class WorkDogEntity extends TameableEntity {
 
         boolean isOwner = isOwnedBy(player);
         if (isTame() && isOwner) {
-            if (!isLying()) {
+            if (stack.getItem() == Items.STICK) {
+                if (getMode() == Mode.WANDER) { //if (stack.getItem() == Items.SLIME_BALL)
+                    setMode(Mode.FOLLOW);
+                    player.displayClientMessage(new StringTextComponent("FOLLOW MODE"), true);
+                    return ActionResultType.sidedSuccess(level.isClientSide);
+                } else if (getMode() == Mode.FOLLOW) { //if (stack.getItem() == Items.GUNPOWDER) {
+                    setMode(Mode.WORK);
+                    player.displayClientMessage(new StringTextComponent("WORK MODE"), true);
+                    return ActionResultType.sidedSuccess(level.isClientSide);
+                } else if (getMode() == Mode.WORK) { //if (stack.getItem() == Items.FEATHER)
+                    setMode(Mode.WANDER);
+                    player.displayClientMessage(new StringTextComponent("WANDER MODE"), true);
+                    return ActionResultType.sidedSuccess(level.isClientSide);
+                }
+            } else if (isFood(stack) && getHealth() < getMaxHealth()) {
+                usePlayerItem(player, stack);
+                heal(2.0F);
+                return ActionResultType.sidedSuccess(level.isClientSide);
+
+            } else if (!isLying()) {
                 setOrderedToSit(!isOrderedToSit());
                 jumping = false;
                 navigation.stop();
                 setTarget(null);
+                return ActionResultType.sidedSuccess(level.isClientSide);
             }
-
-            return ActionResultType.sidedSuccess(level.isClientSide);
 
         } else if (canTame(player, stack)) {
             if (!player.abilities.instabuild) stack.shrink(1);
@@ -615,10 +612,12 @@ public abstract class WorkDogEntity extends TameableEntity {
                 setTarget(null);
                 setOrderedToSit(true);
                 this.goalSelector.addGoal(6, followGoal);
+                setMode(Mode.FOLLOW);
                 level.broadcastEntityEvent(this, (byte) 7);
 
             } else level.broadcastEntityEvent(this, (byte) 6);
             return ActionResultType.sidedSuccess(level.isClientSide);
+
         }
 
         return ActionResultType.PASS;
