@@ -1,19 +1,19 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "BBB",
-    "BTB",
+    "III",
+    "BDI",
     "III"
   ],
   "key": {
+    "I": [
+      {"item": "minecraft:iron_ingot"}
+    ],
     "B": [
       {"item": "minecraft:iron_bars"}
     ],
-    "T": [
-      {"item": "minecraft:iron_trapdoor"}
-    ],
-    "I": [
-      {"item": "minecraft:iron_ingot"}
+    "D": [
+      {"tag": "minecraft:carpets"}
     ]
   },
   "result": {
