@@ -35,8 +35,9 @@ public class WorkDogVillagers {
                 new VillagerTrades.EmeraldForItemsTrade(Items.CHICKEN, 14, 16, 2)};
 //       emeraldCost, numberOfItems, maxUses, villagerXp, priceMultiplier
         VillagerTrades.ITrade[] apprentice = new VillagerTrades.ITrade[]{
-//                new VillagerTrades.EmeraldForItemsTrade(WorkDogItems.TENNIS_BALL.get(), 1, 1, 3, 10),
-//                new VillagerTrades.EmeraldForItemsTrade(WorkDogItems.THROW_STICK.get(), 1, 1, 3, 10),
+//                new VillagerTrades.ItemsForEmeraldsTrade(WorkDogItems.TENNIS_BALL.get(), 1, 1, 3, 10),
+//                new VillagerTrades.ItemsForEmeraldsTrade(WorkDogItems.THROW_STICK.get(), 1, 1, 3, 10),
+                new VillagerTrades.ItemsForEmeraldsTrade(WorkDogItems.FRISBEE.get(), 1, 1, 3, 10),
                 new VillagerTrades.ItemsForEmeraldsTrade(WorkDogItems.COLLAR.get(), 3, 1, 3, 10),
                 new VillagerTrades.ItemsForEmeraldsTrade(WorkDogItems.STERILIZATION_POTION.get(), 3, 1, 16, 10)};
         VillagerTrades.ITrade[] journeyman = new VillagerTrades.ITrade[]{
@@ -44,7 +45,7 @@ public class WorkDogVillagers {
                 new VillagerTrades.ItemsForEmeraldsTrade(WorkDogItems.HOG_VEST.get(), 7, 1, 3, 10)};
         VillagerTrades.ITrade[] expert = new VillagerTrades.ITrade[]{
                 new VillagerTrades.ItemsForEmeraldsTrade(WorkDogItems.CRATE.get(), 3, 1, 3, 30),
-                new VillagerTrades.ItemsForEmeraldsTrade(WorkDogItems.SERVICE_VESTS.get(DyeColor.WHITE.getName()).get(), 7, 1, 3, 15),
+//                new VillagerTrades.ItemsForEmeraldsTrade(WorkDogItems.SERVICE_VESTS.get(DyeColor.WHITE.getName()).get(), 7, 1, 3, 15),
 //                new VillagerTrades.ItemsForEmeraldsTrade(WorkDogItems.WOLF_COLLAR.get(), 7, 1, 3, 15),
                 new VillagerTrades.ItemsForEmeraldsTrade(WorkDogItems.MUZZLE.get(), 7, 2, 3, 15)};
         VillagerTrades.ITrade[] master = new VillagerTrades.ITrade[]{
