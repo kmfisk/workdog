@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WWW",
+    "TTT"
+  ],
+  "key": {
+    "W": [
+      {"item": "minecraft:purple_wool"}
+    ],
+    "T": [
+      {"item": "minecraft:purple_glazed_terracotta"}
+    ]
+  },
+  "result": {
+    "item": "workdog:fancy_purple_dog_bed"
+  }
+}
+

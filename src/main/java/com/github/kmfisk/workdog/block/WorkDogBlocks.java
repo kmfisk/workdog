@@ -36,7 +36,7 @@ public class WorkDogBlocks {
         for (int i = 0; i < 16; i++) {
             DyeColor color = DyeColor.byId(i);
             BEDS.put(color.getName(), registerWithItem(color.getName() + "_dog_bed", () -> new DogBedBlock(AbstractBlock.Properties.of(Material.WOOL).sound(SoundType.WOOD).strength(0.2F).noOcclusion())));
-            FANCY_BEDS.put(color.getName(), registerWithItem(color.getName() + "_fancy_dog_bed", () -> new DogBedBlock(AbstractBlock.Properties.of(Material.WOOL).sound(SoundType.WOOD).strength(0.2F).noOcclusion())));
+            FANCY_BEDS.put(color.getName(), registerWithItem("fancy_" + color.getName() + "_dog_bed", () -> new DogBedBlock(AbstractBlock.Properties.of(Material.WOOL).sound(SoundType.WOOD).strength(0.2F).noOcclusion())));
             BOWLS.put(color.getName(), registerWithItem(color.getName() + "_dog_bowl", () -> new BowlBlock(AbstractBlock.Properties.of(Material.DECORATION).instabreak().noOcclusion())));
         }
     }
