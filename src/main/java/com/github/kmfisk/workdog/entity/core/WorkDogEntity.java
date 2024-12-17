@@ -32,7 +32,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.GameRules;
@@ -42,7 +41,10 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 public abstract class WorkDogEntity extends TameableEntity {
     public static final Tags.IOptionalNamedTag<EntityType<?>> HERDING_DOGS = EntityTypeTags.createOptional(new ResourceLocation(WorkDog.MOD_ID, "herding"));
@@ -540,36 +542,6 @@ public abstract class WorkDogEntity extends TameableEntity {
     @Override
     public ActionResultType mobInteract(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getItemInHand(hand);
-
-        // BREEDING TESTING ITEMS TODO: REMOVE
-        /*if (stack.getItem() == Items.STICK) {
-            if (player.isDiscrete())
-                player.displayClientMessage(new StringTextComponent("Variant: " + getVariant() + " // Longhair: " + isLonghair()), true);
-            else {
-                StringBuilder debugInfo = new StringBuilder();
-                debugInfo.append(getMode().name()).append(" MODE // ");
-                debugInfo.append(getGender() == Gender.MALE ? "MALE, " : "FEMALE, ");
-                if (getGender() == Gender.FEMALE) debugInfo.append("litters: ").append(getLitters()).append(", ");
-                if (isInfertile()) debugInfo.append("fixed/infertile: ").append(getBreedTimer());
-                else if (getGender() == Gender.MALE) debugInfo.append("timer: ").append(getBreedTimer());
-                else if (getBreedingStatus("inheat")) debugInfo.append("in heat for: ").append(getBreedTimer());
-                else if (!getBreedingStatus("ispregnant")) debugInfo.append("heat starts in: ").append(getBreedTimer());
-                else
-                    debugInfo.append("pregnant for: ").append(getBreedTimer()).append(" // puppies: ").append(getPuppies());
-
-                player.displayClientMessage(new StringTextComponent(debugInfo.toString()), true);
-            }
-
-            return ActionResultType.CONSUME;
-
-        } else if (stack.getItem() == Items.BLAZE_POWDER && !isInfertile() && getBreedTimer() != 0 && !getBreedingStatus("ispregnant")) {
-            if (getGender() == Gender.MALE) setBreedTimer(0);
-            else if (getBreedingStatus("inheat")) setBreedTimer(20);
-            else setBreedTimer(-20);
-            return ActionResultType.CONSUME;
-
-        }*/
-
         List<Item> functionalItems = Arrays.asList(WorkDogItems.CRATE.get(), WorkDogItems.PINK_JUICE.get(),
                 WorkDogItems.STERILIZATION_POTION.get(), WorkDogItems.SURRENDER_FORM.get());
         if (functionalItems.contains(stack.getItem())) return ActionResultType.PASS;
@@ -635,10 +607,6 @@ public abstract class WorkDogEntity extends TameableEntity {
         // The fact that true == MALE is an implementation detail that should not be relied on.
         public boolean toBool() {
             return this == MALE;
-        }
-
-        public TextComponent getLocalizedName() {
-            return new TranslationTextComponent("data_book." + WorkDog.MOD_ID + ".gender." + name().toLowerCase(Locale.ROOT));
         }
     }
 
