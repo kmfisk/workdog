@@ -3,21 +3,25 @@ package com.github.kmfisk.workdog.entity.merchant.villager;
 import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.block.WorkDogBlocks;
 import com.github.kmfisk.workdog.entity.WorkDogEntities;
+import com.github.kmfisk.workdog.item.DyeableDogEquipmentItem;
 import com.github.kmfisk.workdog.item.WorkDogItems;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.merchant.villager.VillagerProfession;
 import net.minecraft.entity.merchant.villager.VillagerTrades;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.item.*;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.village.PointOfInterestType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.List;
+import java.util.Random;
 
 public class WorkDogVillagers {
     public static final DeferredRegister<VillagerProfession> PROFESSIONS = DeferredRegister.create(ForgeRegistries.PROFESSIONS, WorkDog.MOD_ID);
@@ -38,16 +42,16 @@ public class WorkDogVillagers {
 //                new VillagerTrades.ItemsForEmeraldsTrade(WorkDogItems.TENNIS_BALL.get(), 1, 1, 3, 10),
 //                new VillagerTrades.ItemsForEmeraldsTrade(WorkDogItems.THROW_STICK.get(), 1, 1, 3, 10),
                 new VillagerTrades.ItemsForEmeraldsTrade(WorkDogItems.FRISBEE.get(), 1, 1, 3, 10),
-                new VillagerTrades.ItemsForEmeraldsTrade(WorkDogItems.COLLAR.get(), 3, 1, 3, 10),
+                new DyedEquipmentForEmeraldsTrade(WorkDogItems.COLLAR.get(), 3, 3, 10),
                 new VillagerTrades.ItemsForEmeraldsTrade(WorkDogItems.STERILIZATION_POTION.get(), 3, 1, 16, 10)};
         VillagerTrades.ITrade[] journeyman = new VillagerTrades.ITrade[]{
-                new VillagerTrades.ItemsForEmeraldsTrade(WorkDogItems.HARNESS.get(), 7, 1, 3, 10),
-                new VillagerTrades.ItemsForEmeraldsTrade(WorkDogItems.HOG_VEST.get(), 7, 1, 3, 10)};
+                new DyedEquipmentForEmeraldsTrade(WorkDogItems.HARNESS.get(), 7, 3, 10),
+                new DyedEquipmentForEmeraldsTrade(WorkDogItems.HOG_VEST.get(), 7, 3, 10)};
         VillagerTrades.ITrade[] expert = new VillagerTrades.ITrade[]{
                 new VillagerTrades.ItemsForEmeraldsTrade(WorkDogItems.CRATE.get(), 3, 1, 3, 30),
                 new VillagerTrades.ItemsForEmeraldsTrade(WorkDogItems.SERVICE_VESTS.get(DyeColor.WHITE.getName()).get(), 7, 1, 3, 15),
 //                new VillagerTrades.ItemsForEmeraldsTrade(WorkDogItems.WOLF_COLLAR.get(), 7, 1, 3, 15),
-                new VillagerTrades.ItemsForEmeraldsTrade(WorkDogItems.MUZZLE.get(), 7, 2, 3, 15)};
+                new DyedEquipmentForEmeraldsTrade(WorkDogItems.MUZZLE.get(), 7, 3, 15)};
         VillagerTrades.ITrade[] master = new VillagerTrades.ITrade[]{
                 new VillagerTrades.ItemsForEmeraldsTrade(new ItemStack(WorkDogItems.SPAWN_EGGS.get(WorkDogEntities.BOSTON_TERRIER).get()), 16, 1, 3, 15, 0.2f),
                 new VillagerTrades.ItemsForEmeraldsTrade(new ItemStack(WorkDogItems.SPAWN_EGGS.get(WorkDogEntities.JACK_RUSSELL_TERRIER).get()), 32, 1, 3, 15, 0.2f),
@@ -60,5 +64,37 @@ public class WorkDogVillagers {
 
     protected static Int2ObjectMap<VillagerTrades.ITrade[]> toIntMap(ImmutableMap<Integer, VillagerTrades.ITrade[]> map) {
         return new Int2ObjectOpenHashMap<>(map);
+    }
+
+    public static class DyedEquipmentForEmeraldsTrade implements VillagerTrades.ITrade {
+        private final Item item;
+        private final int value;
+        private final int maxUses;
+        private final int villagerXp;
+
+        public DyedEquipmentForEmeraldsTrade(Item item, int value, int maxUses, int villagerXp) {
+            this.item = item;
+            this.value = value;
+            this.maxUses = maxUses;
+            this.villagerXp = villagerXp;
+        }
+
+        public MerchantOffer getOffer(Entity entity, Random random) {
+            ItemStack cost = new ItemStack(Items.EMERALD, value);
+            ItemStack merch = new ItemStack(item);
+            if (item instanceof DyeableDogEquipmentItem) {
+                List<DyeItem> dyeItems = Lists.newArrayList();
+                dyeItems.add(getRandomDye(random));
+                if (random.nextFloat() > 0.7F) dyeItems.add(getRandomDye(random));
+                if (random.nextFloat() > 0.8F) dyeItems.add(getRandomDye(random));
+                merch = IDyeableArmorItem.dyeArmor(merch, dyeItems);
+            }
+
+            return new MerchantOffer(cost, merch, maxUses, villagerXp, 0.05F);
+        }
+
+        private static DyeItem getRandomDye(Random random) {
+            return DyeItem.byColor(DyeColor.byId(random.nextInt(16)));
+        }
     }
 }
