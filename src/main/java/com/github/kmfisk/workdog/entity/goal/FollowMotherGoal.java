@@ -18,7 +18,7 @@ public class FollowMotherGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (puppy.getAge() >= 0) return false;
+        if (puppy.getAge() >= 0 || puppy.isOrderedToSit()) return false;
         else {
             List<WorkDogEntity> list = puppy.level.getEntitiesOfClass(puppy.getClass(), puppy.getBoundingBox().inflate(8.0D, 4.0D, 8.0D));
             WorkDogEntity dogEntity = null;
