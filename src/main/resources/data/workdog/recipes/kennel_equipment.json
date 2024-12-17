@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "HML",
+    "S  "
+  ],
+  "key": {
+    "#": [
+      {"item": "minecraft:stone_slab"}
+    ],
+    "H": [
+      {"item": "workdog:harness"}
+    ],
+    "M": [
+      {"item": "workdog:muzzle"}
+    ],
+    "L": [
+      {"item": "minecraft:lead"}
+    ],
+    "S": [
+      {"item": "minecraft:stick"}
+    ]
+  },
+  "result": {
+    "item": "workdog:kennel_equipment"
+  }
+}
+

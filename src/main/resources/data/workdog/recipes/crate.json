@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BBB",
+    "BTB",
+    "III"
+  ],
+  "key": {
+    "B": [
+      {"item": "minecraft:iron_bars"}
+    ],
+    "T": [
+      {"item": "minecraft:iron_trapdoor"}
+    ],
+    "I": [
+      {"item": "minecraft:iron_ingot"}
+    ]
+  },
+  "result": {
+    "item": "workdog:crate"
+  }
+}
