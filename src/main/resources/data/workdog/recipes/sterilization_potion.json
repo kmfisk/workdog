@@ -1,18 +1,27 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "minecraft:glass_bottle"
-    },
-    {
-      "item": "minecraft:spider_eye"
-    },
-    {
-      "item": "minecraft:bone"
-    }
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BS ",
+    " G ",
+    " I "
   ],
+  "key": {
+    "G": [
+      {"item": "minecraft:glass_bottle"}
+    ],
+    "S": [
+      {"item": "minecraft:spider_eye"}
+    ],
+    "B": [
+      {"item": "minecraft:bone"}
+    ],
+    "I": [
+      {"item": "minecraft:iron_nugget"}
+    ]
+  },
   "result": {
-    "item": "workdog:sterilization_potion"
+    "item": "workdog:sterilization_potion",
+    "count": 4
   }
 }
 
