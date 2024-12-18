@@ -3,6 +3,7 @@ package com.github.kmfisk.workdog.client.renderer.entity;
 import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.client.renderer.entity.model.AkitaModel;
 import com.github.kmfisk.workdog.entity.AkitaEntity;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
 
@@ -14,6 +15,11 @@ public class AkitaRenderer extends WorkDogRenderer<AkitaEntity, AkitaModel> {
         super(rendererManager, new AkitaModel.Adult(), 0.5f);
         adultModel = model;
         babyModel = new AkitaModel.Baby();
+    }
+
+    @Override
+    protected void scale(AkitaEntity entity, MatrixStack matrixStack, float partialTickTime) {
+        matrixStack.scale(0.9F, 0.9F, 0.9F);
     }
 
     @Override
