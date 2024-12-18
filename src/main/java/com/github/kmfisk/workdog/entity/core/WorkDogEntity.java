@@ -593,7 +593,7 @@ public abstract class WorkDogEntity extends TameableEntity {
     protected SoundEvent getAmbientSound() {
         /*if (isAngry()) return SoundEvents.WOLF_GROWL;
         else*/ if (random.nextInt(3) == 0)
-            return isTame() && getHealth() < 10.0F ? SoundEvents.WOLF_WHINE : SoundEvents.WOLF_PANT;
+            return isTame() && getHealth() < getMaxHealth() / 2 ? SoundEvents.WOLF_WHINE : SoundEvents.WOLF_PANT;
         else return SoundEvents.WOLF_AMBIENT;
     }
 
