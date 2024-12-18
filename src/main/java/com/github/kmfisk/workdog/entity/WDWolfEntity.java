@@ -64,7 +64,11 @@ public class WDWolfEntity extends WorkDogEntity {
             if (!WorkDogConfig.pedigreeMode.get()) spawnData = new AgeableData(0.1F);
             else spawnData = new AgeableData(false);
         }
-        return super.finalizeSpawn(world, difficulty, reason, spawnData, dataTag);
+        spawnData = super.finalizeSpawn(world, difficulty, reason, spawnData, dataTag);
+        Set<BiomeDictionary.Type> biomeTypes = BiomeDictionary.getTypes(RegistryKey.create(Registry.BIOME_REGISTRY, world.getLevel().getBiome(blockPosition()).getRegistryName()));
+        if (biomeTypes.contains(BiomeDictionary.Type.SNOWY))
+            setVariant(dataTag != null && dataTag.contains("Variant") ? dataTag.getInt("Variant") : 3);
+        return spawnData;
     }
 
     @Override
