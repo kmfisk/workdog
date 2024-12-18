@@ -219,8 +219,8 @@ public abstract class BostonTerrierModel extends WorkDogModel<BostonTerrierEntit
 
         @Override
         public void playMovementAnimation(BostonTerrierEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-            float speed = 1.5f;
-            float degree = 0.6f;
+            float speed = 2.5f;
+            float degree = 0.8f;
 
             if (entity.isSprinting()) {
                 this.ArmBaseLeft.xRot = MathHelper.cos((limbSwing * speed * 0.4F) + (float) Math.PI) * (degree * 4.0F) * limbSwingAmount * 0.5F + -0.1F;
@@ -259,34 +259,32 @@ public abstract class BostonTerrierModel extends WorkDogModel<BostonTerrierEntit
 
             } else {
                 this.ArmBaseLeft.xRot = MathHelper.cos((limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * 2.0F) * limbSwingAmount * 0.5F + 0.13F;
-                this.ArmLeft.xRot = MathHelper.cos(5.0F + (limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * -2.5F) * limbSwingAmount * 0.5F + -0.04F;
-                this.ForearmLeft.xRot = MathHelper.cos(5.0F + (limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * 3.0F) * limbSwingAmount * 0.5F + -0.13F;
+                this.ArmLeft.xRot = MathHelper.cos(5.0F + (limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * -1.5F) * limbSwingAmount * 0.5F + -0.04F;
                 this.HandLeft.xRot = MathHelper.cos(4.0F + (limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * 2.0F) * limbSwingAmount * 0.5F + 0.09F;
                 this.ArmBaseRight.xRot = MathHelper.cos((limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * -2.0F) * limbSwingAmount * 0.5F + 0.13F;
-                this.ArmRight.xRot = MathHelper.cos(5.0F + (limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * 2.5F) * limbSwingAmount * 0.5F + -0.04F;
-                this.ForearmRight.xRot = MathHelper.cos(5.0F + (limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * -3.0F) * limbSwingAmount * 0.5F + -0.13F;
+                this.ArmRight.xRot = MathHelper.cos(5.0F + (limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * 1.5F) * limbSwingAmount * 0.5F + -0.04F;
                 this.HandRight.xRot = MathHelper.cos(4.0F + (limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * -2.0F) * limbSwingAmount * 0.5F + 0.09F;
-//                this.ArmBaseLeft.z = MathHelper.cos(2.0F + (limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * 0.2F) * limbSwingAmount * 0.5F;
-//                this.ArmBaseRight.z = MathHelper.cos((limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * -0.2F) * limbSwingAmount * 0.5F;
+                this.ArmBaseLeft.z = MathHelper.cos(2.0F + (limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * 0.2F) * limbSwingAmount * 0.5F + 0.2F;
+                this.ArmBaseRight.z = MathHelper.cos((limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * -0.2F) * limbSwingAmount * 0.5F + 0.2F;
                 this.Neck.xRot = MathHelper.cos(1.0F + (limbSwing * speed * 0.5F) + (float) Math.PI) * (degree * 0.1F) * limbSwingAmount * 0.5F + 0.68F;
                 this.Head.xRot = MathHelper.cos(2.0F + (limbSwing * speed * 0.5F) + (float) Math.PI) * (degree * -0.1F) * limbSwingAmount * 0.5F + -0.40F;
                 this.ThighLeft.xRot = MathHelper.cos(2.0F + (limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * -2.0F) * limbSwingAmount * 0.5F + 0.18F;
-                this.UpperLegLeft.xRot = MathHelper.cos((limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * -2.0F) * limbSwingAmount * 0.5F + 0.63F;
-                this.LowerLegLeft.xRot = MathHelper.cos((limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * 2.0F) * limbSwingAmount * 0.5F + -0.68F;
+                this.UpperLegLeft.xRot = MathHelper.cos((limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * -1.0F) * limbSwingAmount * 0.5F + 0.63F;
+                this.LowerLegLeft.xRot = MathHelper.cos((limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * 1.0F) * limbSwingAmount * 0.5F + -0.68F;
                 this.FootLeft.xRot = MathHelper.cos(5.0F + (limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * -2.0F) * limbSwingAmount * 0.5F;
-//            this.ThighLeft.y = MathHelper.cos((limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * -0.1F) * limbSwingAmount * 0.5F;
-//                this.ThighLeft.z = MathHelper.cos(4.0F + (limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * -0.3F) * limbSwingAmount * 0.5F + 0.03F;
+                this.ThighLeft.y = MathHelper.cos((limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * -0.1F) * limbSwingAmount * 0.5F + 2.5F;
+                this.ThighLeft.z = MathHelper.cos(4.0F + (limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * -0.3F) * limbSwingAmount * 0.5F + 1.6F;
                 this.ThighRight.xRot = MathHelper.cos(2.0F + (limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * 2.0F) * limbSwingAmount * 0.5F + 0.18F;
-                this.UpperLegRight.xRot = MathHelper.cos((limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * 2.0F) * limbSwingAmount * 0.5F + 0.63F;
-                this.LowerLegRight.xRot = MathHelper.cos((limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * -2.0F) * limbSwingAmount * 0.5F + -0.68F;
+                this.UpperLegRight.xRot = MathHelper.cos((limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * 1.0F) * limbSwingAmount * 0.5F + 0.63F;
+                this.LowerLegRight.xRot = MathHelper.cos((limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * -1.0F) * limbSwingAmount * 0.5F + -0.68F;
                 this.FootRight.xRot = MathHelper.cos(5.0F + (limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * 2.0F) * limbSwingAmount * 0.5F;
-//            this.ThighRight.y = MathHelper.cos((limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * 0.1F) * limbSwingAmount * 0.5F;
-//                this.ThighRight.z = MathHelper.cos(4.0F + (limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * 0.3F) * limbSwingAmount * 0.5F + 0.03F;
-                this.Chest.xRot = MathHelper.cos(1.0F + (limbSwing * speed * 0.5F) + (float) Math.PI) * (degree * -0.05F) * limbSwingAmount * 0.5F + -0.05F;
-                this.Body.xRot = MathHelper.cos((limbSwing * speed * 0.5F) + (float) Math.PI) * (degree * -0.1F) * limbSwingAmount * 0.5F + 0.04F;
-                this.Hips.xRot = MathHelper.cos(2.0F + (limbSwing * speed * 0.5F) + (float) Math.PI) * (degree * -0.2F) * limbSwingAmount * 0.5F + -0.15F;
-//                this.Neck.z = MathHelper.cos(5.0F + (limbSwing * speed * 0.5F) + (float) Math.PI) * (degree * -0.07F) * limbSwingAmount * 0.5F;
-//            this.Chest.y = MathHelper.cos((limbSwing * speed * 0.5F) + (float) Math.PI) * (degree * -0.09F) * limbSwingAmount * 0.5F;
+                this.ThighRight.y = MathHelper.cos((limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * 0.1F) * limbSwingAmount * 0.5F + 2.5F;
+                this.ThighRight.z = MathHelper.cos(4.0F + (limbSwing * speed * 0.25F) + (float) Math.PI) * (degree * 0.3F) * limbSwingAmount * 0.5F + 1.6F;
+                this.Chest.xRot = MathHelper.cos(1.0F + (limbSwing * speed * 0.5F) + (float) Math.PI) * (degree * -0.05F) * limbSwingAmount * 0.5F + -0.12F;
+                this.Body.xRot = MathHelper.cos((limbSwing * speed * 0.5F) + (float) Math.PI) * (degree * -0.1F) * limbSwingAmount * 0.5F + 0.05F;
+                this.Hips.xRot = MathHelper.cos(2.0F + (limbSwing * speed * 0.5F) + (float) Math.PI) * (degree * -0.2F) * limbSwingAmount * 0.5F + -0.09F;
+                this.Neck.z = MathHelper.cos(5.0F + (limbSwing * speed * 0.5F) + (float) Math.PI) * (degree * -0.07F) * limbSwingAmount * 0.5F + -1.5F;
+                this.Chest.y = MathHelper.cos((limbSwing * speed * 0.5F) + (float) Math.PI) * (degree * -0.09F) * limbSwingAmount * 0.5F + 15.6F;
             }
         }
 
@@ -383,10 +381,13 @@ public abstract class BostonTerrierModel extends WorkDogModel<BostonTerrierEntit
             this.UpperLegRight.setPos(0.1F, 3.7F, -1.2F);
             this.setRotateAngle(UpperLegRight, 0.6373942428283291F, 0.0F, 0.0F);
             this.HandLeft.setPos(-0.1F, 1.3F, 1.4F);
+            this.setRotateAngle(HandLeft, 0F, 0F, 0F);
             this.ForearmRight.setPos(0.0F, 1.6F, -2.0F);
             this.setRotateAngle(ForearmRight, -0.045553093477052F, 0.0F, 0.0F);
             this.ArmLeft.setPos(0.0F, 4.0F, 1.0F);
+            this.setRotateAngle(ArmLeft, 0F, 0F, 0F);
             this.ArmRight.setPos(0.0F, 4.0F, 1.0F);
+            this.setRotateAngle(ArmRight, 0F, 0F, 0F);
             this.Chest.setPos(0.0F, 15.6F, -3.7F);
             this.setRotateAngle(Chest, -0.1153662635568252F, 0.0F, 0.0F);
             this.ArmBaseLeft.setPos(2.0F, 0.5F, 0.2F);
@@ -417,14 +418,17 @@ public abstract class BostonTerrierModel extends WorkDogModel<BostonTerrierEntit
             this.Mouth.setPos(0.0F, 2.4F, 2.3F);
             this.setRotateAngle(Mouth, -0.136659280431156F, 0.0F, 0.0F);
             this.FootLeft.setPos(-0.1F, 2.2F, -0.7F);
+            this.setRotateAngle(FootLeft, 0F, 0F, 0F);
             this.CollarLeft.setPos(0.1F, 0.2F, -3.1F);
             this.setRotateAngle(CollarLeft, 0.18203784098300857F, 0.0F, 0.0F);
             this.FootRight.setPos(0.1F, 2.2F, -0.7F);
+            this.setRotateAngle(FootRight, 0F, 0F, 0F);
             this.LowerLegRight.setPos(0.0F, 3.0F, 2.0F);
             this.setRotateAngle(LowerLegRight, -0.5918411493512771F, 0.0F, 0.0F);
             this.EarRight.setPos(-1.2F, -2.4F, 1.4F);
             this.setRotateAngle(EarRight, 0.136659280431156F, 0.0F, -0.22759093446006054F);
             this.HandRight.setPos(0.1F, 1.3F, 1.4F);
+            this.setRotateAngle(HandRight, 0F, 0F, 0F);
             this.CollarRight.setPos(-0.2F, 0.0F, 0.0F);
             this.Hips.setPos(0.0F, 0.0F, 5.0F);
             this.setRotateAngle(Hips, -0.091106186954104F, 0.0F, 0.0F);
@@ -566,7 +570,7 @@ public abstract class BostonTerrierModel extends WorkDogModel<BostonTerrierEntit
 
         @Override
         public void playMovementAnimation(BostonTerrierEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-            float speed = 1.0f;
+            float speed = 1.4f;
             float degree = 0.5f;
             this.ArmLeft.xRot = MathHelper.cos((limbSwing * speed * 0.3F) + (float) Math.PI) * (degree * 3.0F) * limbSwingAmount * 0.5F;
             this.ArmRight.xRot = MathHelper.cos((limbSwing * speed * 0.3F) + (float) Math.PI) * (degree * -3.0F) * limbSwingAmount * 0.5F;
@@ -578,7 +582,7 @@ public abstract class BostonTerrierModel extends WorkDogModel<BostonTerrierEntit
             this.Head.xRot = MathHelper.cos(2.0F + (limbSwing * speed * 0.6F) + (float) Math.PI) * (degree * -0.3F) * limbSwingAmount * 0.5F + -0.63F;
             this.Chest.xRot = MathHelper.cos(3.0F + (limbSwing * speed * 0.6F) + (float) Math.PI) * (degree * -0.07F) * limbSwingAmount * 0.5F + -0.03F;
             this.Body.xRot = MathHelper.cos(2.0F + (limbSwing * speed * 0.6F) + (float) Math.PI) * (degree * -0.3F) * limbSwingAmount * 0.5F + -0.025F;
-//            this.Chest.y = MathHelper.cos(4.0F + (limbSwing * speed * 0.6F) + (float) Math.PI) * (degree * -0.03F) * limbSwingAmount * 0.5F;
+            this.Chest.y = MathHelper.cos(4.0F + (limbSwing * speed * 0.6F) + (float) Math.PI) * (degree * -0.03F) * limbSwingAmount * 0.5F + 19.5F;
         }
 
         @Override
@@ -607,18 +611,23 @@ public abstract class BostonTerrierModel extends WorkDogModel<BostonTerrierEntit
         @Override
         public void resetPose(BostonTerrierEntity entity, float speed, float walkSpeed, float partialTick) {
             this.ArmLeft.setPos(1.7F, 0.7F, -0.5F);
-            this.ArmRight.setPos(-1.7F, 0.7F, -0.5F);
-            this.Neck.setPos(0.0F, -1.0F, -1.0F);
             this.setRotateAngle(ArmLeft, 0.136659280431156F, 0.0F, 0.0F);
+            this.ArmRight.setPos(-1.7F, 0.7F, -0.5F);
             this.setRotateAngle(ArmRight, 0.136659280431156F, 0.0F, 0.0F);
+            this.Neck.setPos(0.0F, -1.0F, -1.0F);
+            this.setRotateAngle(Neck, 0.7285004297824331F, 0.0F, 0.0F);
             this.setRotateAngle(Body, 0.0F, 0.0F, 0.0F);
+            this.Chest.setPos(0.0F, 19.5F, -2.0F);
             this.setRotateAngle(Chest, -0.045553093477052F, 0.0F, 0.0F);
             this.setRotateAngle(Head, -0.6373942428283291F, 0.0F, 0.0F);
-            this.setRotateAngle(Neck, 0.7285004297824331F, 0.0F, 0.0F);
-            this.setRotateAngle(ThighLeft, 0.0F, 0.0F, 0.0F);
-            this.setRotateAngle(ThighRight, 0.0F, 0.0F, 0.0F);
             this.ThighLeft.setPos(1.7F, 0.9F, 2.7F);
+            this.setRotateAngle(ThighLeft, 0.0F, 0.0F, 0.0F);
             this.ThighRight.setPos(-1.7F, 0.9F, 2.7F);
+            this.setRotateAngle(ThighRight, 0.0F, 0.0F, 0.0F);
+            this.LegRight.setPos(0.1F, 4.0F, -1.1F);
+            this.setRotateAngle(LegRight, 0.4553564018453205F, 0.0F, 0.0F);
+            this.LegLeft.setPos(-0.1F, 4.0F, -1.1F);
+            this.setRotateAngle(LegLeft, 0.4553564018453205F, 0.0F, 0.0F);
         }
     }
 }
