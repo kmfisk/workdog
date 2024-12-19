@@ -181,7 +181,8 @@ public abstract class WorkDogEntity extends TameableEntity {
     }
 
     public boolean isMother(UUID uuid) {
-        return getParentUUIDs().get(0).equals(uuid);
+        UUID mother = getParentUUIDs().get(0);
+        return mother != null && mother.equals(uuid);
     }
 
     public void setInfertile(boolean infertile) {
