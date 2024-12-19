@@ -44,8 +44,8 @@ public class WDWolfEntity extends WorkDogEntity {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new SwimGoal(this));
-        this.goalSelector.addGoal(1, new SitGoal(this));
-        this.goalSelector.addGoal(2, new DogBirthGoal(this));
+        this.goalSelector.addGoal(1, new DogBirthGoal(this));
+        this.goalSelector.addGoal(2, new SitGoal(this));
         this.goalSelector.addGoal(3, new DogTemptGoal(this, 0.6D));
         this.goalSelector.addGoal(4, new LeapAtTargetGoal(this, 0.4F));
         this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.5D, true));
