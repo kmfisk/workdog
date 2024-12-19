@@ -118,7 +118,8 @@ public class CrateItem extends Item {
                 tooltip.add(new StringTextComponent("\"" + nbt.getString("DisplayName") + "\"").withStyle(TextFormatting.AQUA));
 
             TranslationTextComponent entityId = new TranslationTextComponent(Util.makeDescriptionId("entity", new ResourceLocation(nbt.getString("id"))));
-            tooltip.add(entityId.withStyle(TextFormatting.BLUE));
+            TranslationTextComponent gender = new TranslationTextComponent(nbt.getBoolean("Gender") ? "tooltip.workdog.crate.male" : "tooltip.workdog.crate.female");
+            tooltip.add(gender.append(" ").append(entityId).withStyle(TextFormatting.BLUE));
 
             if (nbt.contains("OwnerName")) {
                 TranslationTextComponent owner = new TranslationTextComponent("tooltip.workdog.crate.owner", nbt.getString("OwnerName"));
