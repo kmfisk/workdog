@@ -130,6 +130,7 @@ public abstract class WorkDogEntity extends TameableEntity {
         if (dataTag != null && dataTag.contains("Variant")) variant = dataTag.getInt("Variant");
         setVariant(variant);
         if (getGender() == Gender.FEMALE && !isInfertile()) setTimeCycle("end", WorkDogConfig.heatCooldown.get());
+        setMode(Mode.WANDER);
         return super.finalizeSpawn(world, difficulty, reason, spawnData, dataTag);
     }
 
