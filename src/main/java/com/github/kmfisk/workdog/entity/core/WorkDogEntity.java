@@ -418,18 +418,18 @@ public abstract class WorkDogEntity extends TameableEntity {
         else return false;
     }
 
-    public void setupChildVariant(WorkDogEntity parent1, WorkDogEntity parent2) {
+    public void setupChildVariant(WorkDogEntity maternal, WorkDogEntity paternal) {
         int variant;
-        if (getType() != parent1.getType() && getType() != parent2.getType()) {
+        if (getType() != maternal.getType() && getType() != paternal.getType()) {
             variant = random.nextInt(getVariantCount());
 
-        } else if (parent1.getType() == parent2.getType()) {
-            WorkDogEntity parent = random.nextBoolean() ? parent1 : parent2;
+        } else if (maternal.getType() == paternal.getType()) {
+            WorkDogEntity parent = random.nextBoolean() ? maternal : paternal;
             if (random.nextFloat() <= 0.6F) variant = parent.getVariant();
             else variant = getCarriedVariant(parent.getVariant());
 
         } else {
-            WorkDogEntity parent = getType() == parent1.getType() ? parent1 : parent2;
+            WorkDogEntity parent = getType() == maternal.getType() ? maternal : paternal;
             if (random.nextFloat() <= 0.6F) variant = parent.getVariant();
             else variant = getCarriedVariant(parent.getVariant());
         }
@@ -440,23 +440,25 @@ public abstract class WorkDogEntity extends TameableEntity {
         setVariant(variant);
     }
 
-    protected void setupChildData(WorkDogEntity parent1, WorkDogEntity parent2) {
+    protected void setupChildData(WorkDogEntity maternal, WorkDogEntity paternal) {
         setAge(-WorkDogConfig.puppyMatureTimer.get());
         setGender(Gender.fromBool(random.nextBoolean()));
         boolean longhair;
-        if (parent1.isLonghair() && parent2.isLonghair())
+        if (maternal.isLonghair() && paternal.isLonghair())
             longhair = true;
-        else if ((parent1.isLonghair() && !parent2.isLonghair()) || (!parent1.isLonghair() && parent2.isLonghair()))
+        else if ((maternal.isLonghair() && !paternal.isLonghair()) || (!maternal.isLonghair() && paternal.isLonghair()))
             longhair = random.nextFloat() <= 0.25F;
         else
             longhair = random.nextFloat() <= 0.08F;
         if (getLonghairChance() == 1.0F) longhair = true;
         else if (getLonghairChance() == 0.0F) longhair = false;
         setLonghair(longhair);
-        if (WorkDogConfig.nameBabies.get() && (parent1.hasCustomName() || parent2.hasCustomName()))
-            setCustomName(new TranslationTextComponent("name.workdog.name_babies", parent1.hasCustomName() ? parent1.getCustomName() : parent2.getCustomName()));
-        setParentUUID(parent1.getUUID());
-        setParentUUID(parent2.getUUID());
+        if (WorkDogConfig.nameBabies.get() && (maternal.hasCustomName() || paternal.hasCustomName()))
+            setCustomName(new TranslationTextComponent("name.workdog.name_babies", maternal.hasCustomName() ? maternal.getCustomName() : paternal.getCustomName()));
+        setParentUUID(maternal.getUUID());
+        setParentUUID(paternal.getUUID());
+        if (maternal.isTame() && WorkDogConfig.tamedLimit.get() == 0/* || owner.getPersistentData().getInt("DogCount") < WorkDogConfig.tamedLimit.get()*/)
+            tame((PlayerEntity) maternal.getOwner());
     }
 
     @Override
