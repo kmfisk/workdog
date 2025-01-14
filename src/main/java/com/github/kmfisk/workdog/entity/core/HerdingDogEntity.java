@@ -1,10 +1,10 @@
 package com.github.kmfisk.workdog.entity.core;
 
 import com.github.kmfisk.workdog.entity.goal.FollowHerderGoal;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.Tags;
 
 import java.util.ArrayList;
@@ -13,11 +13,11 @@ import java.util.List;
 import static com.github.kmfisk.workdog.tags.WorkDogTags.HERDING_DOGS;
 
 public abstract class HerdingDogEntity extends WorkDogEntity {
-    public List<MobEntity> herding = new ArrayList<>();
+    public List<Mob> herding = new ArrayList<>();
 //    private final FollowOwnerGoal herdersFollowGoal = new FollowOwnerGoal(this, 1.5D, 8.0F, 2.0F, false);
 //    private final HerdLivestockGoal herdLivestockGoal = new HerdLivestockGoal(this, 1.5F);
 
-    public HerdingDogEntity(EntityType<? extends TameableEntity> type, World world) {
+    public HerdingDogEntity(EntityType<? extends TamableAnimal> type, Level world) {
         super(type, world);
     }
 
@@ -38,7 +38,7 @@ public abstract class HerdingDogEntity extends WorkDogEntity {
         }*/
     }
 
-    public void herd(MobEntity livestock) {
+    public void herd(Mob livestock) {
         herding.add(livestock);
         livestock.goalSelector.addGoal(6, new FollowHerderGoal(livestock, this));
     }

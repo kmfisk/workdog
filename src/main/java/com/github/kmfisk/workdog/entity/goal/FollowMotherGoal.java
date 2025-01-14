@@ -1,7 +1,7 @@
 package com.github.kmfisk.workdog.entity.goal;
 
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.Goal;
 
 import java.util.List;
 

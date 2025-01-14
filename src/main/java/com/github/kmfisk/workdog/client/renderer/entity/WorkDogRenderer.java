@@ -2,17 +2,17 @@ package com.github.kmfisk.workdog.client.renderer.entity;
 
 import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.resources.ResourceLocation;
+import com.mojang.math.Matrix4f;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.client.ForgeHooksClient;
 
 import java.util.List;
@@ -25,12 +25,12 @@ public abstract class WorkDogRenderer<T extends WorkDogEntity, M extends EntityM
     protected ResourceLocation adult_loc;
     protected List<String> variants;
 
-    public WorkDogRenderer(EntityRendererManager rendererManager, M model, float shadowRadius) {
+    public WorkDogRenderer(EntityRenderDispatcher rendererManager, M model, float shadowRadius) {
         super(rendererManager, model, shadowRadius);
     }
 
     @Override
-    public void render(T entity, float entityYaw, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer buffer, int packedLight) {
+    public void render(T entity, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int packedLight) {
         model = entity.isBaby() ? babyModel : adultModel;
         super.render(entity, entityYaw, partialTicks, matrixStack, buffer, packedLight);
     }
@@ -77,7 +77,7 @@ public abstract class WorkDogRenderer<T extends WorkDogEntity, M extends EntityM
     }
 
     @Override
-    protected void renderNameTag(T entity, ITextComponent textComponent, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer, int packedLightCoords) {
+    protected void renderNameTag(T entity, Component textComponent, PoseStack matrixStack, MultiBufferSource renderTypeBuffer, int packedLightCoords) {
         super.renderNameTag(entity, textComponent, matrixStack, renderTypeBuffer, packedLightCoords);
 
         double distance = entityRenderDispatcher.distanceToSqr(entity);
@@ -94,11 +94,11 @@ public abstract class WorkDogRenderer<T extends WorkDogEntity, M extends EntityM
             float backgroundOpacity = Minecraft.getInstance().options.getBackgroundOpacity(0.25F);
             int j = (int) (backgroundOpacity * 255.0F) << 24;
 
-            TranslationTextComponent info = new TranslationTextComponent((entity.getGender() == WorkDogEntity.Gender.FEMALE ? (entity.getBreedingStatus("inheat") ? "name.workdog.in_heat" : "name.workdog.not_in_heat") : "name.workdog.male"), entity.getBreedTimer());
+            TranslatableComponent info = new TranslatableComponent((entity.getGender() == WorkDogEntity.Gender.FEMALE ? (entity.getBreedingStatus("inheat") ? "name.workdog.in_heat" : "name.workdog.not_in_heat") : "name.workdog.male"), entity.getBreedTimer());
             if (entity.getBreedingStatus("ispregnant"))
-                info = new TranslationTextComponent("name.workdog.pregnant", entity.getBreedTimer());
+                info = new TranslatableComponent("name.workdog.pregnant", entity.getBreedTimer());
 
-            FontRenderer fontRenderer = getFont();
+            Font fontRenderer = getFont();
             float centeredPos = (float) (-fontRenderer.width(info) / 2);
 
             fontRenderer.drawInBatch(info, centeredPos, 0, 553648127, false, matrix4f, renderTypeBuffer, notDiscrete, j, packedLightCoords);

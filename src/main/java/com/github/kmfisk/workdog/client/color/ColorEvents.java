@@ -2,9 +2,9 @@ package com.github.kmfisk.workdog.client.color;
 
 import com.github.kmfisk.workdog.block.WorkDogBlocks;
 import com.github.kmfisk.workdog.item.WorkDogItems;
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.IDyeableArmorItem;
-import net.minecraft.world.biome.BiomeColors;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.DyeableLeatherItem;
+import net.minecraft.client.renderer.BiomeColors;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 
 public class ColorEvents {
@@ -21,7 +21,7 @@ public class ColorEvents {
     }
 
     public static void registerColorHandlerItems(final ColorHandlerEvent.Item event) {
-        event.getItemColors().register((stack, layer) -> layer > 0 ? -1 : ((IDyeableArmorItem) stack.getItem()).getColor(stack),
+        event.getItemColors().register((stack, layer) -> layer > 0 ? -1 : ((DyeableLeatherItem) stack.getItem()).getColor(stack),
                 WorkDogItems.COLLAR.get(), WorkDogItems.HARNESS.get(), WorkDogItems.HOG_VEST.get(), WorkDogItems.MUZZLE.get(), WorkDogItems.SADDLEBAG.get());
     }
 }

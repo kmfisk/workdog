@@ -3,22 +3,22 @@ package com.github.kmfisk.workdog.client.renderer.entity;
 import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.client.renderer.entity.model.BorderCollieModel;
 import com.github.kmfisk.workdog.entity.BorderCollieEntity;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.util.ResourceLocation;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
 public class BorderCollieRenderer extends WorkDogRenderer<BorderCollieEntity, BorderCollieModel> {
-    public BorderCollieRenderer(EntityRendererManager rendererManager) {
+    public BorderCollieRenderer(EntityRenderDispatcher rendererManager) {
         super(rendererManager, new BorderCollieModel.Adult(), 0.5f);
         adultModel = model;
         babyModel = new BorderCollieModel.Baby();
     }
 
     @Override
-    protected void scale(BorderCollieEntity entity, MatrixStack matrixStack, float partialTickTime) {
+    protected void scale(BorderCollieEntity entity, PoseStack matrixStack, float partialTickTime) {
         matrixStack.scale(0.9F, 0.9F, 0.9F);
     }
 

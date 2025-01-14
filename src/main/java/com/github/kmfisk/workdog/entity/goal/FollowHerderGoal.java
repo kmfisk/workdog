@@ -2,27 +2,27 @@ package com.github.kmfisk.workdog.entity.goal;
 
 import com.github.kmfisk.workdog.entity.core.HerdingDogEntity;
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.pathfinding.WalkNodeProcessor;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelReader;
 
 import java.util.EnumSet;
 
 public class FollowHerderGoal extends Goal {
-    private final MobEntity livestock;
+    private final Mob livestock;
     private HerdingDogEntity herder;
-    private final PathNavigator navigation;
+    private final PathNavigation navigation;
     private int timeToRecalcPath;
     private float oldWaterCost;
 
-    public FollowHerderGoal(MobEntity livestockEntity, HerdingDogEntity herdingDogEntity) {
+    public FollowHerderGoal(Mob livestockEntity, HerdingDogEntity herdingDogEntity) {
         this.livestock = livestockEntity;
         this.herder = herdingDogEntity;
         this.navigation = livestockEntity.getNavigation();
@@ -33,7 +33,7 @@ public class FollowHerderGoal extends Goal {
     public boolean canUse() {
         float startDistance = 4.0F;
         if (herder == null) return false;
-        else if (livestock instanceof TameableEntity && ((TameableEntity) livestock).isOrderedToSit())
+        else if (livestock instanceof TamableAnimal && ((TamableAnimal) livestock).isOrderedToSit())
             return false;
         else return !(livestock.distanceToSqr(herder) < (double) (startDistance * startDistance));
     }
@@ -43,7 +43,7 @@ public class FollowHerderGoal extends Goal {
         if (herder.getMode() != WorkDogEntity.Mode.WORK) return false;
         float stopDistance = 2.0F;
         if (navigation.isDone()) return false;
-        else if (livestock instanceof TameableEntity && ((TameableEntity) livestock).isOrderedToSit())
+        else if (livestock instanceof TamableAnimal && ((TamableAnimal) livestock).isOrderedToSit())
             return false;
         else return !(livestock.distanceToSqr(herder) <= (double) (stopDistance * stopDistance));
     }
@@ -51,14 +51,14 @@ public class FollowHerderGoal extends Goal {
     @Override
     public void start() {
         timeToRecalcPath = 0;
-        oldWaterCost = livestock.getPathfindingMalus(PathNodeType.WATER);
-        livestock.setPathfindingMalus(PathNodeType.WATER, 0.0F);
+        oldWaterCost = livestock.getPathfindingMalus(BlockPathTypes.WATER);
+        livestock.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
     }
 
     @Override
     public void stop() {
         navigation.stop();
-        livestock.setPathfindingMalus(PathNodeType.WATER, oldWaterCost);
+        livestock.setPathfindingMalus(BlockPathTypes.WATER, oldWaterCost);
         if (herder.getMode() != WorkDogEntity.Mode.WORK) herder = null;
     }
 
@@ -98,9 +98,9 @@ public class FollowHerderGoal extends Goal {
     }
 
     private boolean canTeleportTo(BlockPos position) {
-        IWorldReader level = livestock.level;
-        PathNodeType pathnodetype = WalkNodeProcessor.getBlockPathTypeStatic(level, position.mutable());
-        if (pathnodetype != PathNodeType.WALKABLE) return false;
+        LevelReader level = livestock.level;
+        BlockPathTypes pathnodetype = WalkNodeEvaluator.getBlockPathTypeStatic(level, position.mutable());
+        if (pathnodetype != BlockPathTypes.WALKABLE) return false;
         else {
             BlockState blockstate = level.getBlockState(position.below());
             if (blockstate.getBlock() instanceof LeavesBlock) return false;

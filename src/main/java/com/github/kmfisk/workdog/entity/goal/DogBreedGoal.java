@@ -2,20 +2,20 @@ package com.github.kmfisk.workdog.entity.goal;
 
 import com.github.kmfisk.workdog.config.WorkDogConfig;
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
-import net.minecraft.entity.EntityPredicate;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.Level;
 
 import java.util.EnumSet;
 import java.util.List;
 
 public class DogBreedGoal extends Goal {
-    private static final EntityPredicate PARTNER_TARGETING = (new EntityPredicate()).range(8.0D).allowInvulnerable().allowSameTeam().allowUnseeable();
+    private static final TargetingConditions PARTNER_TARGETING = (new TargetingConditions()).range(8.0D).allowInvulnerable().allowSameTeam().allowUnseeable();
     private static final double NEARBY_RADIUS_CHECK = 16.0D;
     private final double moveSpeed;
     private final WorkDogEntity dog;
-    protected final World level;
+    protected final Level level;
     private WorkDogEntity target;
     private int breedDelay;
     private List<WorkDogEntity> nearbyDogs;

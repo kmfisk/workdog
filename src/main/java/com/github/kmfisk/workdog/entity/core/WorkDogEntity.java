@@ -6,33 +6,33 @@ import com.github.kmfisk.workdog.entity.goal.*;
 import com.github.kmfisk.workdog.item.WorkDogItems;
 import com.github.kmfisk.workdog.tags.WorkDogTags;
 import com.google.common.collect.Lists;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.item.ExperienceOrbEntity;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.ParticleTypes;
+import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nullable;
@@ -41,39 +41,58 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public abstract class WorkDogEntity extends TameableEntity {
-    public static final DataParameter<Boolean> GENDER = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.BOOLEAN);
-    public static final DataParameter<Boolean> LONGHAIR = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.BOOLEAN);
-    public static final DataParameter<Integer> VARIANT = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.INT);
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.AgableMob;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
+import net.minecraft.world.entity.ai.goal.LeapAtTargetGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 
-    private static final DataParameter<Optional<UUID>> PARENT_ID_0 = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.OPTIONAL_UUID);
-    private static final DataParameter<Optional<UUID>> PARENT_ID_1 = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.OPTIONAL_UUID);
+public abstract class WorkDogEntity extends TamableAnimal {
+    public static final EntityDataAccessor<Boolean> GENDER = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<Boolean> LONGHAIR = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.INT);
 
-    private static final DataParameter<Boolean> INFERTILE = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> IN_HEAT = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> IS_PREGNANT = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Integer> BREED_TIMER = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.INT);
-    private static final DataParameter<Integer> PUPPIES = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.INT);
-    private static final DataParameter<Integer> LITTERS = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.INT);
+    private static final EntityDataAccessor<Optional<UUID>> PARENT_ID_0 = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.OPTIONAL_UUID);
+    private static final EntityDataAccessor<Optional<UUID>> PARENT_ID_1 = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.OPTIONAL_UUID);
 
-    private static final DataParameter<Boolean> IS_LYING = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> INFERTILE = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> IN_HEAT = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> IS_PREGNANT = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> BREED_TIMER = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> PUPPIES = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> LITTERS = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.INT);
 
-    private static final DataParameter<Integer> MODE = EntityDataManager.defineId(WorkDogEntity.class, DataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> IS_LYING = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.BOOLEAN);
 
-    private DogAvoidEntityGoal<PlayerEntity> avoidPlayersGoal;
-    protected WaterAvoidingRandomWalkingGoal wanderGoal;
+    private static final EntityDataAccessor<Integer> MODE = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.INT);
+
+    private DogAvoidEntityGoal<Player> avoidPlayersGoal;
+    protected WaterAvoidingRandomStrollGoal wanderGoal;
     protected final FollowOwnerGoal followGoal = new FollowOwnerGoal(this, 1.33D, 10.0F, 2.0F, false);
 
-    public WorkDogEntity(EntityType<? extends TameableEntity> type, World world) {
+    public WorkDogEntity(EntityType<? extends TamableAnimal> type, Level world) {
         super(type, world);
         reassessModeGoals();
     }
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(1, new SwimGoal(this));
+        this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(1, new DogBirthGoal(this));
-        this.goalSelector.addGoal(2, new SitGoal(this));
+        this.goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(3, new DogTemptGoal(this, 0.6D));
         this.goalSelector.addGoal(4, new LeapAtTargetGoal(this, 0.4F));
         this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.5D, true));
@@ -86,7 +105,7 @@ public abstract class WorkDogEntity extends TameableEntity {
     protected void reassessTameGoals() {
         if (isBaby() || !(this instanceof WDWolfEntity)) {
             if (avoidPlayersGoal == null)
-                avoidPlayersGoal = new DogAvoidEntityGoal<>(this, PlayerEntity.class, 16.0F, 0.8D, 1.33D);
+                avoidPlayersGoal = new DogAvoidEntityGoal<>(this, Player.class, 16.0F, 0.8D, 1.33D);
 
             this.goalSelector.removeGoal(avoidPlayersGoal);
             if (!isTame()) this.goalSelector.addGoal(4, avoidPlayersGoal);
@@ -94,7 +113,7 @@ public abstract class WorkDogEntity extends TameableEntity {
     }
 
     public void reassessModeGoals() {
-        if (wanderGoal == null) wanderGoal = new WaterAvoidingRandomWalkingGoal(this, 1.0D);
+        if (wanderGoal == null) wanderGoal = new WaterAvoidingRandomStrollGoal(this, 1.0D);
         this.goalSelector.removeGoal(wanderGoal);
         this.goalSelector.removeGoal(followGoal);
         if (getMode() == Mode.FOLLOW) {
@@ -123,7 +142,7 @@ public abstract class WorkDogEntity extends TameableEntity {
     }
 
     @Override
-    public ILivingEntityData finalizeSpawn(IServerWorld world, DifficultyInstance difficulty, SpawnReason reason, @Nullable ILivingEntityData spawnData, @Nullable CompoundNBT dataTag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
         setGender(Gender.fromBool(random.nextBoolean()));
         setLonghair(random.nextFloat() <= getLonghairChance());
         int variant = random.nextInt(getVariantCount());
@@ -242,18 +261,18 @@ public abstract class WorkDogEntity extends TameableEntity {
 
     public void addSire(WorkDogEntity sire) {
         if (!getPersistentData().contains("Sire") || (getPersistentData().contains("Sire") && getPersistentData().getCompound("Sire").isEmpty())) {
-            CompoundNBT tags = new CompoundNBT();
+            CompoundTag tags = new CompoundTag();
             sire.save(tags);
             getPersistentData().put("Sire", tags);
         }
     }
 
-    private void setSire(INBT sire) {
+    private void setSire(Tag sire) {
         if (getPersistentData().contains("Sire"))
             getPersistentData().put("Sire", sire);
     }
 
-    public CompoundNBT getSire() {
+    public CompoundTag getSire() {
         return getPersistentData().getCompound("Sire");
     }
 
@@ -283,16 +302,16 @@ public abstract class WorkDogEntity extends TameableEntity {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundNBT nbt) {
+    public void addAdditionalSaveData(CompoundTag nbt) {
         super.addAdditionalSaveData(nbt);
         nbt.putBoolean("Gender", getGender().toBool());
         nbt.putBoolean("Longhair", isLonghair());
         nbt.putInt("Variant", getVariant());
 
         List<UUID> list = getParentUUIDs();
-        ListNBT parentNbtList = new ListNBT();
+        ListTag parentNbtList = new ListTag();
         for (UUID uuid : list) {
-            if (uuid != null) parentNbtList.add(NBTUtil.createUUID(uuid));
+            if (uuid != null) parentNbtList.add(NbtUtils.createUUID(uuid));
         }
         nbt.put("Parents", parentNbtList);
 
@@ -312,15 +331,15 @@ public abstract class WorkDogEntity extends TameableEntity {
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundNBT nbt) {
+    public void readAdditionalSaveData(CompoundTag nbt) {
         super.readAdditionalSaveData(nbt);
         setGender(Gender.fromBool(nbt.getBoolean("Gender")));
         setLonghair(nbt.getBoolean("Longhair"));
         setVariant(nbt.getInt("Variant"));
 
-        ListNBT parentNbtList = nbt.getList("Parents", 11);
-        for (INBT inbt : parentNbtList) {
-            setParentUUID(NBTUtil.loadUUID(inbt));
+        ListTag parentNbtList = nbt.getList("Parents", 11);
+        for (Tag inbt : parentNbtList) {
+            setParentUUID(NbtUtils.loadUUID(inbt));
         }
 
         setInfertile(nbt.getBoolean("Infertile"));
@@ -395,7 +414,7 @@ public abstract class WorkDogEntity extends TameableEntity {
         return WorkDogTags.RAW_MEAT.contains(stack.getItem());
     }
 
-    public boolean canTame(PlayerEntity player, ItemStack stack) {
+    public boolean canTame(Player player, ItemStack stack) {
         if (isTame()) return false;
         if (WorkDogConfig.tamedLimit.get() != 0 && player.getPersistentData().getInt("DogCount") >= WorkDogConfig.tamedLimit.get())
             return false;
@@ -405,7 +424,7 @@ public abstract class WorkDogEntity extends TameableEntity {
     }
 
     @Override
-    public boolean canMate(AnimalEntity entity) {
+    public boolean canMate(Animal entity) {
         if (entity == this) return false;
         if (!(entity instanceof WorkDogEntity)) return false;
         if (entity.isBaby() || isBaby()) return false;
@@ -455,18 +474,18 @@ public abstract class WorkDogEntity extends TameableEntity {
         else if (getLonghairChance() == 0.0F) longhair = false;
         setLonghair(longhair);
         if (WorkDogConfig.nameBabies.get() && (maternal.hasCustomName() || paternal.hasCustomName()))
-            setCustomName(new TranslationTextComponent("name.workdog.name_babies", maternal.hasCustomName() ? maternal.getCustomName() : paternal.getCustomName()));
+            setCustomName(new TranslatableComponent("name.workdog.name_babies", maternal.hasCustomName() ? maternal.getCustomName() : paternal.getCustomName()));
         setParentUUID(maternal.getUUID());
         setParentUUID(paternal.getUUID());
         if (maternal.isTame() && WorkDogConfig.tamedLimit.get() == 0/* || owner.getPersistentData().getInt("DogCount") < WorkDogConfig.tamedLimit.get()*/)
-            tame((PlayerEntity) maternal.getOwner());
+            tame((Player) maternal.getOwner());
     }
 
     @Override
-    public void spawnChildFromBreeding(ServerWorld world, AnimalEntity entity) {
+    public void spawnChildFromBreeding(ServerLevel world, Animal entity) {
         if (entity instanceof WorkDogEntity) {
             WorkDogEntity sire = (WorkDogEntity) entity;
-            AgeableEntity childBreedType;
+            AgableMob childBreedType;
             boolean purebred = getType() == sire.getType();
             if (purebred || random.nextBoolean()) {
                 childBreedType = getBreedOffspring(world, sire);
@@ -504,13 +523,13 @@ public abstract class WorkDogEntity extends TameableEntity {
                 }
 
                 if (world.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT))
-                    world.addFreshEntity(new ExperienceOrbEntity(world, getX(), getY(), getZ(), getRandom().nextInt(7) + 1));
+                    world.addFreshEntity(new ExperienceOrb(world, getX(), getY(), getZ(), getRandom().nextInt(7) + 1));
             }
         }
     }
 
     @Override
-    protected void onOffspringSpawnedFromEgg(PlayerEntity player, MobEntity entity) {
+    protected void onOffspringSpawnedFromEgg(Player player, Mob entity) {
         if (entity instanceof WorkDogEntity) {
             WorkDogEntity child = (WorkDogEntity) entity;
             child.setupChildVariant(this, this);
@@ -524,7 +543,7 @@ public abstract class WorkDogEntity extends TameableEntity {
         else {
             Entity entity = damageSource.getEntity();
             this.setOrderedToSit(false);
-            if (entity != null && !(entity instanceof PlayerEntity) && !(entity instanceof AbstractArrowEntity))
+            if (entity != null && !(entity instanceof Player) && !(entity instanceof AbstractArrow))
                 amount = (amount + 1.0F) / 2.0F;
 
             return super.hurt(damageSource, amount);
@@ -532,39 +551,39 @@ public abstract class WorkDogEntity extends TameableEntity {
     }
 
     @Override
-    public ActionResultType mobInteract(PlayerEntity player, Hand hand) {
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         List<Item> functionalItems = Arrays.asList(WorkDogItems.CRATE.get(), WorkDogItems.PINK_JUICE.get(),
                 WorkDogItems.STERILIZATION_POTION.get(), WorkDogItems.SURRENDER_FORM.get());
-        if (functionalItems.contains(stack.getItem())) return ActionResultType.PASS;
+        if (functionalItems.contains(stack.getItem())) return InteractionResult.PASS;
 
         boolean isOwner = isOwnedBy(player);
         if (isTame() && isOwner) {
             if (stack.getItem() == Items.STICK) {
                 if (getMode() == Mode.WANDER) { //if (stack.getItem() == Items.SLIME_BALL)
                     setMode(Mode.FOLLOW);
-                    player.displayClientMessage(new TranslationTextComponent("chat.workdog.follow_mode", getName()), true);
-                    return ActionResultType.sidedSuccess(level.isClientSide);
+                    player.displayClientMessage(new TranslatableComponent("chat.workdog.follow_mode", getName()), true);
+                    return InteractionResult.sidedSuccess(level.isClientSide);
                 } else if (getMode() == Mode.FOLLOW) { //if (stack.getItem() == Items.GUNPOWDER) {
                     setMode(Mode.WORK);
-                    player.displayClientMessage(new TranslationTextComponent("chat.workdog.work_mode", getName()), true);
-                    return ActionResultType.sidedSuccess(level.isClientSide);
+                    player.displayClientMessage(new TranslatableComponent("chat.workdog.work_mode", getName()), true);
+                    return InteractionResult.sidedSuccess(level.isClientSide);
                 } else if (getMode() == Mode.WORK) { //if (stack.getItem() == Items.FEATHER)
                     setMode(Mode.WANDER);
-                    player.displayClientMessage(new TranslationTextComponent("chat.workdog.wander_mode", getName()), true);
-                    return ActionResultType.sidedSuccess(level.isClientSide);
+                    player.displayClientMessage(new TranslatableComponent("chat.workdog.wander_mode", getName()), true);
+                    return InteractionResult.sidedSuccess(level.isClientSide);
                 }
             } else if (isFood(stack) && getHealth() < getMaxHealth()) {
                 usePlayerItem(player, stack);
                 heal(2.0F);
-                return ActionResultType.sidedSuccess(level.isClientSide);
+                return InteractionResult.sidedSuccess(level.isClientSide);
 
             } else if (!isLying()) {
                 setOrderedToSit(!isOrderedToSit());
                 jumping = false;
                 navigation.stop();
                 setTarget(null);
-                return ActionResultType.sidedSuccess(level.isClientSide);
+                return InteractionResult.sidedSuccess(level.isClientSide);
             }
 
         } else if (canTame(player, stack)) {
@@ -580,11 +599,11 @@ public abstract class WorkDogEntity extends TameableEntity {
                 level.broadcastEntityEvent(this, (byte) 7);
 
             } else level.broadcastEntityEvent(this, (byte) 6);
-            return ActionResultType.sidedSuccess(level.isClientSide);
+            return InteractionResult.sidedSuccess(level.isClientSide);
 
         }
 
-        return ActionResultType.PASS;
+        return InteractionResult.PASS;
     }
 
     @Override

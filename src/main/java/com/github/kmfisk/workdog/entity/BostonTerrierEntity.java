@@ -1,13 +1,13 @@
 package com.github.kmfisk.workdog.entity;
 
 import com.github.kmfisk.workdog.entity.core.ToyDogEntity;
-import net.minecraft.entity.AgeableEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.AgableMob;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -15,11 +15,11 @@ import java.util.Collections;
 import java.util.List;
 
 public class BostonTerrierEntity extends ToyDogEntity {
-    public BostonTerrierEntity(EntityType<? extends TameableEntity> type, World world) {
+    public BostonTerrierEntity(EntityType<? extends TamableAnimal> type, Level world) {
         super(type, world);
     }
 
-    public static AttributeModifierMap.MutableAttribute registerAttributes() {
+    public static AttributeSupplier.Builder registerAttributes() {
         return createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.2F).add(Attributes.MAX_HEALTH, 6.0F).add(Attributes.ATTACK_DAMAGE, 1.0F);
     }
 
@@ -46,7 +46,7 @@ public class BostonTerrierEntity extends ToyDogEntity {
 
     @Nullable
     @Override
-    public AgeableEntity getBreedOffspring(ServerWorld world, AgeableEntity entity) {
+    public AgableMob getBreedOffspring(ServerLevel world, AgableMob entity) {
         return WorkDogEntities.BOSTON_TERRIER.create(world);
     }
 

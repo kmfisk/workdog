@@ -1,14 +1,14 @@
 package com.github.kmfisk.workdog.entity.core;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.Tags;
 
 import static com.github.kmfisk.workdog.tags.WorkDogTags.TOY_DOGS;
 
 public abstract class ToyDogEntity extends WorkDogEntity {
-    public ToyDogEntity(EntityType<? extends TameableEntity> type, World world) {
+    public ToyDogEntity(EntityType<? extends TamableAnimal> type, Level world) {
         super(type, world);
     }
 

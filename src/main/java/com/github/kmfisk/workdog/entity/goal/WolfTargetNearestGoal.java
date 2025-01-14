@@ -1,8 +1,8 @@
 package com.github.kmfisk.workdog.entity.goal;
 
 import com.github.kmfisk.workdog.entity.WDWolfEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.Difficulty;
 
 import java.util.function.Predicate;

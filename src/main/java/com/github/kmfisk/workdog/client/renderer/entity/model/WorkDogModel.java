@@ -1,10 +1,10 @@
 package com.github.kmfisk.workdog.client.renderer.entity.model;
 
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
-import net.minecraft.client.renderer.entity.model.SegmentedModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.client.model.ListModel;
+import net.minecraft.client.model.geom.ModelPart;
 
-public abstract class WorkDogModel<E extends WorkDogEntity> extends SegmentedModel<E> {
+public abstract class WorkDogModel<E extends WorkDogEntity> extends ListModel<E> {
     @Override
     public void prepareMobModel(E entity, float speed, float walkSpeed, float partialTick) {
         resetPose(entity, speed, walkSpeed, partialTick);
@@ -31,7 +31,7 @@ public abstract class WorkDogModel<E extends WorkDogEntity> extends SegmentedMod
 
     public abstract void playMovementAnimation(E entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch);
 
-    public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
+    public void setRotateAngle(ModelPart modelRenderer, float x, float y, float z) {
         modelRenderer.xRot = x;
         modelRenderer.yRot = y;
         modelRenderer.zRot = z;

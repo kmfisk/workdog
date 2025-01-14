@@ -2,11 +2,11 @@ package com.github.kmfisk.workdog.entity.goal;
 
 import com.github.kmfisk.workdog.config.WorkDogConfig;
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 
 import java.util.EnumSet;
 import java.util.Optional;
@@ -14,7 +14,7 @@ import java.util.Optional;
 public class DogBirthGoal extends Goal {
     private final WorkDogEntity mother;
     private WorkDogEntity sire;
-    World level;
+    Level level;
 
     public DogBirthGoal(WorkDogEntity dogEntity) {
         this.mother = dogEntity;
@@ -59,7 +59,7 @@ public class DogBirthGoal extends Goal {
                 if (entity instanceof WorkDogEntity) {
                     sire = (WorkDogEntity) entity; // create the sire dog for puppy referencing
                     for (int i = 0; i < mother.getPuppies(); i++)
-                        mother.spawnChildFromBreeding((ServerWorld) level, sire);
+                        mother.spawnChildFromBreeding((ServerLevel) level, sire);
                 }
             }
 

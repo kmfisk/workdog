@@ -1,23 +1,23 @@
 package com.github.kmfisk.workdog.inventory;
 
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
-public class WorkDogContainer extends Container {
-    private final IInventory container;
+public class WorkDogContainer extends AbstractContainerMenu {
+    private final Container container;
     public final WorkDogEntity dog;
 
-    public WorkDogContainer(int id, PlayerInventory playerInventory) {
-        this(id, playerInventory, new Inventory(5), null);
+    public WorkDogContainer(int id, Inventory playerInventory) {
+        this(id, playerInventory, new SimpleContainer(5), null);
     }
 
-    public WorkDogContainer(int id, PlayerInventory playerInventory, IInventory dogInventory, final WorkDogEntity dog) {
+    public WorkDogContainer(int id, Inventory playerInventory, Container dogInventory, final WorkDogEntity dog) {
         super(WDContainerTypes.WORK_DOG_CONTAINER.get(), id);
         this.container = dogInventory;
         this.dog = dog;
@@ -45,12 +45,12 @@ public class WorkDogContainer extends Container {
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         return container.stillValid(player) && dog.isAlive() && dog.distanceTo(player) < 8.0F;
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity player, int slotId) { // todo
+    public ItemStack quickMoveStack(Player player, int slotId) { // todo
         ItemStack stack = ItemStack.EMPTY;
         Slot slot = slots.get(slotId);
         if (slot != null && slot.hasItem()) {
@@ -83,7 +83,7 @@ public class WorkDogContainer extends Container {
     }
 
     @Override
-    public void removed(PlayerEntity player) {
+    public void removed(Player player) {
         super.removed(player);
         container.stopOpen(player);
     }

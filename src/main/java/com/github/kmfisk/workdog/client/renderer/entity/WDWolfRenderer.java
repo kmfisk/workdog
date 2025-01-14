@@ -3,22 +3,22 @@ package com.github.kmfisk.workdog.client.renderer.entity;
 import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.client.renderer.entity.model.WDWolfModel;
 import com.github.kmfisk.workdog.entity.WDWolfEntity;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.util.ResourceLocation;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
 public class WDWolfRenderer extends WorkDogRenderer<WDWolfEntity, WDWolfModel> {
-    public WDWolfRenderer(EntityRendererManager rendererManager) {
+    public WDWolfRenderer(EntityRenderDispatcher rendererManager) {
         super(rendererManager, new WDWolfModel.Adult(), 0.5f);
         adultModel = model;
         babyModel = new WDWolfModel.Baby();
     }
 
     @Override
-    protected void scale(WDWolfEntity entity, MatrixStack matrixStack, float partialTickTime) {
+    protected void scale(WDWolfEntity entity, PoseStack matrixStack, float partialTickTime) {
         matrixStack.scale(1.1F, 1.1F, 1.1F);
     }
 

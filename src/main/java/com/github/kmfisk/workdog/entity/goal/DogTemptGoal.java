@@ -2,17 +2,17 @@ package com.github.kmfisk.workdog.entity.goal;
 
 import com.github.kmfisk.workdog.entity.WDWolfEntity;
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
-import net.minecraft.entity.EntityPredicate;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.InteractionHand;
 
 import java.util.EnumSet;
 
 public class DogTemptGoal extends Goal {
     private final WorkDogEntity dog;
-    protected PlayerEntity player;
+    protected Player player;
     private final double speedModifier;
     private final float lookDistance;
     private double px;
@@ -21,13 +21,13 @@ public class DogTemptGoal extends Goal {
     private double pRotX;
     private double pRotY;
     private int lookTime;
-    private final EntityPredicate begTargeting;
+    private final TargetingConditions begTargeting;
 
     public DogTemptGoal(WorkDogEntity dog, double speedModifier) {
         this.dog = dog;
         this.speedModifier = speedModifier;
         this.lookDistance = 10.0F;
-        this.begTargeting = new EntityPredicate().range(lookDistance).allowInvulnerable().allowSameTeam().allowNonAttackable();
+        this.begTargeting = new TargetingConditions().range(lookDistance).allowInvulnerable().allowSameTeam().allowNonAttackable();
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }
 
@@ -84,8 +84,8 @@ public class DogTemptGoal extends Goal {
         --lookTime;
     }
 
-    private boolean playerHoldingInteresting(PlayerEntity playerEntity) {
-        for (Hand hand : Hand.values()) {
+    private boolean playerHoldingInteresting(Player playerEntity) {
+        for (InteractionHand hand : InteractionHand.values()) {
             ItemStack itemstack = playerEntity.getItemInHand(hand);
             if (dog.isFood(itemstack)) return true;
         }

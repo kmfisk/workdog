@@ -1,11 +1,11 @@
 package com.github.kmfisk.workdog.entity.core;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.goal.FollowOwnerGoal;
-import net.minecraft.entity.ai.goal.OwnerHurtTargetGoal;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
+import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.entity.living.LootingLevelEvent;
 
@@ -15,7 +15,7 @@ public abstract class HuntingDogEntity extends WorkDogEntity {
     private final OwnerHurtTargetGoal ownerHurtTargetGoal = new OwnerHurtTargetGoal(this);
     private final FollowOwnerGoal huntersFollowGoal = new FollowOwnerGoal(this, 1.5D, 4.0F, 2.0F, false);
 
-    public HuntingDogEntity(EntityType<? extends TameableEntity> type, World world) {
+    public HuntingDogEntity(EntityType<? extends TamableAnimal> type, Level world) {
         super(type, world);
     }
 

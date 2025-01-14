@@ -1,32 +1,34 @@
 package com.github.kmfisk.workdog.item;
 
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Supplier;
+
+import net.minecraft.world.item.Item.Properties;
 
 public class WorkDogSpawnEggItem extends ForgeSpawnEggItem {
     public WorkDogSpawnEggItem(Supplier<? extends EntityType<?>> type, Properties props) {
@@ -34,7 +36,7 @@ public class WorkDogSpawnEggItem extends ForgeSpawnEggItem {
     }
 
     @Override
-    public ActionResult<ItemStack> use(World level, PlayerEntity player, Hand hand) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
         EntityType<?> entityType = getType(itemStack.getTag());
         Entity entity = entityType.create(level);
@@ -52,40 +54,40 @@ public class WorkDogSpawnEggItem extends ForgeSpawnEggItem {
                     setVariant = currentVariant == maxVariants ? -1 : Math.min(currentVariant + 1, maxVariants);
                 } else setVariant = 0;
                 String message = setVariant == -1 ? "Random" : String.valueOf(setVariant);
-                player.displayClientMessage(new StringTextComponent(message), true);
+                player.displayClientMessage(new TextComponent(message), true);
                 if (setVariant == -1) itemStack.removeTagKey("Variant");
                 else itemStack.getOrCreateTag().putInt("Variant", setVariant);
             }
         }
 
-        BlockRayTraceResult rayTraceResult = getPlayerPOVHitResult(level, player, RayTraceContext.FluidMode.SOURCE_ONLY);
-        if (rayTraceResult.getType() != RayTraceResult.Type.BLOCK) return ActionResult.pass(itemStack);
-        else if (!(level instanceof ServerWorld)) return ActionResult.success(itemStack);
+        BlockHitResult rayTraceResult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
+        if (rayTraceResult.getType() != HitResult.Type.BLOCK) return InteractionResultHolder.pass(itemStack);
+        else if (!(level instanceof ServerLevel)) return InteractionResultHolder.success(itemStack);
         else {
             BlockPos blockPos = rayTraceResult.getBlockPos();
-            if (!(level.getBlockState(blockPos).getBlock() instanceof FlowingFluidBlock))
-                return ActionResult.pass(itemStack);
+            if (!(level.getBlockState(blockPos).getBlock() instanceof LiquidBlock))
+                return InteractionResultHolder.pass(itemStack);
 
             if (level.mayInteract(player, blockPos) && player.mayUseItemAt(blockPos, rayTraceResult.getDirection(), itemStack)) {
-                if (entityType.spawn((ServerWorld) level, itemStack, player, blockPos, SpawnReason.SPAWN_EGG, false, false) == null)
-                    return ActionResult.pass(itemStack);
+                if (entityType.spawn((ServerLevel) level, itemStack, player, blockPos, MobSpawnType.SPAWN_EGG, false, false) == null)
+                    return InteractionResultHolder.pass(itemStack);
                 else {
                     if (!player.abilities.instabuild) itemStack.shrink(1);
                     player.awardStat(Stats.ITEM_USED.get(this));
-                    return ActionResult.consume(itemStack);
+                    return InteractionResultHolder.consume(itemStack);
                 }
             } else {
-                return ActionResult.fail(itemStack);
+                return InteractionResultHolder.fail(itemStack);
             }
         }
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World level, List<ITextComponent> tooltip, ITooltipFlag isAdvanced) {
-        CompoundNBT nbt = stack.getTag();
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag isAdvanced) {
+        CompoundTag nbt = stack.getTag();
         if (nbt != null && nbt.contains("Variant")) {
             int variant = nbt.getInt("Variant");
-            tooltip.add(new TranslationTextComponent("tooltip.workdog.spawn_egg.variant", variant).withStyle(TextFormatting.GRAY));
+            tooltip.add(new TranslatableComponent("tooltip.workdog.spawn_egg.variant", variant).withStyle(ChatFormatting.GRAY));
         }
     }
 }

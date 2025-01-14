@@ -3,22 +3,22 @@ package com.github.kmfisk.workdog.client.renderer.entity;
 import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.client.renderer.entity.model.GermanShepherdModel;
 import com.github.kmfisk.workdog.entity.GermanShepherdEntity;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.util.ResourceLocation;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
 public class GermanShepherdRenderer extends WorkDogRenderer<GermanShepherdEntity, GermanShepherdModel> {
-    public GermanShepherdRenderer(EntityRendererManager rendererManager) {
+    public GermanShepherdRenderer(EntityRenderDispatcher rendererManager) {
         super(rendererManager, new GermanShepherdModel.Adult(), 0.5f);
         adultModel = model;
         babyModel = new GermanShepherdModel.Baby();
     }
 
     @Override
-    protected void scale(GermanShepherdEntity entity, MatrixStack matrixStack, float partialTickTime) {
+    protected void scale(GermanShepherdEntity entity, PoseStack matrixStack, float partialTickTime) {
         matrixStack.scale(0.9F, 0.9F, 0.9F);
     }
 

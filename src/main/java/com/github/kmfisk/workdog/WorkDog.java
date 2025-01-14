@@ -10,8 +10,8 @@ import com.github.kmfisk.workdog.entity.merchant.villager.WorkDogVillagers;
 import com.github.kmfisk.workdog.inventory.WDContainerTypes;
 import com.github.kmfisk.workdog.item.WorkDogItems;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
@@ -28,7 +28,7 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 @Mod(WorkDog.MOD_ID)
 public class WorkDog {
     public static final String MOD_ID = "workdog";
-    public static final ItemGroup ITEM_GROUP = new ItemGroup(MOD_ID + ".group") {
+    public static final CreativeModeTab ITEM_GROUP = new CreativeModeTab(MOD_ID + ".group") {
         @Override
         public ItemStack makeIcon() {
             return new ItemStack(WorkDogItems.CRATE.get());
