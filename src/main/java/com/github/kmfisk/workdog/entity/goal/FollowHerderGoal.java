@@ -2,16 +2,16 @@ package com.github.kmfisk.workdog.entity.goal;
 
 import com.github.kmfisk.workdog.entity.core.HerdingDogEntity;
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.LevelReader;
 
 import java.util.EnumSet;
 
@@ -91,7 +91,7 @@ public class FollowHerderGoal extends Goal {
             return false;
         else if (!canTeleportTo(new BlockPos(posX, posY, posZ))) return false;
         else {
-            livestock.moveTo((double) posX + 0.5D, posY, (double) posZ + 0.5D, livestock.yRot, livestock.xRot);
+            livestock.moveTo((double) posX + 0.5D, posY, (double) posZ + 0.5D, livestock.getYRot(), livestock.getXRot());
             navigation.stop();
             return true;
         }

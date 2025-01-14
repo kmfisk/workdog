@@ -4,15 +4,15 @@ import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.client.renderer.entity.model.PitBullModel;
 import com.github.kmfisk.workdog.entity.PitBullEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
 public class PitBullRenderer extends WorkDogRenderer<PitBullEntity, PitBullModel> {
-    public PitBullRenderer(EntityRenderDispatcher rendererManager) {
-        super(rendererManager, new PitBullModel.Adult(), 0.5f);
+    public PitBullRenderer(EntityRendererProvider.Context context) {
+        super(context, new PitBullModel.Adult(), 0.5f);
         adultModel = model;
         babyModel = new PitBullModel.Baby();
     }

@@ -4,15 +4,15 @@ import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.client.renderer.entity.model.JackRussellTerrierModel;
 import com.github.kmfisk.workdog.entity.JackRussellTerrierEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
 public class JackRussellTerrierRenderer extends WorkDogRenderer<JackRussellTerrierEntity, JackRussellTerrierModel> {
-    public JackRussellTerrierRenderer(EntityRenderDispatcher rendererManager) {
-        super(rendererManager, new JackRussellTerrierModel.Adult(), 0.5f);
+    public JackRussellTerrierRenderer(EntityRendererProvider.Context context) {
+        super(context, new JackRussellTerrierModel.Adult(), 0.5f);
         adultModel = model;
         babyModel = new JackRussellTerrierModel.Baby();
     }

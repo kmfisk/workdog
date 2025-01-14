@@ -1,14 +1,13 @@
 package com.github.kmfisk.workdog.entity;
 
 import com.github.kmfisk.workdog.entity.core.ProtectionDogEntity;
-import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
-import net.minecraft.world.entity.AgableMob;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.level.Level;
-import net.minecraft.server.level.ServerLevel;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -47,7 +46,7 @@ public class GermanShepherdEntity extends ProtectionDogEntity {
 
     @Nullable
     @Override
-    public AgableMob getBreedOffspring(ServerLevel world, AgableMob entity) {
+    public AgeableMob getBreedOffspring(ServerLevel world, AgeableMob entity) {
         return WorkDogEntities.GERMAN_SHEPHERD.create(world);
     }
 

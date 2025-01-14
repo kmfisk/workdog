@@ -2,9 +2,9 @@ package com.github.kmfisk.workdog.client.color;
 
 import com.github.kmfisk.workdog.block.WorkDogBlocks;
 import com.github.kmfisk.workdog.item.WorkDogItems;
+import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeableLeatherItem;
-import net.minecraft.client.renderer.BiomeColors;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 
 public class ColorEvents {

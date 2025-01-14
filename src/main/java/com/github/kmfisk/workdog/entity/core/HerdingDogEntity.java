@@ -1,11 +1,11 @@
 package com.github.kmfisk.workdog.entity.core;
 
 import com.github.kmfisk.workdog.entity.goal.FollowHerderGoal;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.Tags;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ public abstract class HerdingDogEntity extends WorkDogEntity {
     }
 
     @Override
-    public Tags.IOptionalNamedTag<EntityType<?>> getWorkGroupTag() {
+    public TagKey<EntityType<?>> getWorkGroupTag() {
         return HERDING_DOGS;
     }
 

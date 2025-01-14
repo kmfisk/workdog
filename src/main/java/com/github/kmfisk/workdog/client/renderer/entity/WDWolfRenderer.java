@@ -4,15 +4,15 @@ import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.client.renderer.entity.model.WDWolfModel;
 import com.github.kmfisk.workdog.entity.WDWolfEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
 public class WDWolfRenderer extends WorkDogRenderer<WDWolfEntity, WDWolfModel> {
-    public WDWolfRenderer(EntityRenderDispatcher rendererManager) {
-        super(rendererManager, new WDWolfModel.Adult(), 0.5f);
+    public WDWolfRenderer(EntityRendererProvider.Context context) {
+        super(context, new WDWolfModel.Adult(), 0.5f);
         adultModel = model;
         babyModel = new WDWolfModel.Baby();
     }

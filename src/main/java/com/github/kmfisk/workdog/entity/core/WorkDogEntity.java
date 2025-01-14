@@ -6,59 +6,44 @@ import com.github.kmfisk.workdog.entity.goal.*;
 import com.github.kmfisk.workdog.item.WorkDogItems;
 import com.github.kmfisk.workdog.tags.WorkDogTags;
 import com.google.common.collect.Lists;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.util.*;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.level.GameRules;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.Level;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraftforge.common.Tags;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.AgableMob;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.SpawnGroupData;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
-import net.minecraft.world.entity.ai.goal.LeapAtTargetGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 
 public abstract class WorkDogEntity extends TamableAnimal {
     public static final EntityDataAccessor<Boolean> GENDER = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.BOOLEAN);
@@ -154,7 +139,7 @@ public abstract class WorkDogEntity extends TamableAnimal {
     }
 
     @Nullable
-    public abstract Tags.IOptionalNamedTag<EntityType<?>> getWorkGroupTag();
+    public abstract TagKey<EntityType<?>> getWorkGroupTag();
 
     public Gender getGender() {
         return Gender.fromBool(entityData.get(GENDER));
@@ -411,7 +396,7 @@ public abstract class WorkDogEntity extends TamableAnimal {
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return WorkDogTags.RAW_MEAT.contains(stack.getItem());
+        return stack.is(WorkDogTags.RAW_MEAT);
     }
 
     public boolean canTame(Player player, ItemStack stack) {
@@ -485,19 +470,19 @@ public abstract class WorkDogEntity extends TamableAnimal {
     public void spawnChildFromBreeding(ServerLevel world, Animal entity) {
         if (entity instanceof WorkDogEntity) {
             WorkDogEntity sire = (WorkDogEntity) entity;
-            AgableMob childBreedType;
+            AgeableMob childBreedType;
             boolean purebred = getType() == sire.getType();
             if (purebred || random.nextBoolean()) {
                 childBreedType = getBreedOffspring(world, sire);
                 if (purebred && random.nextInt(100) < 2 && getWorkGroupTag() != null) {
-                    Entity newBreed = getWorkGroupTag().getRandomElement(random).create(world);
+                    Entity newBreed = ForgeRegistries.ENTITIES.tags().getTag(getWorkGroupTag()).stream().findAny().get().create(world);
                     if (newBreed instanceof WorkDogEntity)
                         childBreedType = ((WorkDogEntity) newBreed).getBreedOffspring(world, this);
                 }
             } else childBreedType = sire.getBreedOffspring(world, this);
             if (!purebred && random.nextInt(100) < 5 && getWorkGroupTag() != null) {
-                Tags.IOptionalNamedTag<EntityType<?>> newBreedTag = random.nextBoolean() && sire.getWorkGroupTag() != null ? sire.getWorkGroupTag() : getWorkGroupTag();
-                Entity newBreed = newBreedTag.getRandomElement(random).create(world);
+                TagKey<EntityType<?>> newBreedTag = random.nextBoolean() && sire.getWorkGroupTag() != null ? sire.getWorkGroupTag() : getWorkGroupTag();
+                Entity newBreed = ForgeRegistries.ENTITIES.tags().getTag(newBreedTag).stream().findAny().get().create(world);
                 if (newBreed instanceof WorkDogEntity)
                     childBreedType = ((WorkDogEntity) newBreed).getBreedOffspring(world, this);
             }
@@ -574,7 +559,7 @@ public abstract class WorkDogEntity extends TamableAnimal {
                     return InteractionResult.sidedSuccess(level.isClientSide);
                 }
             } else if (isFood(stack) && getHealth() < getMaxHealth()) {
-                usePlayerItem(player, stack);
+                usePlayerItem(player, hand, stack);
                 heal(2.0F);
                 return InteractionResult.sidedSuccess(level.isClientSide);
 
@@ -587,7 +572,7 @@ public abstract class WorkDogEntity extends TamableAnimal {
             }
 
         } else if (canTame(player, stack)) {
-            if (!player.abilities.instabuild) stack.shrink(1);
+            if (!player.getAbilities().instabuild) stack.shrink(1);
 
             if (random.nextInt(3) == 0 && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, player)) {
                 tame(player);
@@ -615,7 +600,8 @@ public abstract class WorkDogEntity extends TamableAnimal {
     @Override
     protected SoundEvent getAmbientSound() {
         /*if (isAngry()) return SoundEvents.WOLF_GROWL;
-        else*/ if (random.nextInt(3) == 0)
+        else*/
+        if (random.nextInt(3) == 0)
             return isTame() && getHealth() < getMaxHealth() / 2 ? SoundEvents.WOLF_WHINE : SoundEvents.WOLF_PANT;
         else return SoundEvents.WOLF_AMBIENT;
     }

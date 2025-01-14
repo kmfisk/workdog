@@ -1,9 +1,9 @@
 package com.github.kmfisk.workdog.entity.goal;
 
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
+import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
-import net.minecraft.world.entity.EntitySelector;
 
 public class DogAvoidEntityGoal<T extends LivingEntity> extends AvoidEntityGoal<T> {
     private final WorkDogEntity dog;

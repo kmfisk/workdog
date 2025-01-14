@@ -1,29 +1,27 @@
 package com.github.kmfisk.workdog.item;
 
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.Util;
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class CrateItem extends Item {
     public CrateItem(Properties properties) {
@@ -65,7 +63,7 @@ public class CrateItem extends Item {
         if (dog.isTame()) tags.putString("OwnerName", player.getName().getString());
         if (dog.hasCustomName()) tags.putString("DisplayName", dog.getDisplayName().getString());
 
-        dog.remove();
+        dog.discard();
         player.displayClientMessage(new TranslatableComponent("chat.workdog.crate.capture", dog.getDisplayName()), true);
 
         ItemStack newStack = new ItemStack(this);

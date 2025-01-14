@@ -2,11 +2,11 @@ package com.github.kmfisk.workdog.entity.goal;
 
 import com.github.kmfisk.workdog.entity.WDWolfEntity;
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.InteractionHand;
 
 import java.util.EnumSet;
 
@@ -27,7 +27,7 @@ public class DogTemptGoal extends Goal {
         this.dog = dog;
         this.speedModifier = speedModifier;
         this.lookDistance = 10.0F;
-        this.begTargeting = new TargetingConditions().range(lookDistance).allowInvulnerable().allowSameTeam().allowNonAttackable();
+        this.begTargeting = TargetingConditions.forNonCombat().range(lookDistance).ignoreLineOfSight();
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }
 
@@ -45,7 +45,7 @@ public class DogTemptGoal extends Goal {
             if (dog.distanceToSqr(player) < 36.0D) {
                 if (player.distanceToSqr(px, py, pz) > 0.010000000000000002D)
                     return false;
-                if (Math.abs((double) player.xRot - pRotX) > 5.0D || Math.abs((double) player.yRot - pRotY) > 5.0D)
+                if (Math.abs((double) player.getXRot() - pRotX) > 5.0D || Math.abs((double) player.getYRot() - pRotY) > 5.0D)
                     return false;
             } else {
                 px = player.getX();
@@ -53,8 +53,8 @@ public class DogTemptGoal extends Goal {
                 pz = player.getZ();
             }
 
-            pRotX = player.xRot;
-            pRotY = player.yRot;
+            pRotX = player.getXRot();
+            pRotY = player.getYRot();
         }
 
         return lookTime > 0 && playerHoldingInteresting(player);

@@ -4,15 +4,15 @@ import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.client.renderer.entity.model.GermanShepherdModel;
 import com.github.kmfisk.workdog.entity.GermanShepherdEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
 public class GermanShepherdRenderer extends WorkDogRenderer<GermanShepherdEntity, GermanShepherdModel> {
-    public GermanShepherdRenderer(EntityRenderDispatcher rendererManager) {
-        super(rendererManager, new GermanShepherdModel.Adult(), 0.5f);
+    public GermanShepherdRenderer(EntityRendererProvider.Context context) {
+        super(context, new GermanShepherdModel.Adult(), 0.5f);
         adultModel = model;
         babyModel = new GermanShepherdModel.Baby();
     }

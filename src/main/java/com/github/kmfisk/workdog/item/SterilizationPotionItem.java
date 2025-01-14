@@ -1,26 +1,24 @@
 package com.github.kmfisk.workdog.item;
 
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.network.chat.Component;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class SterilizationPotionItem extends Item {
     public SterilizationPotionItem(Properties properties) {
@@ -33,9 +31,9 @@ public class SterilizationPotionItem extends Item {
             WorkDogEntity dog = (WorkDogEntity) target;
             if ((!dog.isTame() || (dog.isTame() && dog.isOwnedBy(player))) && player.isCrouching() && !dog.isInfertile()) {
                 for (int i = 0; i < 7; ++i) {
-                    double d0 = random.nextGaussian() * 0.02D;
-                    double d1 = random.nextGaussian() * 0.02D;
-                    double d2 = random.nextGaussian() * 0.02D;
+                    double d0 = dog.getRandom().nextGaussian() * 0.02D;
+                    double d1 = dog.getRandom().nextGaussian() * 0.02D;
+                    double d2 = dog.getRandom().nextGaussian() * 0.02D;
                     dog.level.addParticle(ParticleTypes.HAPPY_VILLAGER, dog.getRandomX(1.0D), dog.getRandomY() + 0.5D, dog.getRandomZ(1.0D), d0, d1, d2);
                 }
                 if (!target.level.isClientSide()) {
@@ -47,7 +45,7 @@ public class SterilizationPotionItem extends Item {
                         stack.shrink(1);
                         if (stack.isEmpty())
                             player.setItemInHand(hand, emptyBottle);
-                        else if (!player.inventory.add(emptyBottle))
+                        else if (!player.getInventory().add(emptyBottle))
                             player.drop(emptyBottle, false);
                     }
                 }

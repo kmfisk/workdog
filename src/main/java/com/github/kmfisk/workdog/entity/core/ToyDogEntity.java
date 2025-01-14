@@ -1,9 +1,9 @@
 package com.github.kmfisk.workdog.entity.core;
 
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.Tags;
 
 import static com.github.kmfisk.workdog.tags.WorkDogTags.TOY_DOGS;
 
@@ -13,7 +13,7 @@ public abstract class ToyDogEntity extends WorkDogEntity {
     }
 
     @Override
-    public Tags.IOptionalNamedTag<EntityType<?>> getWorkGroupTag() {
+    public TagKey<EntityType<?>> getWorkGroupTag() {
         return TOY_DOGS;
     }
 }

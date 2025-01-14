@@ -2,16 +2,16 @@ package com.github.kmfisk.workdog.entity.goal;
 
 import com.github.kmfisk.workdog.config.WorkDogConfig;
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.level.Level;
 
 import java.util.EnumSet;
 import java.util.List;
 
 public class DogBreedGoal extends Goal {
-    private static final TargetingConditions PARTNER_TARGETING = (new TargetingConditions()).range(8.0D).allowInvulnerable().allowSameTeam().allowUnseeable();
+    private static final TargetingConditions PARTNER_TARGETING = (TargetingConditions.forNonCombat()).range(8.0D).ignoreLineOfSight();
     private static final double NEARBY_RADIUS_CHECK = 16.0D;
     private final double moveSpeed;
     private final WorkDogEntity dog;
@@ -41,7 +41,7 @@ public class DogBreedGoal extends Goal {
             return false;
 
         target = getNearbyMate();
-        if (target != null && dog.getSensing().canSee(target) && target.getBreedingStatus("inheat")) {
+        if (target != null && dog.getSensing().hasLineOfSight(target) && target.getBreedingStatus("inheat")) {
             if (target.isInfertile()) return false;
             if (!target.isTame()) return true;
             LivingEntity targetOwner = target.getOwner();
@@ -62,7 +62,7 @@ public class DogBreedGoal extends Goal {
         nearbyDogs = level.getEntitiesOfClass(WorkDogEntity.class, dog.getBoundingBox().inflate(NEARBY_RADIUS_CHECK));
 
         return maleCooldownCheck && target.isAlive() && femaleHeatCheck && breedDelay < 60
-                && nearbyDogs.size() < WorkDogConfig.breedingLimit.get() && dog.getSensing().canSee(target);
+                && nearbyDogs.size() < WorkDogConfig.breedingLimit.get() && dog.getSensing().hasLineOfSight(target);
     }
 
     private boolean ownerExceedsLimit(WorkDogEntity tamedDog, LivingEntity owner) {

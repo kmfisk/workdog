@@ -4,15 +4,14 @@ import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.client.renderer.entity.*;
 import com.github.kmfisk.workdog.item.WorkDogItems;
 import com.github.kmfisk.workdog.item.WorkDogSpawnEggItem;
-import net.minecraft.entity.*;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.util.Tuple;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.item.Item;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraftforge.common.ForgeSpawnEggItem;
-import net.minecraftforge.fml.client.registry.IRenderFactory;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.fml.common.thread.EffectiveSide;
+import net.minecraftforge.fml.util.thread.EffectiveSide;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -21,16 +20,10 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.entity.SpawnPlacements;
-
 public class WorkDogEntities {
     public static final DeferredRegister<EntityType<?>> REGISTRAR = DeferredRegister.create(ForgeRegistries.ENTITIES, WorkDog.MOD_ID);
     private static final List<Tuple<EntityType<? extends LivingEntity>, Supplier<AttributeSupplier.Builder>>> ATTRIBUTES = new ArrayList<>();
-    private static final List<Tuple<EntityType<?>, Supplier<IRenderFactory<?>>>> RENDERERS = new ArrayList<>();
+    private static final List<Tuple<EntityType<?>, Supplier<EntityRendererProvider<?>>>> RENDERERS = new ArrayList<>();
 
     public static final EntityType<WDWolfEntity> WOLF = register("wolf", WDWolfEntity::new, MobCategory.CREATURE,
             WDWolfEntity::registerAttributes, () -> WDWolfRenderer::new, 0.95F, 1.2F);
@@ -59,8 +52,8 @@ public class WorkDogEntities {
     }
 
     public static void registerRenderers() {
-        for (Tuple<EntityType<?>, Supplier<IRenderFactory<?>>> renderer : RENDERERS)
-            RenderingRegistry.registerEntityRenderingHandler(renderer.getA(), cast(renderer.getB().get()));
+        for (Tuple<EntityType<?>, Supplier<EntityRendererProvider<?>>> renderer : RENDERERS)
+            EntityRenderers.register(renderer.getA(), cast(renderer.getB().get()));
 
         RENDERERS.clear();
     }
@@ -70,7 +63,7 @@ public class WorkDogEntities {
         return (T) from;
     }
 
-    private static <T extends Entity> EntityType<T> register(String name, EntityType.EntityFactory<T> factory, MobCategory classification, Supplier<AttributeSupplier.Builder> attributes, Supplier<IRenderFactory<? super T>> renderer, float width, float height) {
+    private static <T extends Entity> EntityType<T> register(String name, EntityType.EntityFactory<T> factory, MobCategory classification, Supplier<AttributeSupplier.Builder> attributes, Supplier<EntityRendererProvider<? super T>> renderer, float width, float height) {
         EntityType<T> type = EntityType.Builder.of(factory, classification).sized(width, height).clientTrackingRange(10).build(name);
         REGISTRAR.register(name, () -> type);
         if (attributes != null) ATTRIBUTES.add(new Tuple<>(cast(type), attributes));

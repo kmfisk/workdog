@@ -3,41 +3,32 @@ package com.github.kmfisk.workdog.entity;
 import com.github.kmfisk.workdog.config.WorkDogConfig;
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
 import com.github.kmfisk.workdog.entity.goal.*;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.entity.*;
-import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.world.entity.monster.Enemy;
-import net.minecraft.world.entity.TamableAnimal;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
-import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biome;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.Tags;
-
-import javax.annotation.Nullable;
-import java.util.*;
-
-import net.minecraft.world.entity.AgableMob;
-import net.minecraft.world.entity.AgableMob.AgableMobGroupData;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LeapAtTargetGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.BiomeDictionary;
+
+import javax.annotation.Nullable;
+import java.util.*;
 
 public class WDWolfEntity extends WorkDogEntity {
     public WDWolfEntity(EntityType<? extends TamableAnimal> type, Level world) {
@@ -49,7 +40,7 @@ public class WDWolfEntity extends WorkDogEntity {
     }
 
     @Override
-    public Tags.IOptionalNamedTag<EntityType<?>> getWorkGroupTag() {
+    public TagKey<EntityType<?>> getWorkGroupTag() {
         return null;
     }
 
@@ -73,11 +64,11 @@ public class WDWolfEntity extends WorkDogEntity {
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
         if (spawnData == null) {
-            if (!WorkDogConfig.pedigreeMode.get()) spawnData = new AgableMobGroupData(0.1F);
-            else spawnData = new AgableMobGroupData(false);
+            if (!WorkDogConfig.pedigreeMode.get()) spawnData = new AgeableMobGroupData(0.1F);
+            else spawnData = new AgeableMobGroupData(false);
         }
         spawnData = super.finalizeSpawn(world, difficulty, reason, spawnData, dataTag);
-        Set<BiomeDictionary.Type> biomeTypes = BiomeDictionary.getTypes(ResourceKey.create(Registry.BIOME_REGISTRY, world.getLevel().getBiome(blockPosition()).getRegistryName()));
+        Set<BiomeDictionary.Type> biomeTypes = BiomeDictionary.getTypes(ResourceKey.create(Registry.BIOME_REGISTRY, world.getLevel().getBiome(blockPosition()).value().getRegistryName()));
         if (biomeTypes.contains(BiomeDictionary.Type.SNOWY))
             setVariant(dataTag != null && dataTag.contains("Variant") ? dataTag.getInt("Variant") : 3);
         return spawnData;
@@ -105,11 +96,11 @@ public class WDWolfEntity extends WorkDogEntity {
 
     @Nullable
     @Override
-    public AgableMob getBreedOffspring(ServerLevel world, AgableMob entity) {
+    public AgeableMob getBreedOffspring(ServerLevel world, AgeableMob entity) {
         if (entity instanceof WorkDogEntity) {
             WorkDogEntity baby = WorkDogEntities.WOLF.create(world);
             if (random.nextFloat() <= 0.05F) {
-                Biome biome = level.getBiome(blockPosition());
+                Biome biome = level.getBiome(blockPosition()).value();
                 Set<BiomeDictionary.Type> biomeTypes = BiomeDictionary.getTypes(ResourceKey.create(Registry.BIOME_REGISTRY, biome.getRegistryName()));
                 if (biomeTypes.contains(BiomeDictionary.Type.PLAINS) && !biomeTypes.contains(BiomeDictionary.Type.HOT) && !biomeTypes.contains(BiomeDictionary.Type.COLD)) {
                     baby = WorkDogEntities.PIT_BULL.create(world);
@@ -130,7 +121,7 @@ public class WDWolfEntity extends WorkDogEntity {
     public static boolean checkWolfSpawnRules(EntityType<? extends WDWolfEntity> entityType, ServerLevelAccessor world, MobSpawnType spawnReason, BlockPos pos, Random random) {
         BlockState blockState = world.getBlockState(pos.below());
         return (blockState.is(Blocks.GRASS_BLOCK) || blockState.is(Blocks.SNOW) || blockState.is(BlockTags.ICE)
-                || Tags.Blocks.SAND.contains(blockState.getBlock()) || Tags.Blocks.DIRT.contains(blockState.getBlock()))
+                || blockState.is(BlockTags.SAND) || blockState.is(BlockTags.DIRT))
                 && world.getRawBrightness(pos, 0) < 13;
     }
 

@@ -3,16 +3,16 @@ package com.github.kmfisk.workdog.client.renderer.entity;
 import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Matrix4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
-import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.resources.ResourceLocation;
-import com.mojang.math.Matrix4f;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.ForgeHooksClient;
 
 import java.util.List;
@@ -25,8 +25,8 @@ public abstract class WorkDogRenderer<T extends WorkDogEntity, M extends EntityM
     protected ResourceLocation adult_loc;
     protected List<String> variants;
 
-    public WorkDogRenderer(EntityRenderDispatcher rendererManager, M model, float shadowRadius) {
-        super(rendererManager, model, shadowRadius);
+    public WorkDogRenderer(EntityRendererProvider.Context context, M model, float shadowRadius) {
+        super(context, model, shadowRadius);
     }
 
     @Override

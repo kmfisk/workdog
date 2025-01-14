@@ -3,9 +3,9 @@ package com.github.kmfisk.workdog.entity.goal;
 import com.github.kmfisk.workdog.config.WorkDogConfig;
 import com.github.kmfisk.workdog.entity.core.HerdingDogEntity;
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class HerdLivestockGoal extends Goal {
-    private static final TargetingConditions LIVESTOCK_TARGETING = new TargetingConditions().range(16.0D).selector((entity) -> WorkDogConfig.herderLivestockList.get().contains(Objects.requireNonNull(entity.getType().getRegistryName()).toString()));
+    private static final TargetingConditions LIVESTOCK_TARGETING = TargetingConditions.forNonCombat().range(16.0D).selector((entity) -> WorkDogConfig.herderLivestockList.get().contains(Objects.requireNonNull(entity.getType().getRegistryName()).toString()));
     protected final HerdingDogEntity herder;
     protected final Level level;
     protected Mob livestock;
