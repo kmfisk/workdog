@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[36.2,)"
+loaderVersion="[40,)"
 license="All rights reserved"
 issueTrackerURL="https://github.com/kmfisk/workdog/issues"
 
@@ -12,19 +12,18 @@ issueTrackerURL="https://github.com/kmfisk/workdog/issues"
     logoFile="icon.png"
     credits=""
     authors="fisk, Mnesikos"
-    description='''
-Dogs that do work.
-    '''
+    description='''Dogs that do work.'''
+
 [[dependencies.workdog]]
     modId="forge"
     mandatory=true
-    versionRange="[36.2,)"
+    versionRange="[40,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.workdog]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.5,1.17)"
+    versionRange="[1.18.2,1.19)"
     ordering="NONE"
     side="BOTH"
