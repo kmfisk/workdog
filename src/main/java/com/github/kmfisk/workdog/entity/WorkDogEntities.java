@@ -2,6 +2,7 @@ package com.github.kmfisk.workdog.entity;
 
 import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.client.renderer.entity.*;
+import com.github.kmfisk.workdog.client.renderer.entity.model.*;
 import com.github.kmfisk.workdog.item.WorkDogItems;
 import com.github.kmfisk.workdog.item.WorkDogSpawnEggItem;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -11,6 +12,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.fml.util.thread.EffectiveSide;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -58,6 +60,23 @@ public class WorkDogEntities {
         RENDERERS.clear();
     }
 
+    public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(WDWolfModel.ADULT_LAYER, WDWolfModel.Adult::createBodyLayer);
+        event.registerLayerDefinition(WDWolfModel.BABY_LAYER, WDWolfModel.Baby::createBodyLayer);
+        event.registerLayerDefinition(AkitaModel.ADULT_LAYER, AkitaModel.Adult::createBodyLayer);
+        event.registerLayerDefinition(AkitaModel.BABY_LAYER, AkitaModel.Baby::createBodyLayer);
+        event.registerLayerDefinition(BorderCollieModel.ADULT_LAYER, BorderCollieModel.Adult::createBodyLayer);
+        event.registerLayerDefinition(BorderCollieModel.BABY_LAYER, BorderCollieModel.Baby::createBodyLayer);
+        event.registerLayerDefinition(BostonTerrierModel.ADULT_LAYER, BostonTerrierModel.Adult::createBodyLayer);
+        event.registerLayerDefinition(BostonTerrierModel.BABY_LAYER, BostonTerrierModel.Baby::createBodyLayer);
+        event.registerLayerDefinition(GermanShepherdModel.ADULT_LAYER, GermanShepherdModel.Adult::createBodyLayer);
+        event.registerLayerDefinition(GermanShepherdModel.BABY_LAYER, GermanShepherdModel.Baby::createBodyLayer);
+        event.registerLayerDefinition(JackRussellTerrierModel.ADULT_LAYER, JackRussellTerrierModel.Adult::createBodyLayer);
+        event.registerLayerDefinition(JackRussellTerrierModel.BABY_LAYER, JackRussellTerrierModel.Baby::createBodyLayer);
+        event.registerLayerDefinition(PitBullModel.ADULT_LAYER, PitBullModel.Adult::createBodyLayer);
+        event.registerLayerDefinition(PitBullModel.BABY_LAYER, PitBullModel.Baby::createBodyLayer);
+    }
+
     @SuppressWarnings("unchecked")
     private static <T, F> T cast(F from) {
         return (T) from;
@@ -68,7 +87,7 @@ public class WorkDogEntities {
         REGISTRAR.register(name, () -> type);
         if (attributes != null) ATTRIBUTES.add(new Tuple<>(cast(type), attributes));
         if (EffectiveSide.get().isClient() && renderer != null) RENDERERS.add(new Tuple<>(cast(type), cast(renderer)));
-        WorkDogItems.SPAWN_EGGS.put(type, WorkDogItems.REGISTRAR.register(name + "_spawn_egg", () -> new WorkDogSpawnEggItem(() -> type, new Item.Properties().tab(WorkDog.ITEM_GROUP))));
+        WorkDogItems.SPAWN_EGGS.put(type, WorkDogItems.REGISTRAR.register(name + "_spawn_egg", () -> new WorkDogSpawnEggItem(() -> (EntityType<? extends Mob>) type, new Item.Properties().tab(WorkDog.ITEM_GROUP))));
         return type;
     }
 }

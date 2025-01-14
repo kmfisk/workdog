@@ -12,9 +12,9 @@ import java.util.Locale;
 
 public class WDWolfRenderer extends WorkDogRenderer<WDWolfEntity, WDWolfModel> {
     public WDWolfRenderer(EntityRendererProvider.Context context) {
-        super(context, new WDWolfModel.Adult(), 0.5f);
+        super(context, new WDWolfModel.Adult(context.bakeLayer(WDWolfModel.ADULT_LAYER)), 0.5f);
         adultModel = model;
-        babyModel = new WDWolfModel.Baby();
+        babyModel = new WDWolfModel.Baby(context.bakeLayer(WDWolfModel.BABY_LAYER));
     }
 
     @Override

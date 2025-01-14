@@ -12,9 +12,9 @@ import java.util.Locale;
 
 public class PitBullRenderer extends WorkDogRenderer<PitBullEntity, PitBullModel> {
     public PitBullRenderer(EntityRendererProvider.Context context) {
-        super(context, new PitBullModel.Adult(), 0.5f);
+        super(context, new PitBullModel.Adult(context.bakeLayer(PitBullModel.ADULT_LAYER)), 0.5f);
         adultModel = model;
-        babyModel = new PitBullModel.Baby();
+        babyModel = new PitBullModel.Baby(context.bakeLayer(PitBullModel.BABY_LAYER));
     }
 
     @Override

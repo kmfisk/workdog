@@ -12,9 +12,9 @@ import java.util.Locale;
 
 public class BostonTerrierRenderer extends WorkDogRenderer<BostonTerrierEntity, BostonTerrierModel> {
     public BostonTerrierRenderer(EntityRendererProvider.Context context) {
-        super(context, new BostonTerrierModel.Adult(), 0.5f);
+        super(context, new BostonTerrierModel.Adult(context.bakeLayer(BostonTerrierModel.ADULT_LAYER)), 0.5f);
         adultModel = model;
-        babyModel = new BostonTerrierModel.Baby();
+        babyModel = new BostonTerrierModel.Baby(context.bakeLayer(BostonTerrierModel.BABY_LAYER));
     }
 
     @Override

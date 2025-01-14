@@ -12,9 +12,9 @@ import java.util.Locale;
 
 public class BorderCollieRenderer extends WorkDogRenderer<BorderCollieEntity, BorderCollieModel> {
     public BorderCollieRenderer(EntityRendererProvider.Context context) {
-        super(context, new BorderCollieModel.Adult(), 0.5f);
+        super(context, new BorderCollieModel.Adult(context.bakeLayer(BorderCollieModel.ADULT_LAYER)), 0.5f);
         adultModel = model;
-        babyModel = new BorderCollieModel.Baby();
+        babyModel = new BorderCollieModel.Baby(context.bakeLayer(BorderCollieModel.BABY_LAYER));
     }
 
     @Override

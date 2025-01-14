@@ -1,16 +1,21 @@
 package com.github.kmfisk.workdog.client.renderer.entity.model;
 
+import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.entity.WDWolfEntity;
 import com.google.common.collect.ImmutableList;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public abstract class WDWolfModel extends WorkDogModel<WDWolfEntity> {
+    public static ModelLayerLocation ADULT_LAYER = new ModelLayerLocation(new ResourceLocation(WorkDog.MOD_ID, "wolf"), "adult");
+    public static ModelLayerLocation BABY_LAYER = new ModelLayerLocation(new ResourceLocation(WorkDog.MOD_ID, "wolf"), "baby");
     public ModelPart Chest;
     public ModelPart Body;
     public ModelPart Neck;

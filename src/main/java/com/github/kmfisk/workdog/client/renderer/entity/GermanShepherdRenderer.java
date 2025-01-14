@@ -12,9 +12,9 @@ import java.util.Locale;
 
 public class GermanShepherdRenderer extends WorkDogRenderer<GermanShepherdEntity, GermanShepherdModel> {
     public GermanShepherdRenderer(EntityRendererProvider.Context context) {
-        super(context, new GermanShepherdModel.Adult(), 0.5f);
+        super(context, new GermanShepherdModel.Adult(context.bakeLayer(GermanShepherdModel.ADULT_LAYER)), 0.5f);
         adultModel = model;
-        babyModel = new GermanShepherdModel.Baby();
+        babyModel = new GermanShepherdModel.Baby(context.bakeLayer(GermanShepherdModel.BABY_LAYER));
     }
 
     @Override

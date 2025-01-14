@@ -13,6 +13,8 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -53,6 +55,7 @@ public class WorkDog {
         bus.addListener(this::setupClient);
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
+            bus.addListener(this::registerLayerDefinitions);
             bus.addListener(ColorEvents::registerColorHandlerBlocks);
             bus.addListener(ColorEvents::registerColorHandlerItems);
         }
@@ -69,6 +72,11 @@ public class WorkDog {
         WorkDogEntities.registerRenderers();
         WorkDogBlocks.setRenderLayers();
         WDContainerTypes.registerFactories();
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        WorkDogEntities.registerLayerDefinitions(event);
     }
 
     private void registerAttributes(final EntityAttributeCreationEvent event) {

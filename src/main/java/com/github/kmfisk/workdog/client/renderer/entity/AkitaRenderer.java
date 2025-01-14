@@ -12,9 +12,9 @@ import java.util.Locale;
 
 public class AkitaRenderer extends WorkDogRenderer<AkitaEntity, AkitaModel> {
     public AkitaRenderer(EntityRendererProvider.Context context) {
-        super(context, new AkitaModel.Adult(), 0.5f);
+        super(context, new AkitaModel.Adult(context.bakeLayer(AkitaModel.ADULT_LAYER)), 0.5f);
         adultModel = model;
-        babyModel = new AkitaModel.Baby();
+        babyModel = new AkitaModel.Baby(context.bakeLayer(AkitaModel.BABY_LAYER));
     }
 
     @Override
