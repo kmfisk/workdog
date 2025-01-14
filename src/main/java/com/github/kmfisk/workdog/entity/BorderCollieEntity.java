@@ -47,7 +47,7 @@ public class BorderCollieEntity extends HerdingDogEntity {
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel world, AgeableMob entity) {
-        return WorkDogEntities.BORDER_COLLIE.create(world);
+        return WorkDogEntities.BORDER_COLLIE.get().create(world);
     }
 
     public enum BorderCollieVariant {

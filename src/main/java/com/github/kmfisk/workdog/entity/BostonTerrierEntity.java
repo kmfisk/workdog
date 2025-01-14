@@ -47,7 +47,7 @@ public class BostonTerrierEntity extends ToyDogEntity {
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel world, AgeableMob entity) {
-        return WorkDogEntities.BOSTON_TERRIER.create(world);
+        return WorkDogEntities.BOSTON_TERRIER.get().create(world);
     }
 
     public enum BostonTerrierVariant {

@@ -2,7 +2,6 @@ package com.github.kmfisk.workdog.item;
 
 import com.github.kmfisk.workdog.WorkDog;
 import net.minecraft.Util;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.DeferredRegister;
@@ -14,8 +13,6 @@ import java.util.Map;
 
 public class WorkDogItems {
     public static final DeferredRegister<Item> REGISTRAR = DeferredRegister.create(ForgeRegistries.ITEMS, WorkDog.MOD_ID);
-
-    public static final Map<EntityType<?>, RegistryObject<Item>> SPAWN_EGGS = new HashMap<>();
 
     public static final RegistryObject<Item> CRATE = REGISTRAR.register("crate", () -> new CrateItem(new Item.Properties().stacksTo(1).tab(WorkDog.ITEM_GROUP)));
 

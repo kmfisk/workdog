@@ -47,7 +47,7 @@ public class PitBullEntity extends HuntingDogEntity {
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel world, AgeableMob entity) {
-        return WorkDogEntities.PIT_BULL.create(world);
+        return WorkDogEntities.PIT_BULL.get().create(world);
     }
 
     @Override

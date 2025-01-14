@@ -98,17 +98,17 @@ public class WDWolfEntity extends WorkDogEntity {
     @Override
     public AgeableMob getBreedOffspring(ServerLevel world, AgeableMob entity) {
         if (entity instanceof WorkDogEntity) {
-            WorkDogEntity baby = WorkDogEntities.WOLF.create(world);
+            WorkDogEntity baby = WorkDogEntities.WOLF.get().create(world);
             if (random.nextFloat() <= 0.05F) {
                 Biome biome = level.getBiome(blockPosition()).value();
                 Set<BiomeDictionary.Type> biomeTypes = BiomeDictionary.getTypes(ResourceKey.create(Registry.BIOME_REGISTRY, biome.getRegistryName()));
                 if (biomeTypes.contains(BiomeDictionary.Type.PLAINS) && !biomeTypes.contains(BiomeDictionary.Type.HOT) && !biomeTypes.contains(BiomeDictionary.Type.COLD)) {
-                    baby = WorkDogEntities.PIT_BULL.create(world);
+                    baby = WorkDogEntities.PIT_BULL.get().create(world);
                 }
 
                 if ((biomeTypes.contains(BiomeDictionary.Type.CONIFEROUS) && biomeTypes.contains(BiomeDictionary.Type.FOREST)) ||
                         (biomeTypes.contains(BiomeDictionary.Type.MOUNTAIN) && !biomeTypes.contains(BiomeDictionary.Type.HOT) && !biomeTypes.contains(BiomeDictionary.Type.FOREST))) {
-                    baby = WorkDogEntities.AKITA.create(world);
+                    baby = WorkDogEntities.AKITA.get().create(world);
                 }
             }
 

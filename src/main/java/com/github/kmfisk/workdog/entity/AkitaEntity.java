@@ -47,7 +47,7 @@ public class AkitaEntity extends HuntingDogEntity {
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel world, AgeableMob entity) {
-        return WorkDogEntities.AKITA.create(world);
+        return WorkDogEntities.AKITA.get().create(world);
     }
 
     @Override

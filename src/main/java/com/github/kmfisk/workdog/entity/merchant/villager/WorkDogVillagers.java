@@ -17,6 +17,7 @@ import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.trading.MerchantOffer;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -54,12 +55,12 @@ public class WorkDogVillagers {
 //                new VillagerTrades.ItemsForEmeraldsTrade(WorkDogItems.WOLF_COLLAR.get(), 7, 1, 3, 15),
                 new DyedEquipmentForEmeraldsTrade(WorkDogItems.MUZZLE.get(), 7, 3, 15)};
         VillagerTrades.ItemListing[] master = new VillagerTrades.ItemListing[]{
-                new VillagerTrades.ItemsForEmeralds(new ItemStack(WorkDogItems.SPAWN_EGGS.get(WorkDogEntities.BOSTON_TERRIER).get()), 16, 1, 3, 15, 0.2f),
-                new VillagerTrades.ItemsForEmeralds(new ItemStack(WorkDogItems.SPAWN_EGGS.get(WorkDogEntities.JACK_RUSSELL_TERRIER).get()), 32, 1, 3, 15, 0.2f),
-                new VillagerTrades.ItemsForEmeralds(new ItemStack(WorkDogItems.SPAWN_EGGS.get(WorkDogEntities.BORDER_COLLIE).get()), 48, 1, 3, 15, 0.2f),
-                new VillagerTrades.ItemsForEmeralds(new ItemStack(WorkDogItems.SPAWN_EGGS.get(WorkDogEntities.PIT_BULL).get()), 64, 1, 3, 15, 0.2f),
-                new VillagerTrades.ItemsForEmeralds(new ItemStack(WorkDogItems.SPAWN_EGGS.get(WorkDogEntities.AKITA).get()), 64, 1, 3, 15, 0.2f),
-                new VillagerTrades.ItemsForEmeralds(new ItemStack(WorkDogItems.SPAWN_EGGS.get(WorkDogEntities.GERMAN_SHEPHERD).get()), 64, 1, 3, 15, 0.2f)};
+                new VillagerTrades.ItemsForEmeralds(new ItemStack(ForgeSpawnEggItem.fromEntityType(WorkDogEntities.BOSTON_TERRIER.get())), 16, 1, 3, 15, 0.2f),
+                new VillagerTrades.ItemsForEmeralds(new ItemStack(ForgeSpawnEggItem.fromEntityType(WorkDogEntities.JACK_RUSSELL_TERRIER.get())), 32, 1, 3, 15, 0.2f),
+                new VillagerTrades.ItemsForEmeralds(new ItemStack(ForgeSpawnEggItem.fromEntityType(WorkDogEntities.BORDER_COLLIE.get())), 48, 1, 3, 15, 0.2f),
+                new VillagerTrades.ItemsForEmeralds(new ItemStack(ForgeSpawnEggItem.fromEntityType(WorkDogEntities.PIT_BULL.get())), 64, 1, 3, 15, 0.2f),
+                new VillagerTrades.ItemsForEmeralds(new ItemStack(ForgeSpawnEggItem.fromEntityType(WorkDogEntities.AKITA.get())), 64, 1, 3, 15, 0.2f),
+                new VillagerTrades.ItemsForEmeralds(new ItemStack(ForgeSpawnEggItem.fromEntityType(WorkDogEntities.GERMAN_SHEPHERD.get())), 64, 1, 3, 15, 0.2f)};
         VillagerTrades.TRADES.put(KENNEL_HAND.get(), toIntMap(ImmutableMap.of(1, novice, 2, apprentice, 3, journeyman, 4, expert, 5, master)));
     }
 
