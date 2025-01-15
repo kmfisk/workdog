@@ -4,26 +4,31 @@ import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.config.WorkDogConfig;
 import com.github.kmfisk.workdog.entity.WorkDogEntities;
 import com.github.kmfisk.workdog.entity.core.HuntingDogEntity;
+import com.mojang.serialization.Codec;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.level.biome.MobSpawnSettings;
-import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.common.world.BiomeModifier;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LootingLevelEvent;
-import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-
-import java.util.Set;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 @Mod.EventBusSubscriber(modid = WorkDog.MOD_ID)
 public class WorkDogEvents {
+    public static final DeferredRegister<Codec<? extends BiomeModifier>> BIOME_MODIFIER_DEFERRED = DeferredRegister.create(ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, WorkDog.MOD_ID);
+    private static final RegistryObject<Codec<? extends BiomeModifier>> BIOME_MODIFIER_SERIALIZER = RegistryObject.create(new ResourceLocation(WorkDog.MOD_ID, "biome_spawn_serializer"), ForgeRegistries.Keys.BIOME_MODIFIER_SERIALIZERS, WorkDog.MOD_ID);
+
     @SubscribeEvent
-    public static void joinWorldEvent(EntityJoinWorldEvent event) {
-        if (!event.getWorld().isClientSide) {
+    public static void joinWorldEvent(EntityJoinLevelEvent event) {
+        if (!event.getLevel().isClientSide) {
             if (event.getEntity().getClass() == Wolf.class && WorkDogConfig.removeVanillaWolves.get()) {
                 LivingEntity entity = (LivingEntity) event.getEntity();
                 if (!entity.getPersistentData().contains("WorkDogsSpawn")) {

@@ -16,6 +16,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -23,7 +24,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
@@ -70,7 +70,6 @@ public class WorkDog {
 
     private void setupClient(final FMLClientSetupEvent event) {
         WorkDogEntities.registerRenderers();
-        WorkDogBlocks.setRenderLayers();
         WDContainerTypes.registerFactories();
     }
 
@@ -86,6 +85,6 @@ public class WorkDog {
     private void gatherData(final GatherDataEvent event) {
         System.out.println("Generating workdog Data!");
         DataGenerator dataGenerator = event.getGenerator();
-        if (event.includeServer()) dataGenerator.addProvider(new WorkDogRecipeProvider(dataGenerator));
+        dataGenerator.addProvider(event.includeServer(), new WorkDogRecipeProvider(dataGenerator));
     }
 }

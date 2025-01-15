@@ -30,6 +30,8 @@ import net.minecraftforge.common.BiomeDictionary;
 import javax.annotation.Nullable;
 import java.util.*;
 
+import net.minecraft.world.entity.AgeableMob.AgeableMobGroupData;
+
 public class WDWolfEntity extends WorkDogEntity {
     public WDWolfEntity(EntityType<? extends TamableAnimal> type, Level world) {
         super(type, world);

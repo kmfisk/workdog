@@ -4,7 +4,6 @@ import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -40,7 +39,7 @@ public class SurrenderFormItem extends Item {
                     dog.setMode(WorkDogEntity.Mode.WANDER);
                     dog.setTame(false);
                     dog.setOwnerUUID(null);
-                    player.displayClientMessage(new TranslatableComponent("chat.workdog.surrender_form.success", dog.getName()), true);
+                    player.displayClientMessage(Component.translatable("chat.workdog.surrender_form.success", dog.getName()), true);
                     if (!player.isCreative()) stack.shrink(1);
                 }
             }
@@ -51,6 +50,6 @@ public class SurrenderFormItem extends Item {
     @OnlyIn(Dist.CLIENT)
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        tooltip.add(new TranslatableComponent("tooltip.workdog.surrender_form.usage").withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("tooltip.workdog.surrender_form.usage").withStyle(ChatFormatting.GRAY));
     }
 }

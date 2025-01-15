@@ -5,8 +5,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -53,7 +51,7 @@ public class WorkDogSpawnEggItem extends ForgeSpawnEggItem {
                     setVariant = currentVariant == maxVariants ? -1 : Math.min(currentVariant + 1, maxVariants);
                 } else setVariant = 0;
                 String message = setVariant == -1 ? "Random" : String.valueOf(setVariant);
-                player.displayClientMessage(new TextComponent(message), true);
+                player.displayClientMessage(Component.literal(message), true);
                 if (setVariant == -1) itemStack.removeTagKey("Variant");
                 else itemStack.getOrCreateTag().putInt("Variant", setVariant);
             }
@@ -86,7 +84,7 @@ public class WorkDogSpawnEggItem extends ForgeSpawnEggItem {
         CompoundTag nbt = stack.getTag();
         if (nbt != null && nbt.contains("Variant")) {
             int variant = nbt.getInt("Variant");
-            tooltip.add(new TranslatableComponent("tooltip.workdog.spawn_egg.variant", variant).withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("tooltip.workdog.spawn_egg.variant", variant).withStyle(ChatFormatting.GRAY));
         }
     }
 }

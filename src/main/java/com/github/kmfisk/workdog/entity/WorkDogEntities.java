@@ -24,7 +24,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 public class WorkDogEntities {
-    public static final DeferredRegister<EntityType<?>> REGISTRAR = DeferredRegister.create(ForgeRegistries.ENTITIES, WorkDog.MOD_ID);
+    public static final DeferredRegister<EntityType<?>> REGISTRAR = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, WorkDog.MOD_ID);
     private static final List<Tuple<RegistryObject<EntityType<? extends LivingEntity>>, Supplier<AttributeSupplier.Builder>>> ATTRIBUTES = new ArrayList<>();
     private static final List<Tuple<RegistryObject<EntityType<?>>, Supplier<EntityRendererProvider<?>>>> RENDERERS = new ArrayList<>();
 

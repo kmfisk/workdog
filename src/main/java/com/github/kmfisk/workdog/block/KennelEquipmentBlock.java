@@ -16,6 +16,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class KennelEquipmentBlock extends Block {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     protected static final VoxelShape NORTH_SHAPE = box(0.0D, 4.0D, 8.0D, 16.0D, 12.0D, 16.0D);

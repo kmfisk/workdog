@@ -2,8 +2,6 @@ package com.github.kmfisk.workdog.block;
 
 import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.item.WorkDogItems;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -12,8 +10,6 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -44,11 +40,5 @@ public class WorkDogBlocks {
         RegistryObject<T> registryObject = REGISTRAR.register(name, block);
         WorkDogItems.REGISTRAR.register(name, () -> new BlockItem(registryObject.get(), new Item.Properties().tab(WorkDog.ITEM_GROUP)));
         return registryObject;
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public static void setRenderLayers() {
-        RenderType cutout = RenderType.cutout();
-        ItemBlockRenderTypes.setRenderLayer(KENNEL_EQUIPMENT.get(), cutout);
     }
 }

@@ -3,7 +3,6 @@ package com.github.kmfisk.workdog.item;
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -38,6 +37,6 @@ public class PinkJuiceItem extends Item {
     @OnlyIn(Dist.CLIENT)
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        tooltip.add(new TranslatableComponent("tooltip.workdog.pink_juice.usage").withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("tooltip.workdog.pink_juice.usage").withStyle(ChatFormatting.GRAY));
     }
 }

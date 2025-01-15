@@ -1,0 +1,9 @@
+{
+  "type": "forge:add_spawns",
+  "spawner": {
+    "type": "workdog:wolf",
+    "weight": 16,
+    "minCount": 1,
+    "maxCount": 5
+  }
+}

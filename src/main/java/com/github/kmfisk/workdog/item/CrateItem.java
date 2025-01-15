@@ -6,8 +6,7 @@ import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -32,7 +31,7 @@ public class CrateItem extends Item {
     public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target, InteractionHand hand) {
         if (target instanceof WorkDogEntity) {
             if (stack.hasTag()) {
-                player.displayClientMessage(new TranslatableComponent("chat.workdog.crate.full"), true);
+                player.displayClientMessage(Component.translatable("chat.workdog.crate.full"), true);
                 return InteractionResult.PASS;
             }
 
@@ -42,10 +41,10 @@ public class CrateItem extends Item {
                 ItemStack capturedEntityItem = caughtEntityItem(dog, player);
                 player.setItemInHand(hand, capturedEntityItem);
                 return InteractionResult.CONSUME;
-            } else player.displayClientMessage(new TranslatableComponent("chat.workdog.crate.not_your_dog"), true);
+            } else player.displayClientMessage(Component.translatable("chat.workdog.crate.not_your_dog"), true);
 
         } else
-            player.displayClientMessage(new TranslatableComponent("chat.workdog.crate.fail"), true);
+            player.displayClientMessage(Component.translatable("chat.workdog.crate.fail"), true);
 
         return super.interactLivingEntity(stack, player, target, hand);
     }
@@ -64,7 +63,7 @@ public class CrateItem extends Item {
         if (dog.hasCustomName()) tags.putString("DisplayName", dog.getDisplayName().getString());
 
         dog.discard();
-        player.displayClientMessage(new TranslatableComponent("chat.workdog.crate.capture", dog.getDisplayName()), true);
+        player.displayClientMessage(Component.translatable("chat.workdog.crate.capture", dog.getDisplayName()), true);
 
         ItemStack newStack = new ItemStack(this);
         newStack.setTag(tags);
@@ -78,7 +77,7 @@ public class CrateItem extends Item {
             Level level = context.getLevel();
             ItemStack stack = context.getItemInHand();
             if (!stack.hasTag() || (stack.hasTag() && !stack.getTag().contains("id"))) {
-                player.displayClientMessage(new TranslatableComponent("chat.workdog.crate.empty"), true);
+                player.displayClientMessage(Component.translatable("chat.workdog.crate.empty"), true);
                 return InteractionResult.PASS;
             }
 
@@ -100,7 +99,7 @@ public class CrateItem extends Item {
                     stack.shrink(1);
                     player.setItemInHand(context.getHand(), new ItemStack(this));
 
-                    player.displayClientMessage(new TranslatableComponent("chat.workdog.crate.release", entity.getDisplayName()), true);
+                    player.displayClientMessage(Component.translatable("chat.workdog.crate.release", entity.getDisplayName()), true);
                 }
             }
 
@@ -115,18 +114,18 @@ public class CrateItem extends Item {
         CompoundTag nbt = stack.getTag();
         if (nbt != null && nbt.contains("id")) {
             if (nbt.contains("DisplayName"))
-                tooltip.add(new TextComponent("\"" + nbt.getString("DisplayName") + "\"").withStyle(ChatFormatting.AQUA));
+                tooltip.add(Component.literal("\"" + nbt.getString("DisplayName") + "\"").withStyle(ChatFormatting.AQUA));
 
-            TranslatableComponent entityId = new TranslatableComponent(Util.makeDescriptionId("entity", new ResourceLocation(nbt.getString("id"))));
-            TranslatableComponent gender = new TranslatableComponent(nbt.getBoolean("Gender") ? "tooltip.workdog.crate.male" : "tooltip.workdog.crate.female");
+            MutableComponent entityId = Component.translatable(Util.makeDescriptionId("entity", new ResourceLocation(nbt.getString("id"))));
+            MutableComponent gender = Component.translatable(nbt.getBoolean("Gender") ? "tooltip.workdog.crate.male" : "tooltip.workdog.crate.female");
             tooltip.add(gender.append(" ").append(entityId).withStyle(ChatFormatting.BLUE));
 
             if (nbt.contains("OwnerName")) {
-                TranslatableComponent owner = new TranslatableComponent("tooltip.workdog.crate.owner", nbt.getString("OwnerName"));
+                MutableComponent owner = Component.translatable("tooltip.workdog.crate.owner", nbt.getString("OwnerName"));
                 tooltip.add(owner.withStyle(ChatFormatting.GRAY));
             }
 
         } else
-            tooltip.add(new TranslatableComponent("tooltip.workdog.crate.empty").withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("tooltip.workdog.crate.empty").withStyle(ChatFormatting.GRAY));
     }
 }

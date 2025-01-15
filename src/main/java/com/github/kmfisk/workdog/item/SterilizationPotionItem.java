@@ -4,7 +4,6 @@ import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -38,7 +37,7 @@ public class SterilizationPotionItem extends Item {
                 }
                 if (!target.level.isClientSide()) {
                     dog.setInfertile(true);
-                    player.displayClientMessage(new TranslatableComponent(dog.getGender() == WorkDogEntity.Gender.FEMALE ? "chat.workdog.sterilization_potion.success_female" : "chat.workdog.sterilization_potion.success_male", dog.getName()), true);
+                    player.displayClientMessage(Component.translatable(dog.getGender() == WorkDogEntity.Gender.FEMALE ? "chat.workdog.sterilization_potion.success_female" : "chat.workdog.sterilization_potion.success_male", dog.getName()), true);
 
                     if (!player.isCreative()) {
                         ItemStack emptyBottle = new ItemStack(Items.GLASS_BOTTLE);
@@ -57,6 +56,6 @@ public class SterilizationPotionItem extends Item {
     @OnlyIn(Dist.CLIENT)
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        tooltip.add(new TranslatableComponent("tooltip.workdog.sterilization_potion.usage").withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("tooltip.workdog.sterilization_potion.usage").withStyle(ChatFormatting.GRAY));
     }
 }

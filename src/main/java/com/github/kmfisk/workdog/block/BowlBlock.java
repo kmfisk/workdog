@@ -16,6 +16,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class BowlBlock extends Block {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     protected static final VoxelShape NORTH_SOUTH = box(0.0F, 0.0F, 3.5F, 16.0F, 3.0F, 12.5F);

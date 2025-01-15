@@ -16,6 +16,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class DogBedBlock extends Block {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     protected static final VoxelShape AABB_BOTTOM = box(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D);

@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Random;
 
 public class WorkDogVillagers {
-    public static final DeferredRegister<VillagerProfession> PROFESSIONS = DeferredRegister.create(ForgeRegistries.PROFESSIONS, WorkDog.MOD_ID);
+    public static final DeferredRegister<VillagerProfession> PROFESSIONS = DeferredRegister.create(ForgeRegistries.VILLAGER_PROFESSIONS, WorkDog.MOD_ID);
     public static final DeferredRegister<PoiType> POI_TYPES = DeferredRegister.create(ForgeRegistries.POI_TYPES, WorkDog.MOD_ID);
 
     public static final RegistryObject<PoiType> KENNEL_EQUIPMENT = POI_TYPES.register("kennel_equipment", () -> new PoiType("kennel_hand", PoiType.getBlockStates(WorkDogBlocks.KENNEL_EQUIPMENT.get()), 2, 1));

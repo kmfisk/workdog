@@ -459,7 +459,7 @@ public abstract class WorkDogEntity extends TamableAnimal {
         else if (getLonghairChance() == 0.0F) longhair = false;
         setLonghair(longhair);
         if (WorkDogConfig.nameBabies.get() && (maternal.hasCustomName() || paternal.hasCustomName()))
-            setCustomName(new TranslatableComponent("name.workdog.name_babies", maternal.hasCustomName() ? maternal.getCustomName() : paternal.getCustomName()));
+            setCustomName(Component.translatable("name.workdog.name_babies", maternal.hasCustomName() ? maternal.getCustomName() : paternal.getCustomName()));
         setParentUUID(maternal.getUUID());
         setParentUUID(paternal.getUUID());
         if (maternal.isTame() && WorkDogConfig.tamedLimit.get() == 0/* || owner.getPersistentData().getInt("DogCount") < WorkDogConfig.tamedLimit.get()*/)
@@ -475,14 +475,14 @@ public abstract class WorkDogEntity extends TamableAnimal {
             if (purebred || random.nextBoolean()) {
                 childBreedType = getBreedOffspring(world, sire);
                 if (purebred && random.nextInt(100) < 2 && getWorkGroupTag() != null) {
-                    Entity newBreed = ForgeRegistries.ENTITIES.tags().getTag(getWorkGroupTag()).stream().findAny().get().create(world);
+                    Entity newBreed = ForgeRegistries.ENTITY_TYPES.tags().getTag(getWorkGroupTag()).stream().findAny().get().create(world);
                     if (newBreed instanceof WorkDogEntity)
                         childBreedType = ((WorkDogEntity) newBreed).getBreedOffspring(world, this);
                 }
             } else childBreedType = sire.getBreedOffspring(world, this);
             if (!purebred && random.nextInt(100) < 5 && getWorkGroupTag() != null) {
                 TagKey<EntityType<?>> newBreedTag = random.nextBoolean() && sire.getWorkGroupTag() != null ? sire.getWorkGroupTag() : getWorkGroupTag();
-                Entity newBreed = ForgeRegistries.ENTITIES.tags().getTag(newBreedTag).stream().findAny().get().create(world);
+                Entity newBreed = ForgeRegistries.ENTITY_TYPES.tags().getTag(newBreedTag).stream().findAny().get().create(world);
                 if (newBreed instanceof WorkDogEntity)
                     childBreedType = ((WorkDogEntity) newBreed).getBreedOffspring(world, this);
             }
@@ -547,15 +547,15 @@ public abstract class WorkDogEntity extends TamableAnimal {
             if (stack.getItem() == Items.STICK) {
                 if (getMode() == Mode.WANDER) { //if (stack.getItem() == Items.SLIME_BALL)
                     setMode(Mode.FOLLOW);
-                    player.displayClientMessage(new TranslatableComponent("chat.workdog.follow_mode", getName()), true);
+                    player.displayClientMessage(Component.translatable("chat.workdog.follow_mode", getName()), true);
                     return InteractionResult.sidedSuccess(level.isClientSide);
                 } else if (getMode() == Mode.FOLLOW) { //if (stack.getItem() == Items.GUNPOWDER) {
                     setMode(Mode.WORK);
-                    player.displayClientMessage(new TranslatableComponent("chat.workdog.work_mode", getName()), true);
+                    player.displayClientMessage(Component.translatable("chat.workdog.work_mode", getName()), true);
                     return InteractionResult.sidedSuccess(level.isClientSide);
                 } else if (getMode() == Mode.WORK) { //if (stack.getItem() == Items.FEATHER)
                     setMode(Mode.WANDER);
-                    player.displayClientMessage(new TranslatableComponent("chat.workdog.wander_mode", getName()), true);
+                    player.displayClientMessage(Component.translatable("chat.workdog.wander_mode", getName()), true);
                     return InteractionResult.sidedSuccess(level.isClientSide);
                 }
             } else if (isFood(stack) && getHealth() < getMaxHealth()) {
