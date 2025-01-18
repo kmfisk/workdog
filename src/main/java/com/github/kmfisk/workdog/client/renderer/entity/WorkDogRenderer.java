@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.ForgeHooksClient;
 
@@ -94,7 +94,7 @@ public abstract class WorkDogRenderer<T extends WorkDogEntity, M extends EntityM
             float backgroundOpacity = Minecraft.getInstance().options.getBackgroundOpacity(0.25F);
             int j = (int) (backgroundOpacity * 255.0F) << 24;
 
-            TranslatableComponent info = Component.translatable((entity.getGender() == WorkDogEntity.Gender.FEMALE ? (entity.getBreedingStatus("inheat") ? "name.workdog.in_heat" : "name.workdog.not_in_heat") : "name.workdog.male"), entity.getBreedTimer());
+            MutableComponent info = Component.translatable((entity.getGender() == WorkDogEntity.Gender.FEMALE ? (entity.getBreedingStatus("inheat") ? "name.workdog.in_heat" : "name.workdog.not_in_heat") : "name.workdog.male"), entity.getBreedTimer());
             if (entity.getBreedingStatus("ispregnant"))
                 info = Component.translatable("name.workdog.pregnant", entity.getBreedTimer());
 

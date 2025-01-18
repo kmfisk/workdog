@@ -1,0 +1,9 @@
+{
+  "type": "forge:add_spawns",
+  "spawner": {
+    "type": "workdog:jack_russell_terrier",
+    "weight": 2,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

@@ -9,6 +9,7 @@ import com.github.kmfisk.workdog.entity.merchant.villager.WorkDogVillagerTrades;
 import com.github.kmfisk.workdog.entity.merchant.villager.WorkDogVillagers;
 import com.github.kmfisk.workdog.inventory.WDContainerTypes;
 import com.github.kmfisk.workdog.item.WorkDogItems;
+import com.github.kmfisk.workdog.world.WorkDogSpawns;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -53,6 +54,9 @@ public class WorkDog {
         bus.addListener(this::gatherData);
 
         bus.addListener(this::setupClient);
+
+        WorkDogSpawns.registerBiomeModifiers();
+        WorkDogSpawns.BIOME_REGISTRAR.register(bus);
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
             bus.addListener(this::registerLayerDefinitions);

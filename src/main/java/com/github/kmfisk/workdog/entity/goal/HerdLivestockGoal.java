@@ -7,6 +7,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class HerdLivestockGoal extends Goal {
-    private static final TargetingConditions LIVESTOCK_TARGETING = TargetingConditions.forNonCombat().range(16.0D).selector((entity) -> WorkDogConfig.herderLivestockList.get().contains(Objects.requireNonNull(entity.getType().getRegistryName()).toString()));
+    private static final TargetingConditions LIVESTOCK_TARGETING = TargetingConditions.forNonCombat().range(16.0D).selector((entity) -> WorkDogConfig.herderLivestockList.get().contains(Objects.requireNonNull(ForgeRegistries.ENTITY_TYPES.getKey(entity.getType())).toString()));
     protected final HerdingDogEntity herder;
     protected final Level level;
     protected Mob livestock;

@@ -11,6 +11,7 @@ import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.npc.VillagerProfession;
@@ -21,16 +22,16 @@ import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Random;
 
 public class WorkDogVillagers {
     public static final DeferredRegister<VillagerProfession> PROFESSIONS = DeferredRegister.create(ForgeRegistries.VILLAGER_PROFESSIONS, WorkDog.MOD_ID);
     public static final DeferredRegister<PoiType> POI_TYPES = DeferredRegister.create(ForgeRegistries.POI_TYPES, WorkDog.MOD_ID);
 
-    public static final RegistryObject<PoiType> KENNEL_EQUIPMENT = POI_TYPES.register("kennel_equipment", () -> new PoiType("kennel_hand", PoiType.getBlockStates(WorkDogBlocks.KENNEL_EQUIPMENT.get()), 2, 1));
-    public static final RegistryObject<VillagerProfession> KENNEL_HAND = PROFESSIONS.register("kennel_hand", () -> new VillagerProfession("kennel_hand", KENNEL_EQUIPMENT.get(), ImmutableSet.of(), ImmutableSet.of(), SoundEvents.VILLAGER_WORK_SHEPHERD));
+    public static final RegistryObject<PoiType> KENNEL_EQUIPMENT = POI_TYPES.register("kennel_equipment", () -> new PoiType(ImmutableSet.copyOf(WorkDogBlocks.KENNEL_EQUIPMENT.get().getStateDefinition().getPossibleStates()), 2, 1));
+    public static final RegistryObject<VillagerProfession> KENNEL_HAND = PROFESSIONS.register("kennel_hand", () -> new VillagerProfession("kennel_hand", entry -> entry.value().equals(KENNEL_EQUIPMENT.get()), entry -> entry.value().equals(KENNEL_EQUIPMENT.get()), ImmutableSet.of(), ImmutableSet.of(), SoundEvents.VILLAGER_WORK_SHEPHERD));
 
     public static void registerTrades() {
 //        numberOfItems, maxUses, villagerXp
@@ -81,7 +82,9 @@ public class WorkDogVillagers {
             this.villagerXp = villagerXp;
         }
 
-        public MerchantOffer getOffer(Entity entity, Random random) {
+        @Nullable
+        @Override
+        public MerchantOffer getOffer(Entity entity, RandomSource random) {
             ItemStack cost = new ItemStack(Items.EMERALD, value);
             ItemStack merch = new ItemStack(item);
             if (item instanceof DyeableDogEquipmentItem) {
@@ -95,7 +98,7 @@ public class WorkDogVillagers {
             return new MerchantOffer(cost, merch, maxUses, villagerXp, 0.05F);
         }
 
-        private static DyeItem getRandomDye(Random random) {
+        private static DyeItem getRandomDye(RandomSource random) {
             return DyeItem.byColor(DyeColor.byId(random.nextInt(16)));
         }
     }
