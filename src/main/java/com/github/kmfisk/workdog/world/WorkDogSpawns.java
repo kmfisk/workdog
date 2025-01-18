@@ -31,7 +31,8 @@ public class WorkDogSpawns {
         @Override
         public void modify(Holder<Biome> holder, Phase phase, ModifiableBiomeInfo.BiomeInfo.Builder builder) {
             if (phase == Phase.ADD && holder.containsTag(BiomeTags.IS_OVERWORLD)) {
-                if (holder.containsTag(BiomeTags.IS_FOREST) && !holder.containsTag(Tags.Biomes.IS_WET) && !holder.containsTag(BiomeTags.IS_JUNGLE) && !holder.containsTag(BiomeTags.IS_HILL) && !holder.containsTag(Tags.Biomes.IS_MOUNTAIN)) {
+                boolean isForest = holder.containsTag(BiomeTags.IS_FOREST) || holder.containsTag(BiomeTags.IS_TAIGA);
+                if (isForest && !holder.containsTag(Tags.Biomes.IS_WET) && !holder.containsTag(BiomeTags.IS_JUNGLE) && !holder.containsTag(BiomeTags.IS_HILL) && !holder.containsTag(Tags.Biomes.IS_MOUNTAIN)) {
                     builder.getMobSpawnSettings().addSpawn(wolfSpawner.type.getCategory(), wolfSpawner);
                 }
 
