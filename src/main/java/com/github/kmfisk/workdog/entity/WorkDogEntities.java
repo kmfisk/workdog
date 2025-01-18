@@ -5,7 +5,6 @@ import com.github.kmfisk.workdog.client.renderer.entity.*;
 import com.github.kmfisk.workdog.client.renderer.entity.model.*;
 import com.github.kmfisk.workdog.item.WorkDogItems;
 import com.github.kmfisk.workdog.item.WorkDogSpawnEggItem;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.*;
@@ -13,7 +12,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.fml.util.thread.EffectiveSide;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -26,22 +24,21 @@ import java.util.function.Supplier;
 public class WorkDogEntities {
     public static final DeferredRegister<EntityType<?>> REGISTRAR = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, WorkDog.MOD_ID);
     private static final List<Tuple<RegistryObject<EntityType<? extends LivingEntity>>, Supplier<AttributeSupplier.Builder>>> ATTRIBUTES = new ArrayList<>();
-    private static final List<Tuple<RegistryObject<EntityType<?>>, Supplier<EntityRendererProvider<?>>>> RENDERERS = new ArrayList<>();
 
     public static final RegistryObject<EntityType<WDWolfEntity>> WOLF = register("wolf", WDWolfEntity::new, MobCategory.CREATURE,
-            WDWolfEntity::registerAttributes, () -> WDWolfRenderer::new, 0.95F, 1.2F);
+            WDWolfEntity::registerAttributes, 0.95F, 1.2F);
     public static final RegistryObject<EntityType<AkitaEntity>> AKITA = register("akita", AkitaEntity::new, MobCategory.CREATURE,
-            AkitaEntity::registerAttributes, () -> AkitaRenderer::new, 0.95F, 1.3F);
+            AkitaEntity::registerAttributes, 0.95F, 1.3F);
     public static final RegistryObject<EntityType<BorderCollieEntity>> BORDER_COLLIE = register("border_collie", BorderCollieEntity::new, MobCategory.CREATURE,
-            BorderCollieEntity::registerAttributes, () -> BorderCollieRenderer::new, 0.75F, 1.2F);
+            BorderCollieEntity::registerAttributes, 0.75F, 1.2F);
     public static final RegistryObject<EntityType<BostonTerrierEntity>> BOSTON_TERRIER = register("boston_terrier", BostonTerrierEntity::new, MobCategory.CREATURE,
-            BostonTerrierEntity::registerAttributes, () -> BostonTerrierRenderer::new, 0.55F, 0.95F);
+            BostonTerrierEntity::registerAttributes, 0.55F, 0.95F);
     public static final RegistryObject<EntityType<GermanShepherdEntity>> GERMAN_SHEPHERD = register("german_shepherd", GermanShepherdEntity::new, MobCategory.CREATURE,
-            GermanShepherdEntity::registerAttributes, () -> GermanShepherdRenderer::new, 0.95F, 1.3F);
+            GermanShepherdEntity::registerAttributes, 0.95F, 1.3F);
     public static final RegistryObject<EntityType<JackRussellTerrierEntity>> JACK_RUSSELL_TERRIER = register("jack_russell_terrier", JackRussellTerrierEntity::new, MobCategory.CREATURE,
-            JackRussellTerrierEntity::registerAttributes, () -> JackRussellTerrierRenderer::new, 0.55F, 0.95F);
+            JackRussellTerrierEntity::registerAttributes, 0.55F, 0.95F);
     public static final RegistryObject<EntityType<PitBullEntity>> PIT_BULL = register("pit_bull", PitBullEntity::new, MobCategory.CREATURE,
-            PitBullEntity::registerAttributes, () -> PitBullRenderer::new, 0.95F, 1.2F);
+            PitBullEntity::registerAttributes, 0.95F, 1.2F);
 
     public static void registerSpawnPlacements() {
         SpawnPlacements.register(WOLF.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, WDWolfEntity::checkWolfSpawnRules);
@@ -55,10 +52,13 @@ public class WorkDogEntities {
     }
 
     public static void registerRenderers() {
-        for (Tuple<RegistryObject<EntityType<?>>, Supplier<EntityRendererProvider<?>>> renderer : RENDERERS)
-            EntityRenderers.register(renderer.getA().get(), cast(renderer.getB().get()));
-
-        RENDERERS.clear();
+        EntityRenderers.register(WOLF.get(), WDWolfRenderer::new);
+        EntityRenderers.register(AKITA.get(), AkitaRenderer::new);
+        EntityRenderers.register(BORDER_COLLIE.get(), BorderCollieRenderer::new);
+        EntityRenderers.register(BOSTON_TERRIER.get(), BostonTerrierRenderer::new);
+        EntityRenderers.register(GERMAN_SHEPHERD.get(), GermanShepherdRenderer::new);
+        EntityRenderers.register(JACK_RUSSELL_TERRIER.get(), JackRussellTerrierRenderer::new);
+        EntityRenderers.register(PIT_BULL.get(), PitBullRenderer::new);
     }
 
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
@@ -83,10 +83,9 @@ public class WorkDogEntities {
         return (T) from;
     }
 
-    private static <T extends Mob> RegistryObject<EntityType<T>> register(String name, EntityType.EntityFactory<T> factory, MobCategory classification, Supplier<AttributeSupplier.Builder> attributes, Supplier<EntityRendererProvider<? super T>> renderer, float width, float height) {
+    private static <T extends Mob> RegistryObject<EntityType<T>> register(String name, EntityType.EntityFactory<T> factory, MobCategory classification, Supplier<AttributeSupplier.Builder> attributes, float width, float height) {
         RegistryObject<EntityType<T>> registryObject = REGISTRAR.register(name, () -> EntityType.Builder.of(factory, classification).sized(width, height).clientTrackingRange(10).build(name));
         if (attributes != null) ATTRIBUTES.add(new Tuple<>(cast(registryObject), attributes));
-        if (EffectiveSide.get().isClient() && renderer != null) RENDERERS.add(new Tuple<>(cast(registryObject), cast(renderer)));
         WorkDogItems.REGISTRAR.register(name + "_spawn_egg", () -> new WorkDogSpawnEggItem(registryObject, new Item.Properties().tab(WorkDog.ITEM_GROUP)));
         return registryObject;
     }
