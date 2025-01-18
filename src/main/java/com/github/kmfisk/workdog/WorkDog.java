@@ -10,9 +10,10 @@ import com.github.kmfisk.workdog.entity.merchant.villager.WorkDogVillagers;
 import com.github.kmfisk.workdog.inventory.WDContainerTypes;
 import com.github.kmfisk.workdog.item.WorkDogItems;
 import com.github.kmfisk.workdog.world.WorkDogSpawns;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -27,16 +28,18 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 
 @Mod(WorkDog.MOD_ID)
 public class WorkDog {
     public static final String MOD_ID = "workdog";
-    public static final CreativeModeTab ITEM_GROUP = new CreativeModeTab(MOD_ID + ".group") {
-        @Override
-        public ItemStack makeIcon() {
-            return new ItemStack(WorkDogItems.CRATE.get());
-        }
-    };
+    public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TAB = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, WorkDog.MOD_ID);
+    public static final RegistryObject<CreativeModeTab> ITEM_GROUP = CREATIVE_MODE_TAB.register(MOD_ID + ".group", () -> CreativeModeTab.builder()
+            .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
+            .icon(() -> WorkDogItems.CRATE.get().getDefaultInstance())
+            .displayItems((itemDisplayParameters, output) -> WorkDogItems.REGISTRAR.getEntries().forEach(item -> output.accept(item.get())))
+            .build());
 
     public WorkDog() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -45,6 +48,7 @@ public class WorkDog {
         WorkDogEntities.REGISTRAR.register(bus);
         WorkDogBlocks.REGISTRAR.register(bus);
         WorkDogItems.REGISTRAR.register(bus);
+        CREATIVE_MODE_TAB.register(bus);
         WDContainerTypes.REGISTRAR.register(bus);
         WorkDogVillagers.POI_TYPES.register(bus);
         WorkDogVillagers.PROFESSIONS.register(bus);
@@ -89,6 +93,6 @@ public class WorkDog {
     private void gatherData(final GatherDataEvent event) {
         System.out.println("Generating workdog Data!");
         DataGenerator dataGenerator = event.getGenerator();
-        dataGenerator.addProvider(event.includeServer(), new WorkDogRecipeProvider(dataGenerator));
+        dataGenerator.addProvider(event.includeServer(), new WorkDogRecipeProvider(dataGenerator.getPackOutput()));
     }
 }

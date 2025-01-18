@@ -3,7 +3,6 @@ package com.github.kmfisk.workdog.client.renderer.entity;
 import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Matrix4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.model.EntityModel;
@@ -14,6 +13,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.ForgeHooksClient;
+import org.joml.Matrix4f;
 
 import java.util.List;
 
@@ -101,9 +101,9 @@ public abstract class WorkDogRenderer<T extends WorkDogEntity, M extends EntityM
             Font fontRenderer = getFont();
             float centeredPos = (float) (-fontRenderer.width(info) / 2);
 
-            fontRenderer.drawInBatch(info, centeredPos, 0, 553648127, false, matrix4f, renderTypeBuffer, notDiscrete, j, packedLightCoords);
+            fontRenderer.drawInBatch(info, centeredPos, 0, 553648127, false, matrix4f, renderTypeBuffer, notDiscrete ? Font.DisplayMode.SEE_THROUGH : Font.DisplayMode.NORMAL, j, packedLightCoords);
             if (notDiscrete)
-                fontRenderer.drawInBatch(info, centeredPos, 0, -1, false, matrix4f, renderTypeBuffer, false, 0, packedLightCoords);
+                fontRenderer.drawInBatch(info, centeredPos, 0, -1, false, matrix4f, renderTypeBuffer, Font.DisplayMode.NORMAL, 0, packedLightCoords);
 
             matrixStack.popPose();
         }

@@ -346,7 +346,7 @@ public abstract class WorkDogEntity extends TamableAnimal {
     @Override
     public void tick() {
         super.tick();
-        if (!level.isClientSide && !isBaby() && !isInfertile() && getGender() == Gender.FEMALE) { //if female & adult & not infertile
+        if (!level().isClientSide && !isBaby() && !isInfertile() && getGender() == Gender.FEMALE) { //if female & adult & not infertile
             if (getBreedingStatus("inheat")) //if in heat
                 if (getBreedTimer() <= 0) { //and timer is finished (reaching 0 after being in positives)
                     if (!getBreedingStatus("ispregnant")) //and not pregnant
@@ -380,7 +380,7 @@ public abstract class WorkDogEntity extends TamableAnimal {
                             double d0 = random.nextGaussian() * 0.02D;
                             double d1 = random.nextGaussian() * 0.02D;
                             double d2 = random.nextGaussian() * 0.02D;
-                            level.addParticle(ParticleTypes.HEART, getRandomX(1.0D), getRandomY() + 0.5D, getRandomZ(1.0D), d0, d1, d2);
+                            level().addParticle(ParticleTypes.HEART, getRandomX(1.0D), getRandomY() + 0.5D, getRandomZ(1.0D), d0, d1, d2);
                         }
                     }
                 } else if (!getBreedingStatus("inheat") && !getBreedingStatus("ispregnant"))
@@ -505,7 +505,7 @@ public abstract class WorkDogEntity extends TamableAnimal {
                     double d0 = random.nextGaussian() * 0.02D;
                     double d1 = random.nextGaussian() * 0.02D;
                     double d2 = random.nextGaussian() * 0.02D;
-                    level.addParticle(ParticleTypes.HEART, getRandomX(1.0D), getRandomY() + 0.5D, getRandomZ(1.0D), d0, d1, d2);
+                    level().addParticle(ParticleTypes.HEART, getRandomX(1.0D), getRandomY() + 0.5D, getRandomZ(1.0D), d0, d1, d2);
                 }
 
                 if (world.getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT))
@@ -549,27 +549,27 @@ public abstract class WorkDogEntity extends TamableAnimal {
                 if (getMode() == Mode.WANDER) { //if (stack.getItem() == Items.SLIME_BALL)
                     setMode(Mode.FOLLOW);
                     player.displayClientMessage(Component.translatable("chat.workdog.follow_mode", getName()), true);
-                    return InteractionResult.sidedSuccess(level.isClientSide);
+                    return InteractionResult.sidedSuccess(level().isClientSide);
                 } else if (getMode() == Mode.FOLLOW) { //if (stack.getItem() == Items.GUNPOWDER) {
                     setMode(Mode.WORK);
                     player.displayClientMessage(Component.translatable("chat.workdog.work_mode", getName()), true);
-                    return InteractionResult.sidedSuccess(level.isClientSide);
+                    return InteractionResult.sidedSuccess(level().isClientSide);
                 } else if (getMode() == Mode.WORK) { //if (stack.getItem() == Items.FEATHER)
                     setMode(Mode.WANDER);
                     player.displayClientMessage(Component.translatable("chat.workdog.wander_mode", getName()), true);
-                    return InteractionResult.sidedSuccess(level.isClientSide);
+                    return InteractionResult.sidedSuccess(level().isClientSide);
                 }
             } else if (isFood(stack) && getHealth() < getMaxHealth()) {
                 usePlayerItem(player, hand, stack);
                 heal(2.0F);
-                return InteractionResult.sidedSuccess(level.isClientSide);
+                return InteractionResult.sidedSuccess(level().isClientSide);
 
             } else if (!isLying()) {
                 setOrderedToSit(!isOrderedToSit());
                 jumping = false;
                 navigation.stop();
                 setTarget(null);
-                return InteractionResult.sidedSuccess(level.isClientSide);
+                return InteractionResult.sidedSuccess(level().isClientSide);
             }
 
         } else if (canTame(player, stack)) {
@@ -582,10 +582,10 @@ public abstract class WorkDogEntity extends TamableAnimal {
                 setOrderedToSit(true);
                 this.goalSelector.addGoal(6, followGoal);
                 setMode(Mode.FOLLOW);
-                level.broadcastEntityEvent(this, (byte) 7);
+                level().broadcastEntityEvent(this, (byte) 7);
 
-            } else level.broadcastEntityEvent(this, (byte) 6);
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            } else level().broadcastEntityEvent(this, (byte) 6);
+            return InteractionResult.sidedSuccess(level().isClientSide);
 
         }
 

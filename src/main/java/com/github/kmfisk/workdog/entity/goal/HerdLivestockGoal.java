@@ -24,7 +24,7 @@ public class HerdLivestockGoal extends Goal {
 
     public HerdLivestockGoal(HerdingDogEntity herdingDogEntity, double speedModifier) {
         this.herder = herdingDogEntity;
-        this.level = herdingDogEntity.level;
+        this.level = herdingDogEntity.level();
         this.speedModifier = speedModifier;
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }

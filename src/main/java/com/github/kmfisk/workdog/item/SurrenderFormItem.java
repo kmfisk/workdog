@@ -32,9 +32,9 @@ public class SurrenderFormItem extends Item {
                     double d0 = dog.getRandom().nextGaussian() * 0.02D;
                     double d1 = dog.getRandom().nextGaussian() * 0.02D;
                     double d2 = dog.getRandom().nextGaussian() * 0.02D;
-                    dog.level.addParticle(ParticleTypes.SMOKE, dog.getRandomX(1.0D), dog.getRandomY() + 0.5D, dog.getRandomZ(1.0D), d0, d1, d2);
+                    dog.level().addParticle(ParticleTypes.SMOKE, dog.getRandomX(1.0D), dog.getRandomY() + 0.5D, dog.getRandomZ(1.0D), d0, d1, d2);
                 }
-                if (!target.level.isClientSide()) {
+                if (!target.level().isClientSide()) {
                     if (dog.isOrderedToSit()) dog.setOrderedToSit(false);
                     dog.setMode(WorkDogEntity.Mode.WANDER);
                     dog.setTame(false);

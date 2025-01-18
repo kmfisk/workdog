@@ -18,7 +18,7 @@ public class DogBirthGoal extends Goal {
 
     public DogBirthGoal(WorkDogEntity dogEntity) {
         this.mother = dogEntity;
-        this.level = dogEntity.level;
+        this.level = dogEntity.level();
         this.setFlags(EnumSet.of(Goal.Flag.JUMP, Goal.Flag.MOVE));
     }
 

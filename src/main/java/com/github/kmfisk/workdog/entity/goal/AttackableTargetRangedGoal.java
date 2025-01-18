@@ -39,9 +39,9 @@ public class AttackableTargetRangedGoal<T extends LivingEntity> extends TargetGo
 
     protected void findTarget() {
         if (targetType != Player.class && targetType != ServerPlayer.class)
-            target = mob.level.getNearestEntity(targetType, targetConditions, mob, mob.getX(), mob.getEyeY(), mob.getZ(), mob.getBoundingBox().inflate(range, 4.0D, range));
+            target = mob.level().getNearestEntity(targetType, targetConditions, mob, mob.getX(), mob.getEyeY(), mob.getZ(), mob.getBoundingBox().inflate(range, 4.0D, range));
         else
-            target = mob.level.getNearestPlayer(targetConditions, mob, mob.getX(), mob.getEyeY(), mob.getZ());
+            target = mob.level().getNearestPlayer(targetConditions, mob, mob.getX(), mob.getEyeY(), mob.getZ());
     }
 
     @Override

@@ -34,7 +34,7 @@ public class DogTemptGoal extends Goal {
     @Override
     public boolean canUse() {
         if (dog instanceof WDWolfEntity && !dog.isBaby()) return false;
-        player = dog.level.getNearestPlayer(begTargeting, dog);
+        player = dog.level().getNearestPlayer(begTargeting, dog);
         return player != null && playerHoldingInteresting(player);
     }
 

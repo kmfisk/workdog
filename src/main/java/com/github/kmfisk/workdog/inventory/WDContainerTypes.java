@@ -13,10 +13,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class WDContainerTypes {
     public static final DeferredRegister<MenuType<?>> REGISTRAR = DeferredRegister.create(ForgeRegistries.MENU_TYPES, WorkDog.MOD_ID);
 
-    public static final RegistryObject<MenuType<WorkDogContainer>> WORK_DOG_CONTAINER = REGISTRAR.register("work_dog_container", () -> new MenuType<>(WorkDogContainer::new));
+//    public static final RegistryObject<MenuType<WorkDogContainer>> WORK_DOG_CONTAINER = REGISTRAR.register("work_dog_container", () -> new MenuType<>(WorkDogContainer::new));
 
     @OnlyIn(Dist.CLIENT)
     public static void registerFactories() {
-        MenuScreens.register(WORK_DOG_CONTAINER.get(), WorkDogScreen::new);
+//        MenuScreens.register(WORK_DOG_CONTAINER.get(), WorkDogScreen::new);
     }
 }

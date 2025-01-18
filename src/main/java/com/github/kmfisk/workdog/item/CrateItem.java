@@ -37,7 +37,7 @@ public class CrateItem extends Item {
 
             WorkDogEntity dog = (WorkDogEntity) target;
             if (!dog.isTame() || dog.getOwner() == player) {
-                if (player.level.isClientSide) return InteractionResult.SUCCESS;
+                if (player.level().isClientSide) return InteractionResult.SUCCESS;
                 ItemStack capturedEntityItem = caughtEntityItem(dog, player);
                 player.setItemInHand(hand, capturedEntityItem);
                 return InteractionResult.CONSUME;

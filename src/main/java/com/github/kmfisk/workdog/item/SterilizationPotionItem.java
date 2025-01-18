@@ -33,9 +33,9 @@ public class SterilizationPotionItem extends Item {
                     double d0 = dog.getRandom().nextGaussian() * 0.02D;
                     double d1 = dog.getRandom().nextGaussian() * 0.02D;
                     double d2 = dog.getRandom().nextGaussian() * 0.02D;
-                    dog.level.addParticle(ParticleTypes.HAPPY_VILLAGER, dog.getRandomX(1.0D), dog.getRandomY() + 0.5D, dog.getRandomZ(1.0D), d0, d1, d2);
+                    dog.level().addParticle(ParticleTypes.HAPPY_VILLAGER, dog.getRandomX(1.0D), dog.getRandomY() + 0.5D, dog.getRandomZ(1.0D), d0, d1, d2);
                 }
-                if (!target.level.isClientSide()) {
+                if (!target.level().isClientSide()) {
                     dog.setInfertile(true);
                     player.displayClientMessage(Component.translatable(dog.getGender() == WorkDogEntity.Gender.FEMALE ? "chat.workdog.sterilization_potion.success_female" : "chat.workdog.sterilization_potion.success_male", dog.getName()), true);
 

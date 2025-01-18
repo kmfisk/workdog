@@ -22,7 +22,7 @@ public class DogBreedGoal extends Goal {
 
     public DogBreedGoal(WorkDogEntity entityDog, double speed) {
         this.dog = entityDog;
-        this.level = entityDog.level;
+        this.level = entityDog.level();
         this.moveSpeed = speed;
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }

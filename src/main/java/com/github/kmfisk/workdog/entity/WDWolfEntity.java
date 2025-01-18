@@ -105,7 +105,7 @@ public class WDWolfEntity extends WorkDogEntity {
         if (entity instanceof WorkDogEntity) {
             WorkDogEntity baby = WorkDogEntities.WOLF.get().create(world);
             if (random.nextFloat() <= 0.05F) {
-                Holder<Biome> biome = level.getBiome(blockPosition());
+                Holder<Biome> biome = level().getBiome(blockPosition());
                 Set<TagKey<Biome>> biomeTypes = biome.tags().collect(Collectors.toSet());
                 if (biomeTypes.contains(Tags.Biomes.IS_PLAINS) && !biomeTypes.contains(Tags.Biomes.IS_HOT) && !biomeTypes.contains(Tags.Biomes.IS_COLD)) {
                     baby = WorkDogEntities.PIT_BULL.get().create(world);

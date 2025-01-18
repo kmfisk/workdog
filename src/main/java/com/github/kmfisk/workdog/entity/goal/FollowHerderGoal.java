@@ -98,7 +98,7 @@ public class FollowHerderGoal extends Goal {
     }
 
     private boolean canTeleportTo(BlockPos position) {
-        LevelReader level = livestock.level;
+        LevelReader level = livestock.level();
         BlockPathTypes pathnodetype = WalkNodeEvaluator.getBlockPathTypeStatic(level, position.mutable());
         if (pathnodetype != BlockPathTypes.WALKABLE) return false;
         else {

@@ -86,7 +86,7 @@ public class WorkDogEntities {
     private static <T extends Mob> RegistryObject<EntityType<T>> register(String name, EntityType.EntityFactory<T> factory, MobCategory classification, Supplier<AttributeSupplier.Builder> attributes, float width, float height) {
         RegistryObject<EntityType<T>> registryObject = REGISTRAR.register(name, () -> EntityType.Builder.of(factory, classification).sized(width, height).clientTrackingRange(10).build(name));
         if (attributes != null) ATTRIBUTES.add(new Tuple<>(cast(registryObject), attributes));
-        WorkDogItems.REGISTRAR.register(name + "_spawn_egg", () -> new WorkDogSpawnEggItem(registryObject, new Item.Properties().tab(WorkDog.ITEM_GROUP)));
+        WorkDogItems.REGISTRAR.register(name + "_spawn_egg", () -> new WorkDogSpawnEggItem(registryObject, new Item.Properties()));
         return registryObject;
     }
 }

@@ -17,7 +17,7 @@ public class WolfTargetNearestGoal<T extends LivingEntity> extends NearestAttack
 
     @Override
     public boolean canUse() {
-        if (wolf.level.getDifficulty() == Difficulty.PEACEFUL) return false;
+        if (wolf.level().getDifficulty() == Difficulty.PEACEFUL) return false;
         return super.canUse() && target != null && !target.getClass().equals(wolf.getClass());
     }
 }
