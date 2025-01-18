@@ -63,10 +63,10 @@ public class WorkDogSpawns {
 
     public static void registerBiomeModifiers() {
         Codec<WorkDogBiomeModifier> codec = RecordCodecBuilder.create(builder -> builder.group(
-                MobSpawnSettings.SpawnerData.CODEC.fieldOf("spawner").forGetter(WorkDogBiomeModifier::wolfSpawner),
-                MobSpawnSettings.SpawnerData.CODEC.fieldOf("spawner").forGetter(WorkDogBiomeModifier::gsSpawner),
-                MobSpawnSettings.SpawnerData.CODEC.fieldOf("spawner").forGetter(WorkDogBiomeModifier::jrtSpawner)
+                MobSpawnSettings.SpawnerData.CODEC.fieldOf("wolf_spawner").forGetter(WorkDogBiomeModifier::wolfSpawner),
+                MobSpawnSettings.SpawnerData.CODEC.fieldOf("german_shepherd_spawner").forGetter(WorkDogBiomeModifier::gsSpawner),
+                MobSpawnSettings.SpawnerData.CODEC.fieldOf("jack_russell_terrier_spawner").forGetter(WorkDogBiomeModifier::jrtSpawner)
         ).apply(builder, WorkDogBiomeModifier::new));
-        BIOME_REGISTRAR.register("workdog_spawn", () -> codec);
+        BIOME_REGISTRAR.register("spawner", () -> codec);
     }
 }

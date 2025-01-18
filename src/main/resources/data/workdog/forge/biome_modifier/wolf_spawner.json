@@ -1,9 +1,21 @@
 {
-  "type": "forge:add_spawns",
-  "spawner": {
+  "type": "workdog:spawner",
+  "wolf_spawner": {
     "type": "workdog:wolf",
     "weight": 16,
     "minCount": 1,
     "maxCount": 5
+  },
+  "german_shepherd_spawner": {
+    "type": "workdog:german_shepherd",
+    "weight": 2,
+    "minCount": 1,
+    "maxCount": 1
+  },
+  "jack_russell_terrier_spawner": {
+    "type": "workdog:jack_russell_terrier",
+    "weight": 2,
+    "minCount": 1,
+    "maxCount": 1
   }
 }
