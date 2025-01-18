@@ -15,11 +15,7 @@ public class WorkDogConfig {
     public static ForgeConfigSpec.ConfigValue<Integer> tamedLimit;
     public static ForgeConfigSpec.ConfigValue<Integer> breedingLimit;
     public static ForgeConfigSpec.BooleanValue nameBabies;
-    public static ForgeConfigSpec.ConfigValue<Integer> wolfSpawnChance;
-    public static ForgeConfigSpec.ConfigValue<Integer> wolfMinGroup;
-    public static ForgeConfigSpec.ConfigValue<Integer> wolfMaxGroup;
     public static ForgeConfigSpec.BooleanValue straySpawns;
-    public static ForgeConfigSpec.ConfigValue<Integer> straySpawnChance;
     public static ForgeConfigSpec.ConfigValue<Integer> puppyMatureTimer;
     public static ForgeConfigSpec.ConfigValue<Integer> pregnancyTimer;
     public static ForgeConfigSpec.ConfigValue<Integer> heatTimer;
@@ -36,6 +32,7 @@ public class WorkDogConfig {
 
     private static void setupConfig(ForgeConfigSpec.Builder builder) {
         builder.push("Options");
+        straySpawns = builder.define("enabled", true);
         pedigreeMode = builder.define("pedigree_mode", false);
         removeVanillaWolves = builder.define("remove_vanilla_wolves", true);
 //        wanderAreaLimit = builder.worldRestart()
@@ -57,18 +54,6 @@ public class WorkDogConfig {
                         " Set this to true if you operate a server that has a lag clearing feature that wipes un-named entities!")
                 .translation(PREFIX + ".name_babies")
                 .define("name_babies", false);
-        builder.pop();
-
-        builder.push("Spawns");
-        builder.push("Wolves");
-        wolfSpawnChance = builder.define("chance", 16);
-        wolfMinGroup = builder.define("min", 1);
-        wolfMaxGroup = builder.define("max", 5);
-        builder.pop();
-        builder.push("Stray Dogs");
-        straySpawns = builder.define("enabled", true);
-        straySpawnChance = builder.define("chance", 2);
-        builder.pop();
         builder.pop();
 
         builder.push("Timers");
