@@ -12,6 +12,7 @@ import com.github.kmfisk.workdog.item.WorkDogItems;
 import com.github.kmfisk.workdog.world.WorkDogSpawns;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
@@ -37,6 +38,7 @@ public class WorkDog {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TAB = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, WorkDog.MOD_ID);
     public static final RegistryObject<CreativeModeTab> ITEM_GROUP = CREATIVE_MODE_TAB.register(MOD_ID + ".group", () -> CreativeModeTab.builder()
             .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
+            .title(Component.translatable("itemGroup." + MOD_ID + ".group"))
             .icon(() -> WorkDogItems.CRATE.get().getDefaultInstance())
             .displayItems((itemDisplayParameters, output) -> WorkDogItems.REGISTRAR.getEntries().forEach(item -> output.accept(item.get())))
             .build());
