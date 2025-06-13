@@ -3,20 +3,18 @@ package com.github.kmfisk.workdog.data;
 import com.github.kmfisk.workdog.block.WorkDogBlocks;
 import com.github.kmfisk.workdog.item.WorkDogItems;
 import com.github.kmfisk.workdog.tags.WorkDogTags;
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
-import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.data.recipes.ShapedRecipeBuilder;
-import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.advancements.criterion.EntityPredicate;
+import net.minecraft.advancements.criterion.InventoryChangeTrigger;
+import net.minecraft.advancements.criterion.ItemPredicate;
+import net.minecraft.advancements.criterion.MinMaxBounds;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.data.*;
+import net.minecraft.item.DyeColor;
+import net.minecraft.item.DyeItem;
+import net.minecraft.item.Items;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.DyeItem;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
 
 import java.util.function.Consumer;
@@ -34,7 +32,7 @@ public class WorkDogRecipeProvider extends RecipeProvider {
                 .pattern("TRT")
                 .define('T', Items.LEATHER)
                 .define('R', Items.GOLD_INGOT)
-                .unlockedBy("has_leather", InventoryChangeTrigger.TriggerInstance.hasItems(Items.LEATHER)).save(consumer);
+                .unlockedBy("has_leather", has(Items.LEATHER)).save(consumer);
         ShapedRecipeBuilder.shaped(WorkDogItems.HARNESS.get())
                 .pattern(" TT")
                 .pattern("GRF")
@@ -43,7 +41,7 @@ public class WorkDogRecipeProvider extends RecipeProvider {
                 .define('R', Items.GOLD_INGOT)
                 .define('G', Items.GOLD_NUGGET)
                 .define('F', Items.STRING)
-                .unlockedBy("has_leather", InventoryChangeTrigger.TriggerInstance.hasItems(Items.LEATHER)).save(consumer);
+                .unlockedBy("has_leather", has(Items.LEATHER)).save(consumer);
         ShapedRecipeBuilder.shaped(WorkDogItems.HOG_VEST.get())
                 .pattern(" TT")
                 .pattern("TRF")
@@ -51,7 +49,7 @@ public class WorkDogRecipeProvider extends RecipeProvider {
                 .define('T', Items.LEATHER)
                 .define('R', Items.IRON_INGOT)
                 .define('F', Items.STRING)
-                .unlockedBy("has_leather", InventoryChangeTrigger.TriggerInstance.hasItems(Items.LEATHER)).save(consumer);
+                .unlockedBy("has_leather", has(Items.LEATHER)).save(consumer);
         ShapedRecipeBuilder.shaped(WorkDogItems.MUZZLE.get())
                 .pattern("RRF")
                 .pattern("TTL")
@@ -59,7 +57,7 @@ public class WorkDogRecipeProvider extends RecipeProvider {
                 .define('T', Items.IRON_INGOT)
                 .define('L', Items.LEATHER)
                 .define('F', Items.STRING)
-                .unlockedBy("has_leather", InventoryChangeTrigger.TriggerInstance.hasItems(Items.LEATHER)).save(consumer);
+                .unlockedBy("has_leather", has(Items.LEATHER)).save(consumer);
         ShapedRecipeBuilder.shaped(WorkDogItems.SADDLEBAG.get())
                 .pattern("F F")
                 .pattern("TRT")
@@ -67,7 +65,7 @@ public class WorkDogRecipeProvider extends RecipeProvider {
                 .define('R', Tags.Items.CHESTS_WOODEN)
                 .define('T', Items.LEATHER)
                 .define('F', Items.STRING)
-                .unlockedBy("has_leather", InventoryChangeTrigger.TriggerInstance.hasItems(Items.LEATHER)).save(consumer);
+                .unlockedBy("has_leather", has(Items.LEATHER)).save(consumer);
 
 
         ShapedRecipeBuilder.shaped(WorkDogItems.CRATE.get())
@@ -77,17 +75,17 @@ public class WorkDogRecipeProvider extends RecipeProvider {
                 .define('I', Items.IRON_INGOT)
                 .define('B', Items.IRON_BARS)
                 .define('D', ItemTags.CARPETS)
-                .unlockedBy("has_iron", InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT)).save(consumer);
+                .unlockedBy("has_iron", has(Items.IRON_INGOT)).save(consumer);
         ShapelessRecipeBuilder.shapeless(WorkDogItems.STERILIZATION_POTION.get(), 4)
                 .requires(Items.GLASS_BOTTLE)
                 .requires(Items.SPIDER_EYE)
                 .requires(Items.BONE)
                 .requires(Items.IRON_NUGGET)
-                .unlockedBy("has_bottle", InventoryChangeTrigger.TriggerInstance.hasItems(Items.GLASS_BOTTLE)).save(consumer);
+                .unlockedBy("has_bottle", has(Items.GLASS_BOTTLE)).save(consumer);
         ShapelessRecipeBuilder.shapeless(WorkDogItems.SURRENDER_FORM.get())
                 .requires(Items.PAPER)
                 .requires(WorkDogItems.COLLAR.get())
-                .unlockedBy("has_collar", InventoryChangeTrigger.TriggerInstance.hasItems(WorkDogItems.COLLAR.get())).save(consumer);
+                .unlockedBy("has_collar", has(WorkDogItems.COLLAR.get())).save(consumer);
 
         ShapedRecipeBuilder.shaped(WorkDogBlocks.KENNEL_EQUIPMENT.get())
                 .pattern("###")
@@ -98,7 +96,7 @@ public class WorkDogRecipeProvider extends RecipeProvider {
                 .define('M', WorkDogItems.MUZZLE.get())
                 .define('L', Items.LEAD)
                 .define('S', Items.STICK)
-                .unlockedBy("has_lead", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.ANY)).save(consumer);
+                .unlockedBy("has_lead", new InventoryChangeTrigger.Instance(EntityPredicate.AndPredicate.ANY, MinMaxBounds.IntBound.atLeast(10), MinMaxBounds.IntBound.ANY, MinMaxBounds.IntBound.ANY, new ItemPredicate[0])).save(consumer);
 
         for (int i = 0; i < 16; i++) {
             DyeColor color = DyeColor.byId(i);
@@ -109,7 +107,7 @@ public class WorkDogRecipeProvider extends RecipeProvider {
                     .define('T', Items.LEATHER)
                     .define('R', DyeItem.byColor(color))
                     .define('F', Items.STRING)
-                    .unlockedBy("has_leather", InventoryChangeTrigger.TriggerInstance.hasItems(Items.LEATHER)).save(consumer);
+                    .unlockedBy("has_leather", has(Items.LEATHER)).save(consumer);
         }
 
         Ingredient woolCarpets = Ingredient.of(ItemTags.CARPETS);
@@ -165,22 +163,22 @@ public class WorkDogRecipeProvider extends RecipeProvider {
         dogBowl(consumer, WorkDogBlocks.BOWLS.get(DyeColor.BLACK.getName()).get(), Blocks.BLACK_CONCRETE);
     }
 
-    public static void dogBed(Consumer<FinishedRecipe> consumer, Block bed, Ingredient topPiece, Block bottomPiece) {
+    public static void dogBed(Consumer<IFinishedRecipe> consumer, Block bed, Ingredient topPiece, Block bottomPiece) {
         ShapedRecipeBuilder.shaped(bed)
                 .pattern("WWW")
                 .pattern("TTT")
                 .define('W', topPiece)
                 .define('T', bottomPiece)
-                .unlockedBy("has_wool", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(ItemTags.WOOL).build())).save(consumer);
+                .unlockedBy("has_wool", has(ItemTags.WOOL)).save(consumer);
     }
 
-    public static void dogBowl(Consumer<FinishedRecipe> consumer, Block bowl, Block concrete) {
+    public static void dogBowl(Consumer<IFinishedRecipe> consumer, Block bowl, Block concrete) {
         ShapedRecipeBuilder.shaped(bowl)
                 .pattern("FCW")
                 .pattern("CCC")
                 .define('F', WorkDogTags.RAW_MEAT)
                 .define('C', concrete)
                 .define('W', Items.POTION.getDefaultInstance().getItem())
-                .unlockedBy("has_concrete", InventoryChangeTrigger.TriggerInstance.hasItems(concrete)).save(consumer);
+                .unlockedBy("has_concrete", has(concrete)).save(consumer);
     }
 }
