@@ -76,7 +76,7 @@ public class WorkDogRecipeProvider extends RecipeProvider {
                 .pattern("III")
                 .define('I', Items.IRON_INGOT)
                 .define('B', Items.IRON_BARS)
-                .define('D', ItemTags.WOOL_CARPETS)
+                .define('D', ItemTags.CARPETS)
                 .unlockedBy("has_iron", InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT)).save(consumer);
         ShapelessRecipeBuilder.shapeless(WorkDogItems.STERILIZATION_POTION.get(), 4)
                 .requires(Items.GLASS_BOTTLE)
@@ -112,7 +112,7 @@ public class WorkDogRecipeProvider extends RecipeProvider {
                     .unlockedBy("has_leather", InventoryChangeTrigger.TriggerInstance.hasItems(Items.LEATHER)).save(consumer);
         }
 
-        Ingredient woolCarpets = Ingredient.of(ItemTags.WOOL_CARPETS);
+        Ingredient woolCarpets = Ingredient.of(ItemTags.CARPETS);
         dogBed(consumer, WorkDogBlocks.BEDS.get(DyeColor.WHITE.getName()).get(), woolCarpets, Blocks.WHITE_WOOL);
         dogBed(consumer, WorkDogBlocks.BEDS.get(DyeColor.ORANGE.getName()).get(), woolCarpets, Blocks.ORANGE_WOOL);
         dogBed(consumer, WorkDogBlocks.BEDS.get(DyeColor.MAGENTA.getName()).get(), woolCarpets, Blocks.MAGENTA_WOOL);
