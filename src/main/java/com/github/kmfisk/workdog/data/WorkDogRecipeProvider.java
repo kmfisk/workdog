@@ -5,14 +5,16 @@ import com.github.kmfisk.workdog.item.WorkDogItems;
 import com.github.kmfisk.workdog.tags.WorkDogTags;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.*;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
@@ -26,14 +28,14 @@ public class WorkDogRecipeProvider extends RecipeProvider {
 
     @Override
     protected void buildShapelessRecipes(Consumer<IFinishedRecipe> consumer) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, WorkDogItems.COLLAR.get(), 2)
+        ShapedRecipeBuilder.shaped(WorkDogItems.COLLAR.get(), 2)
                 .pattern("TTT")
                 .pattern("T T")
                 .pattern("TRT")
                 .define('T', Items.LEATHER)
                 .define('R', Items.GOLD_INGOT)
                 .unlockedBy("has_leather", InventoryChangeTrigger.TriggerInstance.hasItems(Items.LEATHER)).save(consumer);
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, WorkDogItems.HARNESS.get())
+        ShapedRecipeBuilder.shaped(WorkDogItems.HARNESS.get())
                 .pattern(" TT")
                 .pattern("GRF")
                 .pattern("TTT")
@@ -42,7 +44,7 @@ public class WorkDogRecipeProvider extends RecipeProvider {
                 .define('G', Items.GOLD_NUGGET)
                 .define('F', Items.STRING)
                 .unlockedBy("has_leather", InventoryChangeTrigger.TriggerInstance.hasItems(Items.LEATHER)).save(consumer);
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, WorkDogItems.HOG_VEST.get())
+        ShapedRecipeBuilder.shaped(WorkDogItems.HOG_VEST.get())
                 .pattern(" TT")
                 .pattern("TRF")
                 .pattern("TTT")
@@ -50,7 +52,7 @@ public class WorkDogRecipeProvider extends RecipeProvider {
                 .define('R', Items.IRON_INGOT)
                 .define('F', Items.STRING)
                 .unlockedBy("has_leather", InventoryChangeTrigger.TriggerInstance.hasItems(Items.LEATHER)).save(consumer);
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, WorkDogItems.MUZZLE.get())
+        ShapedRecipeBuilder.shaped(WorkDogItems.MUZZLE.get())
                 .pattern("RRF")
                 .pattern("TTL")
                 .define('R', Items.IRON_BARS)
@@ -58,7 +60,7 @@ public class WorkDogRecipeProvider extends RecipeProvider {
                 .define('L', Items.LEATHER)
                 .define('F', Items.STRING)
                 .unlockedBy("has_leather", InventoryChangeTrigger.TriggerInstance.hasItems(Items.LEATHER)).save(consumer);
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, WorkDogItems.SADDLEBAG.get())
+        ShapedRecipeBuilder.shaped(WorkDogItems.SADDLEBAG.get())
                 .pattern("F F")
                 .pattern("TRT")
                 .pattern("TTT")
@@ -68,7 +70,7 @@ public class WorkDogRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_leather", InventoryChangeTrigger.TriggerInstance.hasItems(Items.LEATHER)).save(consumer);
 
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, WorkDogItems.CRATE.get())
+        ShapedRecipeBuilder.shaped(WorkDogItems.CRATE.get())
                 .pattern("III")
                 .pattern("BDI")
                 .pattern("III")
@@ -76,18 +78,18 @@ public class WorkDogRecipeProvider extends RecipeProvider {
                 .define('B', Items.IRON_BARS)
                 .define('D', ItemTags.WOOL_CARPETS)
                 .unlockedBy("has_iron", InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT)).save(consumer);
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, WorkDogItems.STERILIZATION_POTION.get(), 4)
+        ShapelessRecipeBuilder.shapeless(WorkDogItems.STERILIZATION_POTION.get(), 4)
                 .requires(Items.GLASS_BOTTLE)
                 .requires(Items.SPIDER_EYE)
                 .requires(Items.BONE)
                 .requires(Items.IRON_NUGGET)
                 .unlockedBy("has_bottle", InventoryChangeTrigger.TriggerInstance.hasItems(Items.GLASS_BOTTLE)).save(consumer);
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, WorkDogItems.SURRENDER_FORM.get())
+        ShapelessRecipeBuilder.shapeless(WorkDogItems.SURRENDER_FORM.get())
                 .requires(Items.PAPER)
                 .requires(WorkDogItems.COLLAR.get())
                 .unlockedBy("has_collar", InventoryChangeTrigger.TriggerInstance.hasItems(WorkDogItems.COLLAR.get())).save(consumer);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, WorkDogBlocks.KENNEL_EQUIPMENT.get())
+        ShapedRecipeBuilder.shaped(WorkDogBlocks.KENNEL_EQUIPMENT.get())
                 .pattern("###")
                 .pattern("HML")
                 .pattern("S  ")
@@ -100,7 +102,7 @@ public class WorkDogRecipeProvider extends RecipeProvider {
 
         for (int i = 0; i < 16; i++) {
             DyeColor color = DyeColor.byId(i);
-            ShapedRecipeBuilder.shaped(RecipeCategory.MISC, WorkDogItems.SERVICE_VESTS.get(color.getName()).get())
+            ShapedRecipeBuilder.shaped(WorkDogItems.SERVICE_VESTS.get(color.getName()).get())
                     .pattern(" TT")
                     .pattern("TRF")
                     .pattern("TTT")
@@ -164,7 +166,7 @@ public class WorkDogRecipeProvider extends RecipeProvider {
     }
 
     public static void dogBed(Consumer<FinishedRecipe> consumer, Block bed, Ingredient topPiece, Block bottomPiece) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, bed)
+        ShapedRecipeBuilder.shaped(bed)
                 .pattern("WWW")
                 .pattern("TTT")
                 .define('W', topPiece)
@@ -173,7 +175,7 @@ public class WorkDogRecipeProvider extends RecipeProvider {
     }
 
     public static void dogBowl(Consumer<FinishedRecipe> consumer, Block bowl, Block concrete) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, bowl)
+        ShapedRecipeBuilder.shaped(bowl)
                 .pattern("FCW")
                 .pattern("CCC")
                 .define('F', WorkDogTags.RAW_MEAT)
