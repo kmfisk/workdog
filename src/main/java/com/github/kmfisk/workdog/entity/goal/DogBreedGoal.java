@@ -41,7 +41,7 @@ public class DogBreedGoal extends Goal {
             return false;
 
         target = getNearbyMate();
-        if (target != null && dog.getSensing().hasLineOfSight(target) && target.getBreedingStatus("inheat")) {
+        if (target != null && dog.getSensing().hasLineOfSight(target) && target.getBreedingStatus(WorkDogEntity.BreedingStatus.HEAT)) {
             if (target.isInfertile()) return false;
             if (!target.isTame()) return true;
             LivingEntity targetOwner = target.getOwner();
@@ -57,7 +57,7 @@ public class DogBreedGoal extends Goal {
         if (dog.isInfertile() || target.isInfertile()) return false;
 
         boolean maleCooldownCheck = dog.getGender() == WorkDogEntity.Gender.MALE && dog.getBreedTimer() == 0;
-        boolean femaleHeatCheck = target.getGender() == WorkDogEntity.Gender.FEMALE && target.getBreedingStatus("inheat");
+        boolean femaleHeatCheck = target.getGender() == WorkDogEntity.Gender.FEMALE && target.getBreedingStatus(WorkDogEntity.BreedingStatus.HEAT);
 
         nearbyDogs = level.getEntitiesOfClass(WorkDogEntity.class, dog.getBoundingBox().inflate(NEARBY_RADIUS_CHECK));
 
@@ -114,17 +114,17 @@ public class DogBreedGoal extends Goal {
         if (WorkDogConfig.pedigreeMode.get() && dogLitters >= 5 && dog.getRandom().nextBoolean())
             dog.setInfertile(true);
 
-        target.setBreedingStatus("inheat", false); // 100% chance ends heat
+        target.setBreedingStatus(WorkDogEntity.BreedingStatus.HEAT, false); // 100% chance ends heat
 
         if (target.getRandom().nextFloat() <= 0.1F) { // 10% chance false pregnancy
-            target.setTimeCycle("end", WorkDogConfig.heatCooldown.get()); // sets out of heat timer
+            target.setHeatCycle(false, WorkDogConfig.heatCooldown.get()); // sets out of heat timer
             level.broadcastEntityEvent(target, (byte) 6); // smoke particles
         } else {
             int litterSize = level.random.nextInt(4) + 1; // at least 1 puppy, max of 4
-            target.setBreedingStatus("ispregnant", true);
+            target.setBreedingStatus(WorkDogEntity.BreedingStatus.PREGNANT, true);
             target.setPuppies(litterSize);
             target.addSire(dog); // save sire nbt data to mother dog for each puppy added to litterSize
-            target.setTimeCycle("pregnancy", WorkDogConfig.pregnancyTimer.get()); // starts pregnancy timer
+            target.setBreedTimer(WorkDogConfig.pregnancyTimer.get()); // starts pregnancy timer
         }
     }
 }

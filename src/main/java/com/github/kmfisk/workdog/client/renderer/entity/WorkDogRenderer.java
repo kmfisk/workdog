@@ -94,8 +94,8 @@ public abstract class WorkDogRenderer<T extends WorkDogEntity, M extends EntityM
             float backgroundOpacity = Minecraft.getInstance().options.getBackgroundOpacity(0.25F);
             int j = (int) (backgroundOpacity * 255.0F) << 24;
 
-            MutableComponent info = Component.translatable((entity.getGender() == WorkDogEntity.Gender.FEMALE ? (entity.getBreedingStatus("inheat") ? "name.workdog.in_heat" : "name.workdog.not_in_heat") : "name.workdog.male"), entity.getBreedTimer());
-            if (entity.getBreedingStatus("ispregnant"))
+            MutableComponent info = Component.translatable((entity.getGender() == WorkDogEntity.Gender.FEMALE ? (entity.getBreedingStatus(WorkDogEntity.BreedingStatus.HEAT) ? "name.workdog.in_heat" : "name.workdog.not_in_heat") : "name.workdog.male"), entity.getBreedTimer());
+            if (entity.getBreedingStatus(WorkDogEntity.BreedingStatus.PREGNANT))
                 info = Component.translatable("name.workdog.pregnant", entity.getBreedTimer());
 
             Font fontRenderer = getFont();

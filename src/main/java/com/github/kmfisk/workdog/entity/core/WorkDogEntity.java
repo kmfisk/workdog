@@ -13,7 +13,6 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -54,9 +53,6 @@ public abstract class WorkDogEntity extends TamableAnimal {
     private static final EntityDataAccessor<Optional<UUID>> PARENT_ID_0 = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<Optional<UUID>> PARENT_ID_1 = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.OPTIONAL_UUID);
 
-    private static final EntityDataAccessor<Boolean> INFERTILE = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Boolean> IN_HEAT = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Boolean> IS_PREGNANT = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> BREED_TIMER = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> PUPPIES = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> LITTERS = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.INT);
@@ -117,9 +113,6 @@ public abstract class WorkDogEntity extends TamableAnimal {
         this.entityData.define(VARIANT, 0);
         this.entityData.define(PARENT_ID_0, Optional.empty());
         this.entityData.define(PARENT_ID_1, Optional.empty());
-        this.entityData.define(INFERTILE, false);
-        this.entityData.define(IN_HEAT, false);
-        this.entityData.define(IS_PREGNANT, false);
         this.entityData.define(BREED_TIMER, 0);
         this.entityData.define(PUPPIES, 0);
         this.entityData.define(LITTERS, 0);
@@ -134,7 +127,7 @@ public abstract class WorkDogEntity extends TamableAnimal {
         int variant = random.nextInt(getVariantCount());
         if (dataTag != null && dataTag.contains("Variant")) variant = dataTag.getInt("Variant");
         setVariant(variant);
-        if (getGender() == Gender.FEMALE && !isInfertile()) setTimeCycle("end", WorkDogConfig.heatCooldown.get());
+        if (getGender() == Gender.FEMALE && !isInfertile()) setHeatCycle(false, WorkDogConfig.heatCooldown.get());
         setMode(Mode.WANDER);
         return super.finalizeSpawn(world, difficulty, reason, spawnData, dataTag);
     }
@@ -192,38 +185,36 @@ public abstract class WorkDogEntity extends TamableAnimal {
     }
 
     public void setInfertile(boolean infertile) {
-        this.entityData.set(INFERTILE, infertile);
+        setFlag(8, infertile);
     }
 
     public boolean isInfertile() {
-        return this.entityData.get(INFERTILE);
+        return getFlag(8);
     }
 
-    public void setTimeCycle(String s, int time) {
-        if (s.equals("start")) {
-            setBreedingStatus("inheat", true);
-            setBreedTimer(time);
-        }
-        if (s.equals("end")) {
-            setBreedingStatus("inheat", false);
-            setBreedTimer(-time);
-        }
-        if (s.equals("pregnancy")) {
-            setBreedTimer(time);
-        }
+    public void setHeatCycle(boolean startHeat, int time) {
+        setBreedingStatus(BreedingStatus.HEAT, startHeat);
+        setBreedTimer(startHeat ? time : -time);
     }
 
-    public void setBreedingStatus(String string, boolean parTrue) {
-        if (string.equals("inheat")) entityData.set(IN_HEAT, parTrue);
-        else if (string.equals("ispregnant")) entityData.set(IS_PREGNANT, parTrue);
+    public void setBreedingStatus(BreedingStatus breedingStatus, boolean isTrue) {
+        if (breedingStatus == BreedingStatus.HEAT) setFlag(16, isTrue);
+        else if (breedingStatus == BreedingStatus.PREGNANT) setFlag(32, isTrue);
     }
 
-    public boolean getBreedingStatus(String string) {
-        if (string.equals("inheat"))
-            return entityData.get(IN_HEAT);
-        else if (string.equals("ispregnant"))
-            return entityData.get(IS_PREGNANT);
-        return false;
+    public boolean getBreedingStatus(BreedingStatus breedingStatus) {
+        if (breedingStatus == BreedingStatus.HEAT) return getFlag(16);
+        else if (breedingStatus == BreedingStatus.PREGNANT) return getFlag(32);
+        else return false;
+    }
+
+    private void setFlag(int flagId, boolean isFlag) {
+        if (isFlag) entityData.set(DATA_FLAGS_ID, (byte) (entityData.get(DATA_FLAGS_ID) | flagId));
+        else entityData.set(DATA_FLAGS_ID, (byte) (entityData.get(DATA_FLAGS_ID) & ~flagId));
+    }
+
+    private boolean getFlag(int flagId) {
+        return (entityData.get(DATA_FLAGS_ID) & flagId) != 0;
     }
 
     public void setBreedTimer(int time) {
@@ -305,8 +296,8 @@ public abstract class WorkDogEntity extends TamableAnimal {
         nbt.putInt("Litters", getLitters());
         if (getGender() == Gender.FEMALE) {
             if (!isInfertile()) {
-                nbt.putBoolean("InHeat", getBreedingStatus("inheat"));
-                nbt.putBoolean("IsPregnant", getBreedingStatus("ispregnant"));
+                nbt.putBoolean("InHeat", getBreedingStatus(BreedingStatus.HEAT));
+                nbt.putBoolean("IsPregnant", getBreedingStatus(BreedingStatus.PREGNANT));
                 nbt.putInt("Puppies", getPuppies());
                 nbt.put("Sire", getSire());
             }
@@ -332,8 +323,8 @@ public abstract class WorkDogEntity extends TamableAnimal {
         setLitters(nbt.getInt("Litters"));
         if (getGender() == Gender.FEMALE) {
             if (!isInfertile()) {
-                setBreedingStatus("inheat", nbt.getBoolean("InHeat"));
-                setBreedingStatus("ispregnant", nbt.getBoolean("IsPregnant"));
+                setBreedingStatus(BreedingStatus.HEAT, nbt.getBoolean("InHeat"));
+                setBreedingStatus(BreedingStatus.PREGNANT, nbt.getBoolean("IsPregnant"));
                 setPuppies(nbt.getInt("Puppies"));
                 setSire(nbt.get("Sire"));
             }
@@ -347,19 +338,19 @@ public abstract class WorkDogEntity extends TamableAnimal {
     public void tick() {
         super.tick();
         if (!level().isClientSide && !isBaby() && !isInfertile() && getGender() == Gender.FEMALE) { //if female & adult & not infertile
-            if (getBreedingStatus("inheat")) //if in heat
+            if (getBreedingStatus(BreedingStatus.HEAT)) //if in heat
                 if (getBreedTimer() <= 0) { //and timer is finished (reaching 0 after being in positives)
-                    if (!getBreedingStatus("ispregnant")) //and not pregnant
-                        setTimeCycle("end", WorkDogConfig.heatCooldown.get()); //sets out of heat for 3 (default) minecraft days
+                    if (!getBreedingStatus(BreedingStatus.PREGNANT)) //and not pregnant
+                        setHeatCycle(false, WorkDogConfig.heatCooldown.get()); //sets out of heat for 3 (default) minecraft days
                     else { //or if IS pregnant
-                        setTimeCycle("pregnant", WorkDogConfig.pregnancyTimer.get()); //and heat time runs out, starts pregnancy timer for birth
-                        setBreedingStatus("inheat", false); //sets out of heat
+                        setBreedTimer(WorkDogConfig.pregnancyTimer.get()); //and heat time runs out, starts pregnancy timer for birth
+                        setBreedingStatus(BreedingStatus.HEAT, false); //sets out of heat
                     }
                 }
-            if (!getBreedingStatus("inheat")) { //if not in heat
+            if (!getBreedingStatus(BreedingStatus.HEAT)) { //if not in heat
                 if (getBreedTimer() >= 0) { //and timer is finished (reaching 0 after being in negatives)
-                    if (!getBreedingStatus("ispregnant")) //and not pregnant
-                        setTimeCycle("start", WorkDogConfig.heatTimer.get()); //sets in heat for 2 minecraft days
+                    if (!getBreedingStatus(BreedingStatus.PREGNANT)) //and not pregnant
+                        setHeatCycle(true, WorkDogConfig.heatTimer.get()); //sets in heat for 2 minecraft days
                 }
             }
         }
@@ -372,9 +363,9 @@ public abstract class WorkDogEntity extends TamableAnimal {
         if (!isBaby() && !isInfertile()) { //if not a child & not infertile
             int breedTimer = getBreedTimer();
             if (getGender() == Gender.FEMALE) {
-                if (getBreedingStatus("inheat") || getBreedingStatus("ispregnant")) {
+                if (getBreedingStatus(BreedingStatus.HEAT) || getBreedingStatus(BreedingStatus.PREGNANT)) {
                     --breedTimer;
-                    if (getBreedingStatus("inheat")) {
+                    if (getBreedingStatus(BreedingStatus.HEAT)) {
                         if (breedTimer % 10 == 0) {
 
                             double d0 = random.nextGaussian() * 0.02D;
@@ -383,7 +374,7 @@ public abstract class WorkDogEntity extends TamableAnimal {
                             level().addParticle(ParticleTypes.HEART, getRandomX(1.0D), getRandomY() + 0.5D, getRandomZ(1.0D), d0, d1, d2);
                         }
                     }
-                } else if (!getBreedingStatus("inheat") && !getBreedingStatus("ispregnant"))
+                } else if (!getBreedingStatus(BreedingStatus.HEAT) && !getBreedingStatus(BreedingStatus.PREGNANT))
                     ++breedTimer;
             } else if (getGender() == Gender.MALE) {
                 if (breedTimer > 0)
@@ -420,7 +411,7 @@ public abstract class WorkDogEntity extends TamableAnimal {
         if (partner.isInfertile() || isInfertile()) return false;
 
         if (getGender() == Gender.MALE && getBreedTimer() == 0)
-            return (partner.getGender() == Gender.FEMALE && partner.getBreedingStatus("inheat"));
+            return (partner.getGender() == Gender.FEMALE && partner.getBreedingStatus(BreedingStatus.HEAT));
         else return false;
     }
 
@@ -656,5 +647,10 @@ public abstract class WorkDogEntity extends TamableAnimal {
                     throw new IllegalStateException("Unexpected value: " + ordinal);
             }
         }
+    }
+
+    public enum BreedingStatus {
+        HEAT,
+        PREGNANT;
     }
 }

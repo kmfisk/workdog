@@ -24,7 +24,7 @@ public class DogBirthGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (mother.getGender() != WorkDogEntity.Gender.FEMALE || !mother.getBreedingStatus("ispregnant") || mother.getBreedingStatus("inheat"))
+        if (mother.getGender() != WorkDogEntity.Gender.FEMALE || !mother.getBreedingStatus(WorkDogEntity.BreedingStatus.PREGNANT) || mother.getBreedingStatus(WorkDogEntity.BreedingStatus.HEAT))
             return false;
 
         else if (mother.getBreedTimer() >= WorkDogConfig.pregnancyTimer.get() / 10 || mother.isInfertile())
@@ -35,7 +35,7 @@ public class DogBirthGoal extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        return mother.getBreedingStatus("ispregnant") && !mother.isInfertile();
+        return mother.getBreedingStatus(WorkDogEntity.BreedingStatus.PREGNANT) && !mother.isInfertile();
     }
 
     @Override
@@ -65,8 +65,8 @@ public class DogBirthGoal extends Goal {
 
             mother.getPersistentData().remove("Sire"); // deletes just used sire data
             mother.setPuppies(0); // resets puppy counter
-            mother.setBreedingStatus("ispregnant", false); // ends pregnancy
-            mother.setTimeCycle("end", WorkDogConfig.heatCooldown.get()); // sets out of heat timer
+            mother.setBreedingStatus(WorkDogEntity.BreedingStatus.PREGNANT, false); // ends pregnancy
+            mother.setHeatCycle(false, WorkDogConfig.heatCooldown.get()); // sets out of heat timer
 
             int litters = mother.getLitters() + 1;
             mother.setLitters(litters);
