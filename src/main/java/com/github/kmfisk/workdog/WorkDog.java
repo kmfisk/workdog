@@ -3,6 +3,7 @@ package com.github.kmfisk.workdog;
 import com.github.kmfisk.workdog.block.WorkDogBlocks;
 import com.github.kmfisk.workdog.client.color.ColorEvents;
 import com.github.kmfisk.workdog.config.WorkDogConfig;
+import com.github.kmfisk.workdog.data.WDAdvancementProvider;
 import com.github.kmfisk.workdog.data.WDBlockLoot;
 import com.github.kmfisk.workdog.data.WDTagsProviders;
 import com.github.kmfisk.workdog.data.WorkDogRecipeProvider;
@@ -115,6 +116,6 @@ public class WorkDog {
         dataGenerator.addProvider(event.includeServer(), new LootTableProvider(packOutput, Collections.emptySet(),
                 List.of(new LootTableProvider.SubProviderEntry(WDBlockLoot::new, LootContextParamSets.BLOCK))));
         dataGenerator.addProvider(event.includeServer(), new WorkDogRecipeProvider(packOutput));
-//        dataGenerator.addProvider(event.includeServer(), new WDAdvancementProvider(packOutput, event.getLookupProvider(), event.getExistingFileHelper()));
+        dataGenerator.addProvider(event.includeServer(), new WDAdvancementProvider(packOutput, event.getLookupProvider(), event.getExistingFileHelper()));
     }
 }

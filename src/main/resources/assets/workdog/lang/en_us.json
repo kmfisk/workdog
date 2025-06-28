@@ -141,5 +141,25 @@
   "block.workdog.red_dog_bed": "Red Dog Bed",
   "block.workdog.fancy_red_dog_bed": "Fancy Red Dog Bed",
   "block.workdog.black_dog_bed": "Black Dog Bed",
-  "block.workdog.fancy_black_dog_bed": "Fancy Black Dog Bed"
+  "block.workdog.fancy_black_dog_bed": "Fancy Black Dog Bed",
+
+  "__comment": "Advancements",
+  "advancements.workdog.root": "Working Dogs",
+  "advancements.workdog.root.desc": "Man's best friend",
+  "advancements.workdog.bites": "He Don't Bite",
+  "advancements.workdog.bites.desc": "Your dog killed another player, good job.",
+  "advancements.workdog.hound": "Hunt Like A Hound",
+  "advancements.workdog.hound.desc": "Your dog killed a wolf.",
+  "advancements.workdog.escape": "I Don't Know How He Got Out",
+  "advancements.workdog.escape.desc": "Your dog killed something that wouldn't fight back.",
+  "advancements.workdog.esa": "Emotional Support Animal",
+  "advancements.workdog.esa.desc": "Equip a service vest on a pit bull.",
+  "advancements.workdog.michael": "Michael Vick?",
+  "advancements.workdog.michael.desc": "Your dog killed another dog.",
+  "advancements.workdog.peta": "Someone Call PETA",
+  "advancements.workdog.peta.desc": "You killed your own dog!",
+  "advancements.workdog.masculinity": "Fragile Masculinity",
+  "advancements.workdog.masculinity.desc": "Craft a black, gray, or brown service dog vest.",
+  "advancements.workdog.gay": "The Gay Agenda",
+  "advancements.workdog.gay.desc": "Craft a cyan, pink, or magenta service dog vest."
 }
