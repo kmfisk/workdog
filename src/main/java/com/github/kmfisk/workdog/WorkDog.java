@@ -3,6 +3,7 @@ package com.github.kmfisk.workdog;
 import com.github.kmfisk.workdog.block.WorkDogBlocks;
 import com.github.kmfisk.workdog.client.color.ColorEvents;
 import com.github.kmfisk.workdog.config.WorkDogConfig;
+import com.github.kmfisk.workdog.data.WDTagsProviders;
 import com.github.kmfisk.workdog.data.WorkDogRecipeProvider;
 import com.github.kmfisk.workdog.entity.WorkDogEntities;
 import com.github.kmfisk.workdog.entity.merchant.villager.WorkDogVillagerTrades;
@@ -12,6 +13,7 @@ import com.github.kmfisk.workdog.item.WorkDogItems;
 import com.github.kmfisk.workdog.world.WorkDogSpawns;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -93,8 +95,20 @@ public class WorkDog {
     }
 
     private void gatherData(final GatherDataEvent event) {
-        System.out.println("Generating workdog Data!");
         DataGenerator dataGenerator = event.getGenerator();
-        dataGenerator.addProvider(event.includeServer(), new WorkDogRecipeProvider(dataGenerator.getPackOutput()));
+        PackOutput packOutput = dataGenerator.getPackOutput();
+//        dataGenerator.addProvider(event.includeClient(), new WDBlockModels(packOutput, event.getExistingFileHelper()));
+//        dataGenerator.addProvider(event.includeClient(), new WDBlockStates(packOutput, event.getExistingFileHelper()));
+//        dataGenerator.addProvider(event.includeClient(), new WDItemModels(packOutput, event.getExistingFileHelper()));
+
+        WDTagsProviders.WDBlockTagsProvider blockTagsProvider = new WDTagsProviders.WDBlockTagsProvider(packOutput, event.getLookupProvider(), event.getExistingFileHelper());
+        dataGenerator.addProvider(event.includeServer(), blockTagsProvider);
+        dataGenerator.addProvider(event.includeServer(), new WDTagsProviders.WDItemTagsProvider(packOutput, event.getLookupProvider(), blockTagsProvider, event.getExistingFileHelper()));
+        dataGenerator.addProvider(event.includeServer(), new WDTagsProviders.WDPoiTypeTagsProvider(packOutput, event.getLookupProvider(), event.getExistingFileHelper()));
+        dataGenerator.addProvider(event.includeServer(), new WDTagsProviders.WDEntityTypeTagsProvider(packOutput, event.getLookupProvider(), event.getExistingFileHelper()));
+//        dataGenerator.addProvider(event.includeServer(), new LootTableProvider(packOutput, Collections.emptySet(),
+//                List.of(new LootTableProvider.SubProviderEntry(WDBlockLoot::new, LootContextParamSets.BLOCK))));
+        dataGenerator.addProvider(event.includeServer(), new WorkDogRecipeProvider(packOutput));
+//        dataGenerator.addProvider(event.includeServer(), new WDAdvancementProvider(packOutput, event.getLookupProvider(), event.getExistingFileHelper()));
     }
 }

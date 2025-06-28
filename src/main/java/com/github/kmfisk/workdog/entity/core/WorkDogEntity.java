@@ -388,7 +388,7 @@ public abstract class WorkDogEntity extends TamableAnimal {
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return stack.is(WorkDogTags.RAW_MEAT);
+        return stack.is(WorkDogTags.RAW_MEATS);
     }
 
     public boolean canTame(Player player, ItemStack stack) {
