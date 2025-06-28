@@ -67,12 +67,16 @@ public class WDAdvancementProvider extends ForgeAdvancementProvider {
 
             Advancement masculinity = Advancement.Builder.advancement().parent(root)
                     .display(WorkDogItems.SERVICE_VESTS.get(DyeColor.BROWN).get(), Component.translatable("advancements.workdog.masculinity"), Component.translatable("advancements.workdog.masculinity.desc"), null, FrameType.TASK, true, true, false)
-                    .addCriterion("craft_tactical_service_vest", InventoryChangeTrigger.TriggerInstance.hasItems(WorkDogItems.SERVICE_VESTS.get(DyeColor.BLACK).get(), WorkDogItems.SERVICE_VESTS.get(DyeColor.GRAY).get(), WorkDogItems.SERVICE_VESTS.get(DyeColor.BROWN).get()))
+                    .addCriterion("black", InventoryChangeTrigger.TriggerInstance.hasItems(WorkDogItems.SERVICE_VESTS.get(DyeColor.BLACK).get()))
+                    .addCriterion("gray", InventoryChangeTrigger.TriggerInstance.hasItems(WorkDogItems.SERVICE_VESTS.get(DyeColor.GRAY).get()))
+                    .addCriterion("brown", InventoryChangeTrigger.TriggerInstance.hasItems(WorkDogItems.SERVICE_VESTS.get(DyeColor.BROWN).get()))
                     .save(consumer, WorkDog.MOD_ID + ":masculinity");
 
             Advancement gay = Advancement.Builder.advancement().parent(root)
                     .display(WorkDogItems.SERVICE_VESTS.get(DyeColor.MAGENTA).get(), Component.translatable("advancements.workdog.gay"), Component.translatable("advancements.workdog.gay.desc"), null, FrameType.TASK, true, true, false)
-                    .addCriterion("craft_rainbow_service_vest", InventoryChangeTrigger.TriggerInstance.hasItems(WorkDogItems.SERVICE_VESTS.get(DyeColor.CYAN).get(), WorkDogItems.SERVICE_VESTS.get(DyeColor.PINK).get(), WorkDogItems.SERVICE_VESTS.get(DyeColor.MAGENTA).get()))
+                    .addCriterion("cyan", InventoryChangeTrigger.TriggerInstance.hasItems(WorkDogItems.SERVICE_VESTS.get(DyeColor.CYAN).get()))
+                    .addCriterion("pink", InventoryChangeTrigger.TriggerInstance.hasItems(WorkDogItems.SERVICE_VESTS.get(DyeColor.PINK).get()))
+                    .addCriterion("magenta", InventoryChangeTrigger.TriggerInstance.hasItems(WorkDogItems.SERVICE_VESTS.get(DyeColor.MAGENTA).get()))
                     .save(consumer, WorkDog.MOD_ID + ":gay");
         }
     }
