@@ -52,7 +52,7 @@ public class WorkDogVillagers {
                 new DyedEquipmentForEmeraldsTrade(WorkDogItems.HOG_VEST.get(), 7, 3, 10)};
         VillagerTrades.ItemListing[] expert = new VillagerTrades.ItemListing[]{
                 new VillagerTrades.ItemsForEmeralds(WorkDogItems.CRATE.get(), 3, 1, 3, 30),
-                new VillagerTrades.ItemsForEmeralds(WorkDogItems.SERVICE_VESTS.get(DyeColor.WHITE.getName()).get(), 7, 1, 3, 15),
+                new VillagerTrades.ItemsForEmeralds(WorkDogItems.SERVICE_VESTS.get(DyeColor.WHITE).get(), 7, 1, 3, 15),
 //                new VillagerTrades.ItemsForEmeraldsTrade(WorkDogItems.WOLF_COLLAR.get(), 7, 1, 3, 15),
                 new DyedEquipmentForEmeraldsTrade(WorkDogItems.MUZZLE.get(), 7, 3, 15)};
         VillagerTrades.ItemListing[] master = new VillagerTrades.ItemListing[]{

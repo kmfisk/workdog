@@ -99,7 +99,7 @@ public class WorkDogRecipeProvider extends RecipeProvider {
 
         for (int i = 0; i < 16; i++) {
             DyeColor color = DyeColor.byId(i);
-            ShapedRecipeBuilder.shaped(RecipeCategory.MISC, WorkDogItems.SERVICE_VESTS.get(color.getName()).get())
+            ShapedRecipeBuilder.shaped(RecipeCategory.MISC, WorkDogItems.SERVICE_VESTS.get(color).get())
                     .pattern(" TT")
                     .pattern("TRF")
                     .pattern("TTT")
