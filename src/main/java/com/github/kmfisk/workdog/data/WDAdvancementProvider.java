@@ -6,6 +6,7 @@ import com.github.kmfisk.workdog.item.WorkDogItems;
 import com.github.kmfisk.workdog.tags.WorkDogTags;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.FrameType;
+import net.minecraft.advancements.RequirementsStrategy;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -67,6 +68,7 @@ public class WDAdvancementProvider extends ForgeAdvancementProvider {
 
             Advancement masculinity = Advancement.Builder.advancement().parent(root)
                     .display(WorkDogItems.SERVICE_VESTS.get(DyeColor.BROWN).get(), Component.translatable("advancements.workdog.masculinity"), Component.translatable("advancements.workdog.masculinity.desc"), null, FrameType.TASK, true, true, false)
+                    .requirements(RequirementsStrategy.OR)
                     .addCriterion("black", InventoryChangeTrigger.TriggerInstance.hasItems(WorkDogItems.SERVICE_VESTS.get(DyeColor.BLACK).get()))
                     .addCriterion("gray", InventoryChangeTrigger.TriggerInstance.hasItems(WorkDogItems.SERVICE_VESTS.get(DyeColor.GRAY).get()))
                     .addCriterion("brown", InventoryChangeTrigger.TriggerInstance.hasItems(WorkDogItems.SERVICE_VESTS.get(DyeColor.BROWN).get()))
@@ -74,6 +76,7 @@ public class WDAdvancementProvider extends ForgeAdvancementProvider {
 
             Advancement gay = Advancement.Builder.advancement().parent(root)
                     .display(WorkDogItems.SERVICE_VESTS.get(DyeColor.MAGENTA).get(), Component.translatable("advancements.workdog.gay"), Component.translatable("advancements.workdog.gay.desc"), null, FrameType.TASK, true, true, false)
+                    .requirements(RequirementsStrategy.OR)
                     .addCriterion("cyan", InventoryChangeTrigger.TriggerInstance.hasItems(WorkDogItems.SERVICE_VESTS.get(DyeColor.CYAN).get()))
                     .addCriterion("pink", InventoryChangeTrigger.TriggerInstance.hasItems(WorkDogItems.SERVICE_VESTS.get(DyeColor.PINK).get()))
                     .addCriterion("magenta", InventoryChangeTrigger.TriggerInstance.hasItems(WorkDogItems.SERVICE_VESTS.get(DyeColor.MAGENTA).get()))
