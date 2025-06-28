@@ -3,6 +3,7 @@ package com.github.kmfisk.workdog;
 import com.github.kmfisk.workdog.block.WorkDogBlocks;
 import com.github.kmfisk.workdog.client.color.ColorEvents;
 import com.github.kmfisk.workdog.config.WorkDogConfig;
+import com.github.kmfisk.workdog.data.WDBlockLoot;
 import com.github.kmfisk.workdog.data.WDTagsProviders;
 import com.github.kmfisk.workdog.data.WorkDogRecipeProvider;
 import com.github.kmfisk.workdog.entity.WorkDogEntities;
@@ -14,9 +15,11 @@ import com.github.kmfisk.workdog.world.WorkDogSpawns;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
+import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -33,6 +36,9 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
+
+import java.util.Collections;
+import java.util.List;
 
 @Mod(WorkDog.MOD_ID)
 public class WorkDog {
@@ -106,8 +112,8 @@ public class WorkDog {
         dataGenerator.addProvider(event.includeServer(), new WDTagsProviders.WDItemTagsProvider(packOutput, event.getLookupProvider(), blockTagsProvider, event.getExistingFileHelper()));
         dataGenerator.addProvider(event.includeServer(), new WDTagsProviders.WDPoiTypeTagsProvider(packOutput, event.getLookupProvider(), event.getExistingFileHelper()));
         dataGenerator.addProvider(event.includeServer(), new WDTagsProviders.WDEntityTypeTagsProvider(packOutput, event.getLookupProvider(), event.getExistingFileHelper()));
-//        dataGenerator.addProvider(event.includeServer(), new LootTableProvider(packOutput, Collections.emptySet(),
-//                List.of(new LootTableProvider.SubProviderEntry(WDBlockLoot::new, LootContextParamSets.BLOCK))));
+        dataGenerator.addProvider(event.includeServer(), new LootTableProvider(packOutput, Collections.emptySet(),
+                List.of(new LootTableProvider.SubProviderEntry(WDBlockLoot::new, LootContextParamSets.BLOCK))));
         dataGenerator.addProvider(event.includeServer(), new WorkDogRecipeProvider(packOutput));
 //        dataGenerator.addProvider(event.includeServer(), new WDAdvancementProvider(packOutput, event.getLookupProvider(), event.getExistingFileHelper()));
     }
