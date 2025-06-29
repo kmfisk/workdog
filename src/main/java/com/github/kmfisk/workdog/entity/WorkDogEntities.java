@@ -3,6 +3,7 @@ package com.github.kmfisk.workdog.entity;
 import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.client.renderer.entity.*;
 import com.github.kmfisk.workdog.client.renderer.entity.model.*;
+import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
 import com.github.kmfisk.workdog.item.WorkDogItems;
 import com.github.kmfisk.workdog.item.WorkDogSpawnEggItem;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -42,6 +43,12 @@ public class WorkDogEntities {
 
     public static void registerSpawnPlacements() {
         SpawnPlacements.register(WOLF.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, WDWolfEntity::checkWolfSpawnRules);
+        SpawnPlacements.register(AKITA.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, WorkDogEntity::checkAnimalSpawnRules);
+        SpawnPlacements.register(BORDER_COLLIE.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, WorkDogEntity::checkAnimalSpawnRules);
+        SpawnPlacements.register(BOSTON_TERRIER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, WorkDogEntity::checkAnimalSpawnRules);
+        SpawnPlacements.register(GERMAN_SHEPHERD.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, WorkDogEntity::checkAnimalSpawnRules);
+        SpawnPlacements.register(JACK_RUSSELL_TERRIER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, WorkDogEntity::checkAnimalSpawnRules);
+        SpawnPlacements.register(PIT_BULL.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, WorkDogEntity::checkAnimalSpawnRules);
     }
 
     public static void registerAttributes(BiConsumer<EntityType<? extends LivingEntity>, AttributeSupplier.Builder> register) {
