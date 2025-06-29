@@ -11,7 +11,7 @@ public class WorkDogConfig {
     private static final String PREFIX = "config." + WorkDog.MOD_ID;
     public static ForgeConfigSpec.BooleanValue pedigreeMode;
     public static ForgeConfigSpec.BooleanValue removeVanillaWolves;
-    //    public static ForgeConfigSpec.ConfigValue<Double> wanderAreaLimit;
+    public static ForgeConfigSpec.ConfigValue<Double> wanderAreaLimit;
     public static ForgeConfigSpec.ConfigValue<Integer> tamedLimit;
     public static ForgeConfigSpec.ConfigValue<Integer> breedingLimit;
     public static ForgeConfigSpec.BooleanValue nameBabies;
@@ -35,11 +35,11 @@ public class WorkDogConfig {
         straySpawns = builder.define("enabled", true);
         pedigreeMode = builder.define("pedigree_mode", false);
         removeVanillaWolves = builder.define("remove_vanilla_wolves", true);
-//        wanderAreaLimit = builder.worldRestart()
-//                .comment(" When a dog's home point is set, this is the distance in blocks they will roam around it.",
-//                        " Default: 200.0")
-//                .translation(PREFIX + ".wander_area_limit")
-//                .define("wander_area_limit", 200.0D);
+        wanderAreaLimit = builder.worldRestart()
+                .comment(" When a dog's home point is set, this is the distance in blocks they will roam around it.",
+                        " Default: 32.0")
+                .translation(PREFIX + ".wander_area_limit")
+                .define("wander_area_limit", 32.0D);
         tamedLimit = builder
                 .comment(" Sets a limit of dogs each player is allowed to have tamed, setting this to 0 will disable the limit.")
                 .translation(PREFIX + ".tamed_limit")

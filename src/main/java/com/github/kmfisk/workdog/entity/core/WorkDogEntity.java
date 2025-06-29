@@ -49,16 +49,16 @@ public abstract class WorkDogEntity extends TamableAnimal {
     public static final EntityDataAccessor<Boolean> GENDER = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<Boolean> LONGHAIR = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> MODE = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.INT);
 
     private static final EntityDataAccessor<Optional<UUID>> PARENT_ID_0 = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<Optional<UUID>> PARENT_ID_1 = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.OPTIONAL_UUID);
-
     private static final EntityDataAccessor<Integer> BREED_TIMER = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> PUPPIES = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> LITTERS = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.INT);
 
-    private static final EntityDataAccessor<Integer> MODE = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.INT);
-
+    @Nullable
+    BlockPos homePos;
     private DogAvoidEntityGoal<Player> avoidPlayersGoal;
     protected WaterAvoidingRandomStrollGoal wanderGoal;
     protected final FollowOwnerGoal followGoal = new FollowOwnerGoal(this, 1.33D, 10.0F, 2.0F, false);
@@ -93,7 +93,7 @@ public abstract class WorkDogEntity extends TamableAnimal {
     }
 
     public void reassessModeGoals() {
-        if (wanderGoal == null) wanderGoal = new WaterAvoidingRandomStrollGoal(this, 1.0D);
+        if (wanderGoal == null) wanderGoal = new DogWanderGoal(this, 1.0D, 0.001F);
         this.goalSelector.removeGoal(wanderGoal);
         this.goalSelector.removeGoal(followGoal);
         if (getMode() == Mode.FOLLOW) {
@@ -272,6 +272,15 @@ public abstract class WorkDogEntity extends TamableAnimal {
         return Mode.fromOrdinal(this.entityData.get(MODE));
     }
 
+    @Nullable
+    public BlockPos getHomePos() {
+        return homePos;
+    }
+
+    public void setHomePos(BlockPos position) {
+        homePos = position;
+    }
+
     @Override
     public void addAdditionalSaveData(CompoundTag nbt) {
         super.addAdditionalSaveData(nbt);
@@ -299,6 +308,7 @@ public abstract class WorkDogEntity extends TamableAnimal {
         if (!isInfertile()) nbt.putInt("Timer", getBreedTimer());
 
         nbt.putInt("Mode", getMode().ordinal());
+        if (getHomePos() != null) nbt.put("HomePos", NbtUtils.writeBlockPos(getHomePos()));
     }
 
     @Override
@@ -326,6 +336,7 @@ public abstract class WorkDogEntity extends TamableAnimal {
         if (!isInfertile()) setBreedTimer(nbt.getInt("Timer"));
 
         setMode(Mode.fromOrdinal(nbt.getInt("Mode")));
+        if (nbt.contains("HomePos")) setHomePos(NbtUtils.readBlockPos(nbt.getCompound("HomePos")));
     }
 
     @Override
@@ -448,6 +459,7 @@ public abstract class WorkDogEntity extends TamableAnimal {
         setParentUUID(paternal.getUUID());
         if (maternal.isTame() && WorkDogConfig.tamedLimit.get() == 0/* || owner.getPersistentData().getInt("DogCount") < WorkDogConfig.tamedLimit.get()*/)
             tame((Player) maternal.getOwner());
+        if (maternal.getHomePos() != null) setHomePos(maternal.getHomePos());
     }
 
     @Override
@@ -543,6 +555,19 @@ public abstract class WorkDogEntity extends TamableAnimal {
                 usePlayerItem(player, hand, stack);
                 heal(2.0F);
                 return InteractionResult.sidedSuccess(level().isClientSide);
+
+            } else if (stack.getItem() == WorkDogItems.COLLAR.get()) { //todo
+                if (player.isDiscrete()) {
+                    if (getHomePos() != null) {
+                        homePos = null;
+                        player.displayClientMessage(Component.translatable("chat.info.remove_home", getName()), true);
+                    } else {
+                        setHomePos(getOnPos());
+                        player.displayClientMessage(Component.translatable("chat.info.set_home", getName(), getHomePos().getX(), getHomePos().getY(), getHomePos().getZ()), true);
+                    }
+                } else if (getHomePos() != null)
+                    player.displayClientMessage(Component.literal(getHomePos().getX() + ", " + getHomePos().getY() + ", " + getHomePos().getZ()), true);
+                return InteractionResult.SUCCESS;
 
             } else if (!isLying()) {
                 setOrderedToSit(!isOrderedToSit());

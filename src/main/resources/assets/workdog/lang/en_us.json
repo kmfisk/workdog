@@ -56,6 +56,8 @@
   "chat.workdog.sterilization_potion.success_female": "%s was spayed.",
   "chat.workdog.sterilization_potion.success_male": "%s was neutered.",
   "chat.workdog.surrender_form.success": "%s was released from your ownership.",
+  "chat.info.remove_home": "Removed previously set home spot for %s",
+  "chat.info.set_home": "%s's home spot has been set to %d, %d, %d",
 
   "__comment": "Items",
   "item.workdog.crate": "Crate",
