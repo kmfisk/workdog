@@ -259,7 +259,6 @@ public abstract class WorkDogEntity extends TamableAnimal {
         return entityData.get(LITTERS);
     }
 
-
     public boolean isLying() {
         return getGender() == WorkDogEntity.Gender.FEMALE && getBreedingStatus(WorkDogEntity.BreedingStatus.PREGNANT) && getBreedTimer() < WorkDogConfig.pregnancyTimer.get() / 10;
     }
@@ -374,8 +373,7 @@ public abstract class WorkDogEntity extends TamableAnimal {
             } else if (getGender() == Gender.MALE) {
                 if (breedTimer > 0)
                     --breedTimer;
-                else if (breedTimer <= 0)
-                    breedTimer = 0;
+                else breedTimer = 0;
             }
             setBreedTimer(breedTimer);
         }
@@ -398,11 +396,10 @@ public abstract class WorkDogEntity extends TamableAnimal {
     @Override
     public boolean canMate(Animal entity) {
         if (entity == this) return false;
-        if (!(entity instanceof WorkDogEntity)) return false;
+        if (!(entity instanceof WorkDogEntity partner)) return false;
         if (entity.isBaby() || isBaby()) return false;
-        if (isOrderedToSit() || ((WorkDogEntity) entity).isOrderedToSit()) return false;
+        if (isOrderedToSit() || partner.isOrderedToSit()) return false;
 
-        WorkDogEntity partner = (WorkDogEntity) entity;
         if (partner.isInfertile() || isInfertile()) return false;
 
         if (getGender() == Gender.MALE && getBreedTimer() == 0)
@@ -455,8 +452,7 @@ public abstract class WorkDogEntity extends TamableAnimal {
 
     @Override
     public void spawnChildFromBreeding(ServerLevel world, Animal entity) {
-        if (entity instanceof WorkDogEntity) {
-            WorkDogEntity sire = (WorkDogEntity) entity;
+        if (entity instanceof WorkDogEntity sire) {
             AgeableMob childBreedType;
             boolean purebred = getType() == sire.getType();
             if (purebred || random.nextBoolean()) {
@@ -479,8 +475,7 @@ public abstract class WorkDogEntity extends TamableAnimal {
 
             if (cancelled) return;
 
-            if (childBreedType instanceof WorkDogEntity) {
-                WorkDogEntity child = (WorkDogEntity) childBreedType;
+            if (childBreedType instanceof WorkDogEntity child) {
                 child.setupChildVariant(this, sire);
                 child.setupChildData(this, sire);
                 child.moveTo(getX(), getY(), getZ(), 0.0F, 0.0F);
@@ -502,8 +497,7 @@ public abstract class WorkDogEntity extends TamableAnimal {
 
     @Override
     protected void onOffspringSpawnedFromEgg(Player player, Mob entity) {
-        if (entity instanceof WorkDogEntity) {
-            WorkDogEntity child = (WorkDogEntity) entity;
+        if (entity instanceof WorkDogEntity child) {
             child.setupChildVariant(this, this);
             child.setupChildData(this, this);
         }
@@ -631,16 +625,12 @@ public abstract class WorkDogEntity extends TamableAnimal {
         WANDER;
 
         public static Mode fromOrdinal(int ordinal) {
-            switch (ordinal) {
-                case 0:
-                    return WORK;
-                case 1:
-                    return FOLLOW;
-                case 2:
-                    return WANDER;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + ordinal);
-            }
+            return switch (ordinal) {
+                case 0 -> WORK;
+                case 1 -> FOLLOW;
+                case 2 -> WANDER;
+                default -> throw new IllegalStateException("Unexpected value: " + ordinal);
+            };
         }
     }
 
