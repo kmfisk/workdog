@@ -23,7 +23,7 @@ public class DogWanderGoal extends WaterAvoidingRandomStrollGoal {
 
     @Override
     protected @Nullable Vec3 getPosition() {
-        boolean outsideBounds = dog.getHomePos() != null && !dog.getHomePos().closerToCenterThan(dog.position(), WorkDogConfig.wander_area_limit.get());
+        boolean outsideBounds = dog.getHomePos() != null && !dog.getHomePos().closerToCenterThan(dog.position(), WorkDogConfig.wanderAreaLimit.get());
         Vec3 defaultPos = DefaultRandomPos.getPos(dog, 10, 7);
         if (dog.isInWaterOrBubble()) {
             Vec3 landPos = LandRandomPos.getPos(dog, 15, 7);
@@ -36,7 +36,7 @@ public class DogWanderGoal extends WaterAvoidingRandomStrollGoal {
         else if (dog.getRandom().nextFloat() >= probability) {
             pos = LandRandomPos.getPos(dog, 10, 7);
 
-            if (pos != null && dog.getHomePos() != null && !dog.getHomePos().closerToCenterThan(pos, WorkDogConfig.wander_area_limit.get()))
+            if (pos != null && dog.getHomePos() != null && !dog.getHomePos().closerToCenterThan(pos, WorkDogConfig.wanderAreaLimit.get()))
                 pos = towardsHomePos;
         }
 
