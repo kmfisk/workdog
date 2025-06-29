@@ -57,8 +57,6 @@ public abstract class WorkDogEntity extends TamableAnimal {
     private static final EntityDataAccessor<Integer> PUPPIES = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> LITTERS = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.INT);
 
-    private static final EntityDataAccessor<Boolean> IS_LYING = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.BOOLEAN);
-
     private static final EntityDataAccessor<Integer> MODE = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.INT);
 
     private DogAvoidEntityGoal<Player> avoidPlayersGoal;
@@ -116,7 +114,6 @@ public abstract class WorkDogEntity extends TamableAnimal {
         this.entityData.define(BREED_TIMER, 0);
         this.entityData.define(PUPPIES, 0);
         this.entityData.define(LITTERS, 0);
-        this.entityData.define(IS_LYING, false);
         this.entityData.define(MODE, 2);
     }
 
@@ -203,6 +200,7 @@ public abstract class WorkDogEntity extends TamableAnimal {
     }
 
     public boolean getBreedingStatus(BreedingStatus breedingStatus) {
+        if (getGender() == Gender.MALE) return false;
         if (breedingStatus == BreedingStatus.HEAT) return getFlag(16);
         else if (breedingStatus == BreedingStatus.PREGNANT) return getFlag(32);
         else return false;
@@ -261,12 +259,9 @@ public abstract class WorkDogEntity extends TamableAnimal {
         return entityData.get(LITTERS);
     }
 
-    public void setLying(boolean lying) {
-        this.entityData.set(IS_LYING, lying);
-    }
 
     public boolean isLying() {
-        return this.entityData.get(IS_LYING);
+        return getGender() == WorkDogEntity.Gender.FEMALE && getBreedingStatus(WorkDogEntity.BreedingStatus.PREGNANT) && getBreedTimer() < WorkDogConfig.pregnancyTimer.get() / 10;
     }
 
     public void setMode(Mode mode) {

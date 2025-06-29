@@ -40,13 +40,13 @@ public class DogBirthGoal extends Goal {
 
     @Override
     public void start() {
-        mother.setLying(true);
+//        mother.setLying(true);
     }
 
     @Override
     public void stop() {
         sire = null;
-        mother.setLying(false);
+//        mother.setLying(false);
     }
 
     @Override
