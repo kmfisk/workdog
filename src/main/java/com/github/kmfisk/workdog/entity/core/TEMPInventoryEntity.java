@@ -1,5 +1,6 @@
 package com.github.kmfisk.workdog.entity.core;
 
+import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.inventory.WorkDogInventoryMenu;
 import com.github.kmfisk.workdog.item.DogEquipmentItem;
 import com.github.kmfisk.workdog.item.WorkDogItems;
@@ -9,6 +10,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.*;
 import net.minecraft.world.entity.*;
@@ -20,11 +22,12 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.wrapper.InvWrapper;
+import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
 
-public abstract class TEMPInventoryEntity extends TamableAnimal implements ContainerListener, HasCustomInventoryScreen {
+public abstract class TEMPInventoryEntity extends TamableAnimal implements ContainerListener {
     private static final EntityDataAccessor<Boolean> SADDLEBAG = SynchedEntityData.defineId(TEMPInventoryEntity.class, EntityDataSerializers.BOOLEAN);
     protected SimpleContainer inventory;
     LazyOptional<?> itemHandler = null;
@@ -34,11 +37,11 @@ public abstract class TEMPInventoryEntity extends TamableAnimal implements Conta
         this.createInventory();
     }
 
-    @Override
-    public void openCustomInventoryScreen(Player player) { // todo
+    public void openInventory(Player player) { // todo
         if (!level().isClientSide && isTame())
-            player.openMenu(new SimpleMenuProvider((id, playerInv, pPlayer) -> new WorkDogInventoryMenu(id, playerInv, inventory, this), getName()));
-//            NetworkHooks.openScreen((ServerPlayer) player, new SimpleMenuProvider((id, playerInv, pPlayer) -> new WorkDogInventoryMenu(id, playerInv, inventory, this), getName()));
+            NetworkHooks.openScreen((ServerPlayer) player, new SimpleMenuProvider((id, playerInv, pPlayer) -> new WorkDogInventoryMenu(id, playerInv, inventory, TEMPInventoryEntity.this), getName()));
+//            player.openMenu(new SimpleMenuProvider((id, playerInv, pPlayer) -> new WorkDogInventoryMenu(id, playerInv, inventory, this), getName()));
+        WorkDog.setReferencedMob(this);
     }
 
     protected int getInventorySize() {
@@ -176,7 +179,7 @@ public abstract class TEMPInventoryEntity extends TamableAnimal implements Conta
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (!isBaby()) {
             if (isTame() && player.isSecondaryUseActive()) {
-                openCustomInventoryScreen(player);
+                openInventory(player);
                 return InteractionResult.sidedSuccess(level().isClientSide);
             }
 
@@ -210,9 +213,10 @@ public abstract class TEMPInventoryEntity extends TamableAnimal implements Conta
             compoundTag.put("CollarItem", inventory.getItem(0).save(new CompoundTag()));
         if (!inventory.getItem(1).isEmpty())
             compoundTag.put("HarnessItem", inventory.getItem(1).save(new CompoundTag()));
-        if (!inventory.getItem(2).isEmpty()) compoundTag.put("VestItem", inventory.getItem(1).save(new CompoundTag()));
+        if (!inventory.getItem(2).isEmpty())
+            compoundTag.put("VestItem", inventory.getItem(2).save(new CompoundTag()));
         if (!inventory.getItem(3).isEmpty())
-            compoundTag.put("MuzzleItem", inventory.getItem(1).save(new CompoundTag()));
+            compoundTag.put("MuzzleItem", inventory.getItem(3).save(new CompoundTag()));
 
         compoundTag.putBoolean("Saddlebag", hasSaddlebag());
         if (hasSaddlebag()) {

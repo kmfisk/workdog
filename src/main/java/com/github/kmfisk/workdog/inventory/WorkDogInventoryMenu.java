@@ -1,5 +1,6 @@
 package com.github.kmfisk.workdog.inventory;
 
+import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.entity.core.TEMPInventoryEntity;
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
 import com.github.kmfisk.workdog.item.DogEquipmentItem;
@@ -20,9 +21,10 @@ public class WorkDogInventoryMenu extends AbstractContainerMenu {
         this(id, playerInventory, new SimpleContainer(4), null);
     }
 
-    public WorkDogInventoryMenu(int id, Inventory playerInventory, Container dogInventory, final TEMPInventoryEntity dog) {
+    public WorkDogInventoryMenu(int id, Inventory playerInventory, Container dogInventory, TEMPInventoryEntity dog) {
         super(WDMenuTypes.WORK_DOG_CONTAINER.get(), id);
         this.container = dogInventory;
+        if (dog == null && WorkDog.getReferencedMob() instanceof WorkDogEntity) dog = (WorkDogEntity) WorkDog.getReferencedMob();
         this.dog = dog;
         dogInventory.startOpen(playerInventory.player);
         for (int i = 0; i < 4; i++) {
@@ -30,26 +32,26 @@ public class WorkDogInventoryMenu extends AbstractContainerMenu {
             addSlot(new Slot(dogInventory, slotId, 50, i * 20 + 76) {
                 @Override
                 public boolean mayPlace(ItemStack itemStack) {
-                    if (dog != null && dog.isDogEquipment(itemStack)) {
+                    if (WorkDogInventoryMenu.this.dog.isDogEquipment(itemStack)) {
                         TEMPInventoryEntity.DogEquipmentType equipmentType = ((DogEquipmentItem) itemStack.getItem()).getDogEquipmentType();
-                        return dog != null && dog.canWearDogEquipment(equipmentType) && equipmentType == TEMPInventoryEntity.DogEquipmentType.fromSlotId(slotId) && !hasItem();
+                        return WorkDogInventoryMenu.this.dog.canWearDogEquipment(equipmentType) && equipmentType == TEMPInventoryEntity.DogEquipmentType.fromSlotId(slotId) && !hasItem();
                     }
                     return false;
                 }
 
                 @Override
                 public boolean isActive() {
-                    return dog != null && dog.canWearDogEquipment(TEMPInventoryEntity.DogEquipmentType.fromSlotId(slotId));
+                    return WorkDogInventoryMenu.this.dog.canWearDogEquipment(TEMPInventoryEntity.DogEquipmentType.fromSlotId(slotId));
                 }
             });
         }
 //        for (int i = 0; i < 4; i++)
 //            this.addSlot(new DogEquipmentSlot(dogInventory, i, 50, i * 20 + 76));
 
-        if (dog != null && dog.hasSaddlebag()) {
+        if (WorkDogInventoryMenu.this.dog.hasSaddlebag()) {
             for (int row = 0; row < 3; ++row) {
                 for (int column = 0; column < dog.getInventoryColumns(); ++column) {
-                    this.addSlot(new Slot(dogInventory, 4 + column + row * dog.getInventoryColumns(), 192 + column * 18, 18 + row * 18));
+                    this.addSlot(new Slot(dogInventory, 4 + column + row * dog.getInventoryColumns(), 192 + column * 18, 26 + row * 18));
                 }
             }
         }

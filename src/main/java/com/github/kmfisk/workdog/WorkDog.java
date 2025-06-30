@@ -18,6 +18,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -51,6 +52,14 @@ public class WorkDog {
             .icon(() -> WorkDogItems.CRATE.get().getDefaultInstance())
             .displayItems((itemDisplayParameters, output) -> WorkDogItems.REGISTRAR.getEntries().forEach(item -> output.accept(item.get())))
             .build());
+
+    private static Entity referencedMob = null;
+    public static Entity getReferencedMob() {
+        return referencedMob;
+    }
+    public static void setReferencedMob(Entity entity) {
+        referencedMob = entity;
+    }
 
     public WorkDog() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
