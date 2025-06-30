@@ -1,6 +1,7 @@
 package com.github.kmfisk.workdog.item;
 
 import com.github.kmfisk.workdog.WorkDog;
+import com.github.kmfisk.workdog.entity.core.TEMPInventoryEntity;
 import net.minecraft.Util;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -22,15 +23,15 @@ public class WorkDogItems {
 
     public static final RegistryObject<Item> FRISBEE = REGISTRAR.register("frisbee", () -> new Item(new Item.Properties()));
 
-    public static final RegistryObject<Item> COLLAR = REGISTRAR.register("collar", () -> new DyeableDogEquipmentItem(new Item.Properties()));
-    public static final RegistryObject<Item> HARNESS = REGISTRAR.register("harness", () -> new DyeableDogEquipmentItem(new Item.Properties()));
-    public static final RegistryObject<Item> HOG_VEST = REGISTRAR.register("hog_vest", () -> new DyeableDogEquipmentItem(new Item.Properties()));
-    public static final RegistryObject<Item> MUZZLE = REGISTRAR.register("muzzle", () -> new DyeableDogEquipmentItem(new Item.Properties()));
-    public static final RegistryObject<Item> SADDLEBAG = REGISTRAR.register("saddlebag", () -> new DyeableDogEquipmentItem(new Item.Properties()));
+    public static final RegistryObject<Item> COLLAR = REGISTRAR.register("collar", () -> new DyeableDogEquipmentItem(new Item.Properties(), TEMPInventoryEntity.DogEquipmentType.COLLAR));
+    public static final RegistryObject<Item> HARNESS = REGISTRAR.register("harness", () -> new DyeableDogEquipmentItem(new Item.Properties(), TEMPInventoryEntity.DogEquipmentType.HARNESS));
+    public static final RegistryObject<Item> HOG_VEST = REGISTRAR.register("hog_vest", () -> new DyeableDogEquipmentItem(new Item.Properties(), TEMPInventoryEntity.DogEquipmentType.VEST));
+    public static final RegistryObject<Item> MUZZLE = REGISTRAR.register("muzzle", () -> new DyeableDogEquipmentItem(new Item.Properties(), TEMPInventoryEntity.DogEquipmentType.MUZZLE));
+    public static final RegistryObject<Item> SADDLEBAG = REGISTRAR.register("saddlebag", () -> new SaddlebagItem(new Item.Properties()));
     public static final Map<DyeColor, RegistryObject<Item>> SERVICE_VESTS = Util.make(new HashMap<>(), list -> {
         for (int i = 0; i < DyeColor.values().length; i++) {
             DyeColor color = DyeColor.byId(i);
-            list.put(color, REGISTRAR.register(color.getName() + "_service_vest", () -> new Item(new Item.Properties())));
+            list.put(color, REGISTRAR.register(color.getName() + "_service_vest", () -> new DogEquipmentItem(new Item.Properties(), TEMPInventoryEntity.DogEquipmentType.VEST)));
         }
     });
 }

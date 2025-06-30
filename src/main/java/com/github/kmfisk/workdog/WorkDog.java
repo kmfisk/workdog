@@ -10,7 +10,7 @@ import com.github.kmfisk.workdog.data.WorkDogRecipeProvider;
 import com.github.kmfisk.workdog.entity.WorkDogEntities;
 import com.github.kmfisk.workdog.entity.merchant.villager.WorkDogVillagerTrades;
 import com.github.kmfisk.workdog.entity.merchant.villager.WorkDogVillagers;
-import com.github.kmfisk.workdog.inventory.WDContainerTypes;
+import com.github.kmfisk.workdog.inventory.WDMenuTypes;
 import com.github.kmfisk.workdog.item.WorkDogItems;
 import com.github.kmfisk.workdog.world.WorkDogSpawns;
 import net.minecraft.core.registries.Registries;
@@ -60,7 +60,7 @@ public class WorkDog {
         WorkDogBlocks.REGISTRAR.register(bus);
         WorkDogItems.REGISTRAR.register(bus);
         CREATIVE_MODE_TAB.register(bus);
-        WDContainerTypes.REGISTRAR.register(bus);
+        WDMenuTypes.REGISTRAR.register(bus);
         WorkDogVillagers.POI_TYPES.register(bus);
         WorkDogVillagers.PROFESSIONS.register(bus);
 
@@ -89,7 +89,7 @@ public class WorkDog {
 
     private void setupClient(final FMLClientSetupEvent event) {
         WorkDogEntities.registerRenderers();
-        WDContainerTypes.registerFactories();
+        WDMenuTypes.registerFactories();
     }
 
     @OnlyIn(Dist.CLIENT)

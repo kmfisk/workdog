@@ -45,7 +45,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public abstract class WorkDogEntity extends TamableAnimal {
+public abstract class WorkDogEntity extends TEMPInventoryEntity {
     public static final EntityDataAccessor<Boolean> GENDER = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<Boolean> LONGHAIR = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.INT);
@@ -530,6 +530,7 @@ public abstract class WorkDogEntity extends TamableAnimal {
 
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        super.mobInteract(player, hand);
         ItemStack stack = player.getItemInHand(hand);
         List<Item> functionalItems = Arrays.asList(WorkDogItems.CRATE.get(), WorkDogItems.PINK_JUICE.get(),
                 WorkDogItems.STERILIZATION_POTION.get(), WorkDogItems.SURRENDER_FORM.get());

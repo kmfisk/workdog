@@ -4,6 +4,7 @@ import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.block.WorkDogBlocks;
 import com.github.kmfisk.workdog.entity.WorkDogEntities;
 import com.github.kmfisk.workdog.item.DyeableDogEquipmentItem;
+import com.github.kmfisk.workdog.item.SaddlebagItem;
 import com.github.kmfisk.workdog.item.WorkDogItems;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -87,7 +88,7 @@ public class WorkDogVillagers {
         public MerchantOffer getOffer(Entity entity, RandomSource random) {
             ItemStack cost = new ItemStack(Items.EMERALD, value);
             ItemStack merch = new ItemStack(item);
-            if (item instanceof DyeableDogEquipmentItem) {
+            if (item instanceof DyeableDogEquipmentItem || item instanceof SaddlebagItem) {
                 List<DyeItem> dyeItems = Lists.newArrayList();
                 dyeItems.add(getRandomDye(random));
                 if (random.nextFloat() > 0.7F) dyeItems.add(getRandomDye(random));
