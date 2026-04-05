@@ -30,7 +30,7 @@ import java.util.function.Predicate;
 public abstract class TEMPInventoryEntity extends TamableAnimal implements ContainerListener {
     private static final EntityDataAccessor<Boolean> SADDLEBAG = SynchedEntityData.defineId(TEMPInventoryEntity.class, EntityDataSerializers.BOOLEAN);
     protected SimpleContainer inventory;
-    LazyOptional<?> itemHandler = null;
+    private LazyOptional<?> itemHandler = null;
 
     public TEMPInventoryEntity(EntityType<? extends TamableAnimal> type, Level level) {
         super(type, level);
@@ -44,7 +44,7 @@ public abstract class TEMPInventoryEntity extends TamableAnimal implements Conta
         WorkDog.setReferencedMob(this);
     }
 
-    protected int getInventorySize() {
+    public int getInventorySize() {
         return hasSaddlebag() ? 4 + 3 * getInventoryColumns() : 4;
     }
 

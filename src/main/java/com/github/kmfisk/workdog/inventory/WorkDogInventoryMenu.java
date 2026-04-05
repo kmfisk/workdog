@@ -18,7 +18,9 @@ public class WorkDogInventoryMenu extends AbstractContainerMenu {
     public final TEMPInventoryEntity dog;
 
     public WorkDogInventoryMenu(int id, Inventory playerInventory) {
-        this(id, playerInventory, new SimpleContainer(4), null);
+        this(id, playerInventory, new SimpleContainer(
+                WorkDog.getReferencedMob() != null && WorkDog.getReferencedMob() instanceof WorkDogEntity ? ((WorkDogEntity) WorkDog.getReferencedMob()).getInventorySize() : 4
+        ), null);
     }
 
     public WorkDogInventoryMenu(int id, Inventory playerInventory, Container dogInventory, TEMPInventoryEntity dog) {
@@ -76,32 +78,32 @@ public class WorkDogInventoryMenu extends AbstractContainerMenu {
     @Override
     public ItemStack quickMoveStack(Player player, int slotId) { // todo
         ItemStack stack = ItemStack.EMPTY;
-        Slot slot = slots.get(slotId);
-        if (slot != null && slot.hasItem()) {
-            ItemStack slotItem = slot.getItem();
-            stack = slotItem.copy();
-            int i = container.getContainerSize();
-            if (slotId < i) {
-                if (!moveItemStackTo(slotItem, i, slots.size(), true)) return ItemStack.EMPTY;
-            } else if (getSlot(1).mayPlace(slotItem) && !getSlot(1).hasItem()) {
-                if (!moveItemStackTo(slotItem, 1, 2, false)) return ItemStack.EMPTY;
-            } else if (getSlot(0).mayPlace(slotItem)) {
-                if (!moveItemStackTo(slotItem, 0, 1, false)) return ItemStack.EMPTY;
-            } else if (i <= 2 || !moveItemStackTo(slotItem, 2, i, false)) {
-                int j = i + 27;
-                int k = j + 9;
-                if (slotId >= j && slotId < k) {
-                    if (!moveItemStackTo(slotItem, i, j, false)) return ItemStack.EMPTY;
-                } else if (slotId >= i && slotId < j) {
-                    if (!moveItemStackTo(slotItem, j, k, false)) return ItemStack.EMPTY;
-                } else if (!moveItemStackTo(slotItem, j, j, false)) return ItemStack.EMPTY;
-
-                return ItemStack.EMPTY;
-            }
-
-            if (slotItem.isEmpty()) slot.set(ItemStack.EMPTY);
-            else slot.setChanged();
-        }
+//        Slot slot = slots.get(slotId);
+//        if (slot != null && slot.hasItem()) {
+//            ItemStack slotItem = slot.getItem();
+//            stack = slotItem.copy();
+//            int i = container.getContainerSize();
+//            if (slotId < i) {
+//                if (!moveItemStackTo(slotItem, i, slots.size(), true)) return ItemStack.EMPTY;
+//            } else if (getSlot(1).mayPlace(slotItem) && !getSlot(1).hasItem()) {
+//                if (!moveItemStackTo(slotItem, 1, 2, false)) return ItemStack.EMPTY;
+//            } else if (getSlot(0).mayPlace(slotItem)) {
+//                if (!moveItemStackTo(slotItem, 0, 1, false)) return ItemStack.EMPTY;
+//            } else if (i <= 2 || !moveItemStackTo(slotItem, 2, i, false)) {
+//                int j = i + 27;
+//                int k = j + 9;
+//                if (slotId >= j && slotId < k) {
+//                    if (!moveItemStackTo(slotItem, i, j, false)) return ItemStack.EMPTY;
+//                } else if (slotId >= i && slotId < j) {
+//                    if (!moveItemStackTo(slotItem, j, k, false)) return ItemStack.EMPTY;
+//                } else if (!moveItemStackTo(slotItem, j, j, false)) return ItemStack.EMPTY;
+//
+//                return ItemStack.EMPTY;
+//            }
+//
+//            if (slotItem.isEmpty()) slot.set(ItemStack.EMPTY);
+//            else slot.setChanged();
+//        }
 
         return stack;
     }

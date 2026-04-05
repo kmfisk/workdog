@@ -570,7 +570,7 @@ public abstract class WorkDogEntity extends TEMPInventoryEntity {
                     player.displayClientMessage(Component.literal(getHomePos().getX() + ", " + getHomePos().getY() + ", " + getHomePos().getZ()), true);
                 return InteractionResult.SUCCESS;
 
-            } else if (!isLying()) {
+            } else if (!isLying() && !player.isSecondaryUseActive()) {
                 setOrderedToSit(!isOrderedToSit());
                 jumping = false;
                 navigation.stop();
