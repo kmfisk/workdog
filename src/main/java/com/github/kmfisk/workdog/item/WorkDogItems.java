@@ -31,7 +31,7 @@ public class WorkDogItems {
     public static final Map<DyeColor, RegistryObject<Item>> SERVICE_VESTS = Util.make(new HashMap<>(), list -> {
         for (int i = 0; i < DyeColor.values().length; i++) {
             DyeColor color = DyeColor.byId(i);
-            list.put(color, REGISTRAR.register(color.getName() + "_service_vest", () -> new DogEquipmentItem(new Item.Properties(), AbstractInventoryAnimal.DogEquipmentType.VEST)));
+            list.put(color, REGISTRAR.register(color.getName() + "_service_vest", () -> new ServiceVestItem(new Item.Properties(), color)));
         }
     });
 }

@@ -15,6 +15,7 @@ import net.minecraft.util.Mth;
 
 public abstract class AkitaModel extends WorkDogModel<AkitaEntity> {
     public static ModelLayerLocation ADULT_LAYER = new ModelLayerLocation(new ResourceLocation(WorkDog.MOD_ID, "akita"), "adult");
+    public static ModelLayerLocation EQUIPMENT_LAYER = new ModelLayerLocation(new ResourceLocation(WorkDog.MOD_ID, "akita"), "equipment");
     public static ModelLayerLocation BABY_LAYER = new ModelLayerLocation(new ResourceLocation(WorkDog.MOD_ID, "akita"), "baby");
     public ModelPart Chest;
     public ModelPart Body;
