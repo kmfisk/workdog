@@ -90,4 +90,14 @@ public class AkitaEntity extends HuntingDogEntity {
             return AkitaVariant.values()[variant].carries;
         }
     }
+
+    @Override
+    public int getInventoryColumns() {
+        return 9; // todo (large= 27, 9 columns; medium= 18, 6 columns; small= 9, 3 columns)
+    }
+
+    @Override
+    public boolean canWearDogEquipmentType(DogEquipmentType dogEquipmentType) {
+        return true;
+    }
 }

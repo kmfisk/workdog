@@ -1,12 +1,15 @@
 package com.github.kmfisk.workdog.entity;
 
 import com.github.kmfisk.workdog.entity.core.ToyDogEntity;
+import com.github.kmfisk.workdog.item.DogEquipmentItem;
+import com.github.kmfisk.workdog.item.WorkDogItems;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
@@ -71,5 +74,36 @@ public class BostonTerrierEntity extends ToyDogEntity {
         public static List<Integer> getCarriedVariants(int variant) {
             return BostonTerrierVariant.values()[variant].carries;
         }
+    }
+
+    @Override
+    public int getInventoryColumns() {
+        return 0; // todo (large= 27, 9 columns; medium= 18, 6 columns; small= 9, 3 columns)
+    }
+
+    @Override
+    public boolean canEquipSaddlebag() {
+        return false;
+    }
+
+    @Override
+    public boolean canWearDogEquipmentType(DogEquipmentType dogEquipmentType) {
+        switch (dogEquipmentType) {
+            case COLLAR, HARNESS, VEST -> {
+                return true;
+            }
+            case MUZZLE -> {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean canWearDogEquipment(ItemStack stack) {
+        if (stack.getItem() instanceof DogEquipmentItem dogEquipmentItem) {
+            return dogEquipmentItem.getDogEquipmentType() != DogEquipmentType.VEST; // todo allow sweaters when added
+        }
+        return true;
     }
 }

@@ -148,4 +148,27 @@ public class WDWolfEntity extends WorkDogEntity {
             return WolfVariant.values()[variant].carries;
         }
     }
+
+    @Override
+    public int getInventoryColumns() {
+        return 0; // todo (large= 27, 9 columns; medium= 18, 6 columns; small= 9, 3 columns)
+    }
+
+    @Override
+    public boolean canEquipSaddlebag() {
+        return false;
+    }
+
+    @Override
+    public boolean canWearDogEquipmentType(DogEquipmentType dogEquipmentType) {
+        switch (dogEquipmentType) {
+            case COLLAR, HARNESS, MUZZLE -> {
+                return true;
+            }
+            case VEST -> {
+                return false;
+            }
+        }
+        return false;
+    }
 }

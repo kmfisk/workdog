@@ -13,7 +13,10 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.*;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.SlotAccess;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -27,20 +30,19 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
 
-public abstract class TEMPInventoryEntity extends TamableAnimal implements ContainerListener {
-    private static final EntityDataAccessor<Boolean> SADDLEBAG = SynchedEntityData.defineId(TEMPInventoryEntity.class, EntityDataSerializers.BOOLEAN);
+public abstract class AbstractInventoryAnimal extends TamableAnimal implements ContainerListener {
+    private static final EntityDataAccessor<Boolean> SADDLEBAG = SynchedEntityData.defineId(AbstractInventoryAnimal.class, EntityDataSerializers.BOOLEAN);
     protected SimpleContainer inventory;
     private LazyOptional<?> itemHandler = null;
 
-    public TEMPInventoryEntity(EntityType<? extends TamableAnimal> type, Level level) {
+    public AbstractInventoryAnimal(EntityType<? extends TamableAnimal> type, Level level) {
         super(type, level);
         this.createInventory();
     }
 
-    public void openInventory(Player player) { // todo
+    public void openInventory(Player player) {
         if (!level().isClientSide && isTame())
-            NetworkHooks.openScreen((ServerPlayer) player, new SimpleMenuProvider((id, playerInv, pPlayer) -> new WorkDogInventoryMenu(id, playerInv, inventory, TEMPInventoryEntity.this), getName()));
-//            player.openMenu(new SimpleMenuProvider((id, playerInv, pPlayer) -> new WorkDogInventoryMenu(id, playerInv, inventory, this), getName()));
+            NetworkHooks.openScreen((ServerPlayer) player, new SimpleMenuProvider((id, playerInv, pPlayer) -> new WorkDogInventoryMenu(id, playerInv, inventory, AbstractInventoryAnimal.this), getName()));
         WorkDog.setReferencedMob(this);
     }
 
@@ -48,10 +50,7 @@ public abstract class TEMPInventoryEntity extends TamableAnimal implements Conta
         return hasSaddlebag() ? 4 + 3 * getInventoryColumns() : 4;
     }
 
-    public int getInventoryColumns() {
-        // todo (large= 27, 9 columns; medium= 18, 6 columns; small= 9, 3 columns)
-        return 9;
-    }
+    public abstract int getInventoryColumns();
 
     @Override
     protected void defineSynchedData() {
@@ -67,24 +66,19 @@ public abstract class TEMPInventoryEntity extends TamableAnimal implements Conta
         entityData.set(SADDLEBAG, hasSaddlebag);
     }
 
+    public boolean canEquipSaddlebag() {
+        return true;
+    }
+
     private void equipSaddlebag(Player player, ItemStack itemStack) {
         setSaddlebag(true);
-        playSaddlebagEquipsSound();
+        playSound(SoundEvents.DONKEY_CHEST, 1.0F, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
         if (!player.getAbilities().instabuild) itemStack.shrink(1);
         createInventory();
     }
 
-    protected void playSaddlebagEquipsSound() {
-        playSound(SoundEvents.DONKEY_CHEST, 1.0F, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
-    }
-
     public ItemStack getDogEquipment(DogEquipmentType dogEquipmentType) {
         return getItemBySlot(dogEquipmentType.getEquipmentSlot());
-    }
-
-    private void setDogEquipment(DogEquipmentType dogEquipmentType, ItemStack itemStack) {
-        setItemSlot(dogEquipmentType.getEquipmentSlot(), itemStack);
-        setDropChance(dogEquipmentType.getEquipmentSlot(), 0.0F);
     }
 
     public void equipDogEquipment(Player player, DogEquipmentType dogEquipmentType, ItemStack stack) {
@@ -94,11 +88,12 @@ public abstract class TEMPInventoryEntity extends TamableAnimal implements Conta
         }
     }
 
-    public boolean canWearDogEquipment(DogEquipmentType dogEquipmentType) {
-        return true; //todo
+    public abstract boolean canWearDogEquipmentType(DogEquipmentType dogEquipmentType); //todo
+    public boolean canWearDogEquipment(ItemStack stack) {
+        return true;
     }
 
-    public boolean isWearingDogEquipment(DogEquipmentType dogEquipmentType) {
+    public boolean isWearingDogEquipmentType(DogEquipmentType dogEquipmentType) {
         return !getItemBySlot(dogEquipmentType.getEquipmentSlot()).isEmpty();
     }
 
@@ -106,21 +101,17 @@ public abstract class TEMPInventoryEntity extends TamableAnimal implements Conta
         return stack.getItem() instanceof DogEquipmentItem;
     }
 
-//    public boolean isSaddled() {
-//        return getFlag(4);
-//    }
-
     protected void updateContainerEquipment() {
         if (!level().isClientSide) {
             for (DogEquipmentType dogEquipmentType : DogEquipmentType.values()) {
                 setEquipment(dogEquipmentType, inventory.getItem(dogEquipmentType.slotId));
-                setDropChance(dogEquipmentType.getEquipmentSlot(), 0.0F);
             }
         }
     }
 
     private void setEquipment(DogEquipmentType dogEquipmentType, ItemStack itemStack) {
-        setDogEquipment(dogEquipmentType, itemStack);
+        setItemSlot(dogEquipmentType.getEquipmentSlot(), itemStack);
+        setDropChance(dogEquipmentType.getEquipmentSlot(), 0.0F);
 //        if (!level().isClientSide) { todo
 //            getAttribute(Attributes.ARMOR).removeModifier(ARMOR_MODIFIER_UUID);
 //            if (isDogEquipment(itemStack)) {
@@ -185,7 +176,7 @@ public abstract class TEMPInventoryEntity extends TamableAnimal implements Conta
 
             ItemStack stack = player.getItemInHand(hand);
             if (!stack.isEmpty()) {
-                if (!hasSaddlebag() && stack.is(WorkDogItems.SADDLEBAG.get())) {
+                if (canEquipSaddlebag() && !hasSaddlebag() && stack.is(WorkDogItems.SADDLEBAG.get())) {
                     equipSaddlebag(player, stack);
                     return InteractionResult.sidedSuccess(level().isClientSide);
                 }
@@ -193,9 +184,9 @@ public abstract class TEMPInventoryEntity extends TamableAnimal implements Conta
                 InteractionResult interactionresult = stack.interactLivingEntity(player, this, hand);
                 if (interactionresult.consumesAction()) return interactionresult;
 
-                if (isDogEquipment(stack)) {
+                if (isDogEquipment(stack) && canWearDogEquipment(stack)) {
                     DogEquipmentType equipmentType = ((DogEquipmentItem) stack.getItem()).getDogEquipmentType();
-                    if (canWearDogEquipment(equipmentType) && !isWearingDogEquipment(equipmentType)) {
+                    if (canWearDogEquipmentType(equipmentType) && !isWearingDogEquipmentType(equipmentType)) {
                         equipDogEquipment(player, equipmentType, stack);
                         return InteractionResult.sidedSuccess(level().isClientSide);
                     }
@@ -270,15 +261,15 @@ public abstract class TEMPInventoryEntity extends TamableAnimal implements Conta
     private SlotAccess createEquipmentSlotAccess(final int i, final Predicate<ItemStack> stackPredicate) {
         return new SlotAccess() {
             public ItemStack get() {
-                return TEMPInventoryEntity.this.inventory.getItem(i);
+                return AbstractInventoryAnimal.this.inventory.getItem(i);
             }
 
             public boolean set(ItemStack itemStack) {
                 if (!stackPredicate.test(itemStack)) {
                     return false;
                 } else {
-                    TEMPInventoryEntity.this.inventory.setItem(i, itemStack);
-                    TEMPInventoryEntity.this.updateContainerEquipment();
+                    AbstractInventoryAnimal.this.inventory.setItem(i, itemStack);
+                    AbstractInventoryAnimal.this.updateContainerEquipment();
                     return true;
                 }
             }
@@ -291,22 +282,22 @@ public abstract class TEMPInventoryEntity extends TamableAnimal implements Conta
             return new SlotAccess() {
                 @Override
                 public ItemStack get() {
-                    return TEMPInventoryEntity.this.hasSaddlebag() ? new ItemStack(WorkDogItems.SADDLEBAG.get()) : ItemStack.EMPTY;
+                    return AbstractInventoryAnimal.this.hasSaddlebag() ? new ItemStack(WorkDogItems.SADDLEBAG.get()) : ItemStack.EMPTY;
                 }
 
                 @Override
                 public boolean set(ItemStack stack) {
                     if (stack.isEmpty()) {
-                        if (TEMPInventoryEntity.this.hasSaddlebag()) {
-                            TEMPInventoryEntity.this.setSaddlebag(false);
-                            TEMPInventoryEntity.this.createInventory();
+                        if (AbstractInventoryAnimal.this.hasSaddlebag()) {
+                            AbstractInventoryAnimal.this.setSaddlebag(false);
+                            AbstractInventoryAnimal.this.createInventory();
                         }
                         return true;
 
                     } else if (stack.is(WorkDogItems.SADDLEBAG.get())) {
-                        if (!TEMPInventoryEntity.this.hasSaddlebag()) {
-                            TEMPInventoryEntity.this.setSaddlebag(true);
-                            TEMPInventoryEntity.this.createInventory();
+                        if (!AbstractInventoryAnimal.this.hasSaddlebag()) {
+                            AbstractInventoryAnimal.this.setSaddlebag(true);
+                            AbstractInventoryAnimal.this.createInventory();
                         }
                         return true;
 
@@ -317,7 +308,7 @@ public abstract class TEMPInventoryEntity extends TamableAnimal implements Conta
         } else {
             int i = slotId - 400;
             if (i >= 0 && i < 4 && i < inventory.getContainerSize()) {
-                if (!canWearDogEquipment(DogEquipmentType.fromSlotId(i))) return SlotAccess.NULL;
+                if (!canWearDogEquipmentType(DogEquipmentType.fromSlotId(i))) return SlotAccess.NULL;
                 return createEquipmentSlotAccess(i, (stack) -> stack.isEmpty() || isDogEquipment(stack) && ((DogEquipmentItem) stack.getItem()).getDogEquipmentType().slotId == i);
             }
 

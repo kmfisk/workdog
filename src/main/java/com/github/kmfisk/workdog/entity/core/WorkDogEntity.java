@@ -45,7 +45,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public abstract class WorkDogEntity extends TEMPInventoryEntity {
+public abstract class WorkDogEntity extends AbstractInventoryAnimal {
     public static final EntityDataAccessor<Boolean> GENDER = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<Boolean> LONGHAIR = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.INT);

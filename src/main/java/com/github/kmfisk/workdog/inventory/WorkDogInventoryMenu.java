@@ -1,7 +1,7 @@
 package com.github.kmfisk.workdog.inventory;
 
 import com.github.kmfisk.workdog.WorkDog;
-import com.github.kmfisk.workdog.entity.core.TEMPInventoryEntity;
+import com.github.kmfisk.workdog.entity.core.AbstractInventoryAnimal;
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
 import com.github.kmfisk.workdog.item.DogEquipmentItem;
 import net.minecraft.world.Container;
@@ -15,7 +15,7 @@ import net.minecraftforge.common.ForgeMod;
 
 public class WorkDogInventoryMenu extends AbstractContainerMenu {
     private final Container container;
-    public final TEMPInventoryEntity dog;
+    public final AbstractInventoryAnimal dog;
 
     public WorkDogInventoryMenu(int id, Inventory playerInventory) {
         this(id, playerInventory, new SimpleContainer(
@@ -23,10 +23,11 @@ public class WorkDogInventoryMenu extends AbstractContainerMenu {
         ), null);
     }
 
-    public WorkDogInventoryMenu(int id, Inventory playerInventory, Container dogInventory, TEMPInventoryEntity dog) {
+    public WorkDogInventoryMenu(int id, Inventory playerInventory, Container dogInventory, AbstractInventoryAnimal dog) {
         super(WDMenuTypes.WORK_DOG_CONTAINER.get(), id);
         this.container = dogInventory;
-        if (dog == null && WorkDog.getReferencedMob() instanceof WorkDogEntity) dog = (WorkDogEntity) WorkDog.getReferencedMob();
+        if (dog == null && WorkDog.getReferencedMob() instanceof WorkDogEntity)
+            dog = (WorkDogEntity) WorkDog.getReferencedMob();
         this.dog = dog;
         dogInventory.startOpen(playerInventory.player);
         for (int i = 0; i < 4; i++) {
@@ -35,15 +36,15 @@ public class WorkDogInventoryMenu extends AbstractContainerMenu {
                 @Override
                 public boolean mayPlace(ItemStack itemStack) {
                     if (WorkDogInventoryMenu.this.dog.isDogEquipment(itemStack)) {
-                        TEMPInventoryEntity.DogEquipmentType equipmentType = ((DogEquipmentItem) itemStack.getItem()).getDogEquipmentType();
-                        return WorkDogInventoryMenu.this.dog.canWearDogEquipment(equipmentType) && equipmentType == TEMPInventoryEntity.DogEquipmentType.fromSlotId(slotId) && !hasItem();
+                        AbstractInventoryAnimal.DogEquipmentType equipmentType = ((DogEquipmentItem) itemStack.getItem()).getDogEquipmentType();
+                        return WorkDogInventoryMenu.this.dog.canWearDogEquipmentType(equipmentType) && equipmentType == AbstractInventoryAnimal.DogEquipmentType.fromSlotId(slotId) && !hasItem();
                     }
                     return false;
                 }
 
                 @Override
                 public boolean isActive() {
-                    return WorkDogInventoryMenu.this.dog.canWearDogEquipment(TEMPInventoryEntity.DogEquipmentType.fromSlotId(slotId));
+                    return WorkDogInventoryMenu.this.dog.canWearDogEquipmentType(AbstractInventoryAnimal.DogEquipmentType.fromSlotId(slotId));
                 }
             });
         }

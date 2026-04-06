@@ -84,4 +84,14 @@ public class PitBullEntity extends HuntingDogEntity {
             return PitBullVariant.values()[variant].carries;
         }
     }
+
+    @Override
+    public int getInventoryColumns() {
+        return 6; // todo (large= 27, 9 columns; medium= 18, 6 columns; small= 9, 3 columns)
+    }
+
+    @Override
+    public boolean canWearDogEquipmentType(DogEquipmentType dogEquipmentType) {
+        return true;
+    }
 }
