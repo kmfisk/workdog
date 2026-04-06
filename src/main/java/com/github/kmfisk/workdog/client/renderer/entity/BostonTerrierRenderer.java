@@ -1,6 +1,7 @@
 package com.github.kmfisk.workdog.client.renderer.entity;
 
 import com.github.kmfisk.workdog.WorkDog;
+import com.github.kmfisk.workdog.client.renderer.entity.layers.BostonTerrierEquipmentLayer;
 import com.github.kmfisk.workdog.client.renderer.entity.model.BostonTerrierModel;
 import com.github.kmfisk.workdog.entity.BostonTerrierEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -15,6 +16,7 @@ public class BostonTerrierRenderer extends WorkDogRenderer<BostonTerrierEntity, 
         super(context, new BostonTerrierModel.Adult(context.bakeLayer(BostonTerrierModel.ADULT_LAYER)), 0.5f);
         adultModel = model;
         babyModel = new BostonTerrierModel.Baby(context.bakeLayer(BostonTerrierModel.BABY_LAYER));
+        addLayer(new BostonTerrierEquipmentLayer(this, context.getModelSet()));
     }
 
     @Override
