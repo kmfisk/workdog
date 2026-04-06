@@ -1,6 +1,7 @@
 package com.github.kmfisk.workdog.client.renderer.entity;
 
 import com.github.kmfisk.workdog.WorkDog;
+import com.github.kmfisk.workdog.client.renderer.entity.layers.GermanShepherdEquipmentLayer;
 import com.github.kmfisk.workdog.client.renderer.entity.model.GermanShepherdModel;
 import com.github.kmfisk.workdog.entity.GermanShepherdEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -15,6 +16,7 @@ public class GermanShepherdRenderer extends WorkDogRenderer<GermanShepherdEntity
         super(context, new GermanShepherdModel.Adult(context.bakeLayer(GermanShepherdModel.ADULT_LAYER)), 0.5f);
         adultModel = model;
         babyModel = new GermanShepherdModel.Baby(context.bakeLayer(GermanShepherdModel.BABY_LAYER));
+        addLayer(new GermanShepherdEquipmentLayer(this, context.getModelSet()));
     }
 
     @Override

@@ -15,6 +15,7 @@ import net.minecraft.util.Mth;
 
 public abstract class GermanShepherdModel extends WorkDogModel<GermanShepherdEntity> {
     public static ModelLayerLocation ADULT_LAYER = new ModelLayerLocation(new ResourceLocation(WorkDog.MOD_ID, "german_shepherd"), "adult");
+    public static ModelLayerLocation EQUIPMENT_LAYER = new ModelLayerLocation(new ResourceLocation(WorkDog.MOD_ID, "german_shepherd"), "equipment");
     public static ModelLayerLocation BABY_LAYER = new ModelLayerLocation(new ResourceLocation(WorkDog.MOD_ID, "german_shepherd"), "baby");
     public ModelPart Chest;
     public ModelPart Body;
