@@ -1,6 +1,7 @@
 package com.github.kmfisk.workdog.client.renderer.entity;
 
 import com.github.kmfisk.workdog.WorkDog;
+import com.github.kmfisk.workdog.client.renderer.entity.layers.JackRussellTerrierEquipmentLayer;
 import com.github.kmfisk.workdog.client.renderer.entity.model.JackRussellTerrierModel;
 import com.github.kmfisk.workdog.entity.JackRussellTerrierEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -15,6 +16,7 @@ public class JackRussellTerrierRenderer extends WorkDogRenderer<JackRussellTerri
         super(context, new JackRussellTerrierModel.Adult(context.bakeLayer(JackRussellTerrierModel.ADULT_LAYER)), 0.5f);
         adultModel = model;
         babyModel = new JackRussellTerrierModel.Baby(context.bakeLayer(JackRussellTerrierModel.BABY_LAYER));
+        addLayer(new JackRussellTerrierEquipmentLayer(this, context.getModelSet()));
     }
 
     @Override

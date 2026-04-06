@@ -15,6 +15,7 @@ import net.minecraft.util.Mth;
 
 public abstract class JackRussellTerrierModel extends WorkDogModel<JackRussellTerrierEntity> {
     public static ModelLayerLocation ADULT_LAYER = new ModelLayerLocation(new ResourceLocation(WorkDog.MOD_ID, "jack_russell_terrier"), "adult");
+    public static ModelLayerLocation EQUIPMENT_LAYER = new ModelLayerLocation(new ResourceLocation(WorkDog.MOD_ID, "jack_russell_terrier"), "equipment");
     public static ModelLayerLocation BABY_LAYER = new ModelLayerLocation(new ResourceLocation(WorkDog.MOD_ID, "jack_russell_terrier"), "baby");
     public ModelPart Chest;
     public ModelPart Body;

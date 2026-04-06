@@ -84,6 +84,7 @@ public class WorkDogEntities {
         event.registerLayerDefinition(GermanShepherdModel.EQUIPMENT_LAYER, GermanShepherdModel.Adult::createBodyLayer);
         event.registerLayerDefinition(GermanShepherdModel.BABY_LAYER, GermanShepherdModel.Baby::createBodyLayer);
         event.registerLayerDefinition(JackRussellTerrierModel.ADULT_LAYER, JackRussellTerrierModel.Adult::createBodyLayer);
+        event.registerLayerDefinition(JackRussellTerrierModel.EQUIPMENT_LAYER, JackRussellTerrierModel.Adult::createBodyLayer);
         event.registerLayerDefinition(JackRussellTerrierModel.BABY_LAYER, JackRussellTerrierModel.Baby::createBodyLayer);
         event.registerLayerDefinition(PitBullModel.ADULT_LAYER, PitBullModel.Adult::createBodyLayer);
         event.registerLayerDefinition(PitBullModel.BABY_LAYER, PitBullModel.Baby::createBodyLayer);
