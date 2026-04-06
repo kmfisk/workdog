@@ -75,6 +75,7 @@ public class WorkDogEntities {
         event.registerLayerDefinition(AkitaModel.EQUIPMENT_LAYER, AkitaModel.Adult::createBodyLayer);
         event.registerLayerDefinition(AkitaModel.BABY_LAYER, AkitaModel.Baby::createBodyLayer);
         event.registerLayerDefinition(BorderCollieModel.ADULT_LAYER, BorderCollieModel.Adult::createBodyLayer);
+        event.registerLayerDefinition(BorderCollieModel.EQUIPMENT_LAYER, BorderCollieModel.Adult::createBodyLayer);
         event.registerLayerDefinition(BorderCollieModel.BABY_LAYER, BorderCollieModel.Baby::createBodyLayer);
         event.registerLayerDefinition(BostonTerrierModel.ADULT_LAYER, BostonTerrierModel.Adult::createBodyLayer);
         event.registerLayerDefinition(BostonTerrierModel.BABY_LAYER, BostonTerrierModel.Baby::createBodyLayer);

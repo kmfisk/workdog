@@ -15,6 +15,7 @@ import net.minecraft.util.Mth;
 
 public abstract class BorderCollieModel extends WorkDogModel<BorderCollieEntity> {
     public static ModelLayerLocation ADULT_LAYER = new ModelLayerLocation(new ResourceLocation(WorkDog.MOD_ID, "border_collie"), "adult");
+    public static ModelLayerLocation EQUIPMENT_LAYER = new ModelLayerLocation(new ResourceLocation(WorkDog.MOD_ID, "border_collie"), "equipment");
     public static ModelLayerLocation BABY_LAYER = new ModelLayerLocation(new ResourceLocation(WorkDog.MOD_ID, "border_collie"), "baby");
     public ModelPart Chest;
     public ModelPart Body;

@@ -1,6 +1,7 @@
 package com.github.kmfisk.workdog.client.renderer.entity;
 
 import com.github.kmfisk.workdog.WorkDog;
+import com.github.kmfisk.workdog.client.renderer.entity.layers.BorderCollieEquipmentLayer;
 import com.github.kmfisk.workdog.client.renderer.entity.model.BorderCollieModel;
 import com.github.kmfisk.workdog.entity.BorderCollieEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -15,6 +16,7 @@ public class BorderCollieRenderer extends WorkDogRenderer<BorderCollieEntity, Bo
         super(context, new BorderCollieModel.Adult(context.bakeLayer(BorderCollieModel.ADULT_LAYER)), 0.5f);
         adultModel = model;
         babyModel = new BorderCollieModel.Baby(context.bakeLayer(BorderCollieModel.BABY_LAYER));
+        addLayer(new BorderCollieEquipmentLayer(this, context.getModelSet()));
     }
 
     @Override
