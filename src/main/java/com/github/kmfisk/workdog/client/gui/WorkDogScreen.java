@@ -40,7 +40,7 @@ public class WorkDogScreen extends AbstractContainerScreen<WorkDogInventoryMenu>
             if (dog.canWearDogEquipmentType(AbstractInventoryAnimal.DogEquipmentType.HARNESS)) guiGraphics.blit(TEXTURE, i + 49, j + 95, 180, 205, 18, 18, 384, 256);
             if (dog.canWearDogEquipmentType(AbstractInventoryAnimal.DogEquipmentType.VEST)) guiGraphics.blit(TEXTURE, i + 49, j + 115, 198, 205, 18, 18, 384, 256);
             if (dog.canWearDogEquipmentType(AbstractInventoryAnimal.DogEquipmentType.MUZZLE)) guiGraphics.blit(TEXTURE, i + 49, j + 135, 216, 205, 18, 18, 384, 256);
-            if (dog.canEquipSaddlebag()) guiGraphics.blit(TEXTURE, i + 49, j + 155, 234, 205, 18, 18, 384, 256);
+//            if (dog.canEquipSaddlebag()) guiGraphics.blit(TEXTURE, i + 49, j + 155, 234, 205, 18, 18, 384, 256);
         }
     }
 }
