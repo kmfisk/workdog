@@ -77,9 +77,10 @@ public class WDAdvancementProvider extends ForgeAdvancementProvider {
             Advancement gay = Advancement.Builder.advancement().parent(root)
                     .display(WorkDogItems.SERVICE_VESTS.get(DyeColor.MAGENTA).get(), Component.translatable("advancements.workdog.gay"), Component.translatable("advancements.workdog.gay.desc"), null, FrameType.TASK, true, true, false)
                     .requirements(RequirementsStrategy.OR)
-                    .addCriterion("cyan", InventoryChangeTrigger.TriggerInstance.hasItems(WorkDogItems.SERVICE_VESTS.get(DyeColor.CYAN).get()))
+                    .addCriterion("light_blue", InventoryChangeTrigger.TriggerInstance.hasItems(WorkDogItems.SERVICE_VESTS.get(DyeColor.LIGHT_BLUE).get()))
                     .addCriterion("pink", InventoryChangeTrigger.TriggerInstance.hasItems(WorkDogItems.SERVICE_VESTS.get(DyeColor.PINK).get()))
                     .addCriterion("magenta", InventoryChangeTrigger.TriggerInstance.hasItems(WorkDogItems.SERVICE_VESTS.get(DyeColor.MAGENTA).get()))
+                    .addCriterion("purple", InventoryChangeTrigger.TriggerInstance.hasItems(WorkDogItems.SERVICE_VESTS.get(DyeColor.PURPLE).get()))
                     .save(consumer, WorkDog.MOD_ID + ":gay");
         }
     }
