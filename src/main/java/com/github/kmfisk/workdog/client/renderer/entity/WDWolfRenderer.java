@@ -1,6 +1,7 @@
 package com.github.kmfisk.workdog.client.renderer.entity;
 
 import com.github.kmfisk.workdog.WorkDog;
+import com.github.kmfisk.workdog.client.renderer.entity.layers.WDWolfEquipmentLayer;
 import com.github.kmfisk.workdog.client.renderer.entity.model.WDWolfModel;
 import com.github.kmfisk.workdog.entity.WDWolfEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -15,6 +16,7 @@ public class WDWolfRenderer extends WorkDogRenderer<WDWolfEntity, WDWolfModel> {
         super(context, new WDWolfModel.Adult(context.bakeLayer(WDWolfModel.ADULT_LAYER)), 0.5f);
         adultModel = model;
         babyModel = new WDWolfModel.Baby(context.bakeLayer(WDWolfModel.BABY_LAYER));
+        addLayer(new WDWolfEquipmentLayer(this, context.getModelSet()));
     }
 
     @Override

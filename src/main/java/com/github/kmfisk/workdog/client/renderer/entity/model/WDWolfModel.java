@@ -15,6 +15,7 @@ import net.minecraft.util.Mth;
 
 public abstract class WDWolfModel extends WorkDogModel<WDWolfEntity> {
     public static ModelLayerLocation ADULT_LAYER = new ModelLayerLocation(new ResourceLocation(WorkDog.MOD_ID, "wolf"), "adult");
+    public static ModelLayerLocation EQUIPMENT_LAYER = new ModelLayerLocation(new ResourceLocation(WorkDog.MOD_ID, "wolf"), "equipment");
     public static ModelLayerLocation BABY_LAYER = new ModelLayerLocation(new ResourceLocation(WorkDog.MOD_ID, "wolf"), "baby");
     public ModelPart Chest;
     public ModelPart Body;

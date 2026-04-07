@@ -70,6 +70,7 @@ public class WorkDogEntities {
 
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(WDWolfModel.ADULT_LAYER, WDWolfModel.Adult::createBodyLayer);
+        event.registerLayerDefinition(WDWolfModel.EQUIPMENT_LAYER, WDWolfModel.Adult::createBodyLayer);
         event.registerLayerDefinition(WDWolfModel.BABY_LAYER, WDWolfModel.Baby::createBodyLayer);
         event.registerLayerDefinition(AkitaModel.ADULT_LAYER, AkitaModel.Adult::createBodyLayer);
         event.registerLayerDefinition(AkitaModel.EQUIPMENT_LAYER, AkitaModel.Adult::createBodyLayer);
