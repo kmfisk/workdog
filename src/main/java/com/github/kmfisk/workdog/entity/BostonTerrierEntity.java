@@ -102,7 +102,7 @@ public class BostonTerrierEntity extends ToyDogEntity {
     @Override
     public boolean canWearDogEquipment(ItemStack stack) {
         if (stack.getItem() instanceof DogEquipmentItem dogEquipmentItem) {
-            return dogEquipmentItem.getDogEquipmentType() != DogEquipmentType.VEST; // todo allow sweaters when added
+            return dogEquipmentItem.getDogEquipmentType() != DogEquipmentType.VEST || stack.is(WorkDogItems.SWEATER.get());
         }
         return true;
     }

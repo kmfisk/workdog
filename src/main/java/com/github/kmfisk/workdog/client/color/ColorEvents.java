@@ -22,6 +22,6 @@ public class ColorEvents {
 
     public static void registerColorHandlerItems(final RegisterColorHandlersEvent.Item event) {
         event.getItemColors().register((stack, layer) -> layer > 0 ? -1 : ((DyeableLeatherItem) stack.getItem()).getColor(stack),
-                WorkDogItems.COLLAR.get(), WorkDogItems.HARNESS.get(), WorkDogItems.HOG_VEST.get(), WorkDogItems.MUZZLE.get(), WorkDogItems.SADDLEBAG.get());
+                WorkDogItems.COLLAR.get(), WorkDogItems.HARNESS.get(), WorkDogItems.HOG_VEST.get(), WorkDogItems.MUZZLE.get(), WorkDogItems.SADDLEBAG.get(), WorkDogItems.SWEATER.get());
     }
 }

@@ -89,8 +89,9 @@ public abstract class AbstractInventoryAnimal extends TamableAnimal implements C
     }
 
     public abstract boolean canWearDogEquipmentType(DogEquipmentType dogEquipmentType); //todo
+
     public boolean canWearDogEquipment(ItemStack stack) {
-        return true;
+        return !stack.is(WorkDogItems.SWEATER.get());
     }
 
     public boolean isWearingDogEquipmentType(DogEquipmentType dogEquipmentType) {

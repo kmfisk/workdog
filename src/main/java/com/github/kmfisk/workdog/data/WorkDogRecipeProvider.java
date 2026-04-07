@@ -65,7 +65,14 @@ public class WorkDogRecipeProvider extends RecipeProvider {
                 .define('T', Items.LEATHER)
                 .define('F', Items.STRING)
                 .unlockedBy("has_leather", InventoryChangeTrigger.TriggerInstance.hasItems(Items.LEATHER)).save(consumer);
-
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, WorkDogItems.SWEATER.get())
+                .pattern(" TT")
+                .pattern("TRF")
+                .pattern("TTT")
+                .define('T', Items.WHITE_WOOL)
+                .define('R', Items.LEATHER)
+                .define('F', Items.STRING)
+                .unlockedBy("has_leather", InventoryChangeTrigger.TriggerInstance.hasItems(Items.LEATHER)).save(consumer);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, WorkDogItems.CRATE.get())
                 .pattern("III")
