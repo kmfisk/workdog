@@ -143,11 +143,18 @@ public abstract class AbstractInventoryAnimal extends TamableAnimal implements C
 
     @Override
     public void containerChanged(Container container) {
-        for (DogEquipmentType dogEquipmentType : DogEquipmentType.values()) {
-            ItemStack itemStack = getDogEquipment(dogEquipmentType);
-            updateContainerEquipment();
-            ItemStack itemStack1 = getDogEquipment(dogEquipmentType);
-            if (tickCount > 20 && isDogEquipment(itemStack1) && itemStack != itemStack1)
+        ItemStack muzzle = getDogEquipment(DogEquipmentType.MUZZLE);
+        ItemStack collar = getDogEquipment(DogEquipmentType.COLLAR);
+        ItemStack harness = getDogEquipment(DogEquipmentType.HARNESS);
+        ItemStack vest = getDogEquipment(DogEquipmentType.VEST);
+        updateContainerEquipment();
+        if (tickCount > 20) {
+            boolean playSound = false;
+            if (muzzle != getDogEquipment(DogEquipmentType.MUZZLE)) playSound = true;
+            else if (collar != getDogEquipment(DogEquipmentType.COLLAR)) playSound = true;
+            else if (harness != getDogEquipment(DogEquipmentType.HARNESS)) playSound = true;
+            else if (vest != getDogEquipment(DogEquipmentType.VEST)) playSound = true;
+            if (playSound)
                 playSound(SoundEvents.HORSE_ARMOR, 0.5F, 1.0F);
         }
     }
