@@ -201,13 +201,13 @@ public abstract class AbstractInventoryAnimal extends TamableAnimal implements C
     public void addAdditionalSaveData(CompoundTag compoundTag) {
         super.addAdditionalSaveData(compoundTag);
         if (!inventory.getItem(0).isEmpty())
-            compoundTag.put("CollarItem", inventory.getItem(0).save(new CompoundTag()));
+            compoundTag.put("MuzzleItem", inventory.getItem(0).save(new CompoundTag()));
         if (!inventory.getItem(1).isEmpty())
-            compoundTag.put("HarnessItem", inventory.getItem(1).save(new CompoundTag()));
+            compoundTag.put("CollarItem", inventory.getItem(1).save(new CompoundTag()));
         if (!inventory.getItem(2).isEmpty())
-            compoundTag.put("VestItem", inventory.getItem(2).save(new CompoundTag()));
+            compoundTag.put("HarnessItem", inventory.getItem(2).save(new CompoundTag()));
         if (!inventory.getItem(3).isEmpty())
-            compoundTag.put("MuzzleItem", inventory.getItem(3).save(new CompoundTag()));
+            compoundTag.put("VestItem", inventory.getItem(3).save(new CompoundTag()));
 
         compoundTag.putBoolean("Saddlebag", hasSaddlebag());
         if (hasSaddlebag()) {
@@ -228,20 +228,20 @@ public abstract class AbstractInventoryAnimal extends TamableAnimal implements C
     @Override
     public void readAdditionalSaveData(CompoundTag compoundTag) {
         super.readAdditionalSaveData(compoundTag);
+        if (compoundTag.contains("MuzzleItem", 10)) {
+            ItemStack itemstack = ItemStack.of(compoundTag.getCompound("MuzzleItem"));
+            if (!itemstack.isEmpty() && isDogEquipment(itemstack)) inventory.setItem(0, itemstack);
+        }
         if (compoundTag.contains("CollarItem", 10)) {
             ItemStack itemstack = ItemStack.of(compoundTag.getCompound("CollarItem"));
-            if (!itemstack.isEmpty() && isDogEquipment(itemstack)) inventory.setItem(0, itemstack);
+            if (!itemstack.isEmpty() && isDogEquipment(itemstack)) inventory.setItem(1, itemstack);
         }
         if (compoundTag.contains("HarnessItem", 10)) {
             ItemStack itemstack = ItemStack.of(compoundTag.getCompound("HarnessItem"));
-            if (!itemstack.isEmpty() && isDogEquipment(itemstack)) inventory.setItem(1, itemstack);
+            if (!itemstack.isEmpty() && isDogEquipment(itemstack)) inventory.setItem(2, itemstack);
         }
         if (compoundTag.contains("VestItem", 10)) {
             ItemStack itemstack = ItemStack.of(compoundTag.getCompound("VestItem"));
-            if (!itemstack.isEmpty() && isDogEquipment(itemstack)) inventory.setItem(2, itemstack);
-        }
-        if (compoundTag.contains("MuzzleItem", 10)) {
-            ItemStack itemstack = ItemStack.of(compoundTag.getCompound("MuzzleItem"));
             if (!itemstack.isEmpty() && isDogEquipment(itemstack)) inventory.setItem(3, itemstack);
         }
 
@@ -339,10 +339,10 @@ public abstract class AbstractInventoryAnimal extends TamableAnimal implements C
     }
 
     public enum DogEquipmentType {
-        COLLAR(0, EquipmentSlot.HEAD),
-        HARNESS(1, EquipmentSlot.CHEST),
-        VEST(2, EquipmentSlot.LEGS),
-        MUZZLE(3, EquipmentSlot.FEET);
+        MUZZLE(0, EquipmentSlot.FEET),
+        COLLAR(1, EquipmentSlot.HEAD),
+        HARNESS(2, EquipmentSlot.CHEST),
+        VEST(3, EquipmentSlot.LEGS);
 
         private final int slotId;
         private final EquipmentSlot equipmentSlot;
@@ -358,10 +358,10 @@ public abstract class AbstractInventoryAnimal extends TamableAnimal implements C
 
         public static DogEquipmentType fromSlotId(int slotId) {
             return switch (slotId) {
-                case 0 -> COLLAR;
-                case 1 -> HARNESS;
-                case 2 -> VEST;
-                case 3 -> MUZZLE;
+                case 0 -> MUZZLE;
+                case 1 -> COLLAR;
+                case 2 -> HARNESS;
+                case 3 -> VEST;
                 default -> throw new IllegalStateException("Unexpected value: " + slotId);
             };
         }
