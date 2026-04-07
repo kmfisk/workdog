@@ -35,7 +35,7 @@ public class WorkDogInventoryMenu extends AbstractContainerMenu {
             addSlot(new Slot(dogInventory, slotId, 50, i * 20 + 76) {
                 @Override
                 public boolean mayPlace(ItemStack itemStack) {
-                    if (WorkDogInventoryMenu.this.dog.isDogEquipment(itemStack)) {
+                    if (WorkDogInventoryMenu.this.dog.isDogEquipment(itemStack) && WorkDogInventoryMenu.this.dog.canWearDogEquipment(itemStack)) {
                         AbstractInventoryAnimal.DogEquipmentType equipmentType = ((DogEquipmentItem) itemStack.getItem()).getDogEquipmentType();
                         return WorkDogInventoryMenu.this.dog.canWearDogEquipmentType(equipmentType) && equipmentType == AbstractInventoryAnimal.DogEquipmentType.fromSlotId(slotId) && !hasItem();
                     }
@@ -48,8 +48,6 @@ public class WorkDogInventoryMenu extends AbstractContainerMenu {
                 }
             });
         }
-//        for (int i = 0; i < 4; i++)
-//            this.addSlot(new DogEquipmentSlot(dogInventory, i, 50, i * 20 + 76));
 
         if (WorkDogInventoryMenu.this.dog.hasSaddlebag()) {
             for (int row = 0; row < 3; ++row) {
