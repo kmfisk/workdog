@@ -43,6 +43,11 @@ public class WorkDogInventoryMenu extends AbstractContainerMenu {
                 }
 
                 @Override
+                public int getMaxStackSize() {
+                    return 1;
+                }
+
+                @Override
                 public boolean isActive() {
                     return WorkDogInventoryMenu.this.dog.canWearDogEquipmentType(AbstractInventoryAnimal.DogEquipmentType.fromSlotId(slotId));
                 }
