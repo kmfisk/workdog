@@ -15,6 +15,7 @@ import net.minecraft.util.Mth;
 
 public abstract class PitBullModel extends WorkDogModel<PitBullEntity> {
     public static ModelLayerLocation ADULT_LAYER = new ModelLayerLocation(new ResourceLocation(WorkDog.MOD_ID, "pit_bull"), "adult");
+    public static ModelLayerLocation EQUIPMENT_LAYER = new ModelLayerLocation(new ResourceLocation(WorkDog.MOD_ID, "pit_bull"), "equipment");
     public static ModelLayerLocation BABY_LAYER = new ModelLayerLocation(new ResourceLocation(WorkDog.MOD_ID, "pit_bull"), "baby");
     public ModelPart Chest;
     public ModelPart Body;

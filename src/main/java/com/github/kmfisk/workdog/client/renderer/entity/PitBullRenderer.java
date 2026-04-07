@@ -1,6 +1,7 @@
 package com.github.kmfisk.workdog.client.renderer.entity;
 
 import com.github.kmfisk.workdog.WorkDog;
+import com.github.kmfisk.workdog.client.renderer.entity.layers.PitBullEquipmentLayer;
 import com.github.kmfisk.workdog.client.renderer.entity.model.PitBullModel;
 import com.github.kmfisk.workdog.entity.PitBullEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -15,6 +16,7 @@ public class PitBullRenderer extends WorkDogRenderer<PitBullEntity, PitBullModel
         super(context, new PitBullModel.Adult(context.bakeLayer(PitBullModel.ADULT_LAYER)), 0.5f);
         adultModel = model;
         babyModel = new PitBullModel.Baby(context.bakeLayer(PitBullModel.BABY_LAYER));
+        addLayer(new PitBullEquipmentLayer(this, context.getModelSet()));
     }
 
     @Override
