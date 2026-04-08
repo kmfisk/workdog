@@ -43,6 +43,21 @@ public class WorkDogScreen extends AbstractContainerScreen<WorkDogInventoryMenu>
             // if (parents aren't null) {
             guiGraphics.drawWordWrap(font, Component.translatable("gui.workdog.parentage", pronoun, "[NAME1]", "[NAME2]"), 68, 118, 122, 4210752);
 //            } else guiGraphics.drawWordWrap(font, Component.translatable("gui.workdog.stray", pronoun), 68, 118, 122, 4210752);
+
+            boolean albinistic = workDog.getVariant() == workDog.getVariantCount();
+            boolean melanistic = workDog.getVariant() == workDog.getVariantCount() + 1;
+            int i = albinistic || melanistic ? 2 : 1;
+            int icon1X = -16;
+            if (workDog.getBreedingStatus(WorkDogEntity.BreedingStatus.HEAT)) icon1X = 163;
+            else if (workDog.getBreedingStatus(WorkDogEntity.BreedingStatus.PREGNANT)) icon1X = 181;
+            else if (workDog.isInfertile()) icon1X = 199;
+            else i = 1;
+            guiGraphics.blit(TEXTURE, 129 - (16 * i) / 2, 165, icon1X, 188, 16, 16, 384, 256);
+
+            int icon2X = -16;
+            if (albinistic) icon2X = 217;
+            else if (melanistic) icon2X = 235;
+            guiGraphics.blit(TEXTURE, 129 - (16 * i) / 2 + 16 * (i - 1), 165, icon2X, 188, 16, 16, 384, 256);
         }
 
         guiGraphics.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, 4210752, false);
