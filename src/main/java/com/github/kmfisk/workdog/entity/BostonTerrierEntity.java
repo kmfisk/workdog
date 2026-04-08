@@ -32,6 +32,11 @@ public class BostonTerrierEntity extends ToyDogEntity {
     }
 
     @Override
+    public String getVariantName() {
+        return BostonTerrierVariant.fromOrdinal(getVariant()).name().toLowerCase();
+    }
+
+    @Override
     public int getCarriedVariant(int variant) {
         int size = BostonTerrierVariant.getCarriedVariants(variant).size();
         return BostonTerrierVariant.getCarriedVariants(variant).get(random.nextInt(size));
@@ -73,6 +78,22 @@ public class BostonTerrierEntity extends ToyDogEntity {
 
         public static List<Integer> getCarriedVariants(int variant) {
             return BostonTerrierVariant.values()[variant].carries;
+        }
+
+        public static BostonTerrierVariant fromOrdinal(int ordinal) {
+            return switch (ordinal) {
+                case 0 -> BLACK;
+                case 1 -> BLACK_AND_WHITE;
+                case 2 -> BLUE;
+                case 3 -> BRINDLE;
+                case 4 -> BROWN;
+                case 5 -> JADE_BLACK;
+                case 6 -> LILAC;
+                case 7 -> WHITE;
+                case 8 -> ALBINISTIC;
+                case 9 -> MELANISTIC;
+                default -> throw new IllegalStateException("Unexpected value: " + ordinal);
+            };
         }
     }
 

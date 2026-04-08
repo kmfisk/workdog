@@ -29,6 +29,11 @@ public class GermanShepherdEntity extends ProtectionDogEntity {
     }
 
     @Override
+    public String getVariantName() {
+        return GermanShepherdVariant.fromOrdinal(getVariant()).name().toLowerCase();
+    }
+
+    @Override
     public int getCarriedVariant(int variant) {
         int size = GermanShepherdVariant.getCarriedVariants(variant).size();
         return GermanShepherdVariant.getCarriedVariants(variant).get(random.nextInt(size));
@@ -73,6 +78,25 @@ public class GermanShepherdEntity extends ProtectionDogEntity {
 
         public static List<Integer> getCarriedVariants(int variant) {
             return GermanShepherdVariant.values()[variant].carries;
+        }
+
+        public static GermanShepherdVariant fromOrdinal(int ordinal) {
+            return switch (ordinal) {
+                case 0 -> BLACK;
+                case 1 -> BLACK_AND_RED;
+                case 2 -> BLACK_AND_SILVER;
+                case 3 -> BLACK_AND_TAN;
+                case 4 -> RED_SABLE;
+                case 5 -> RED_SADDLEBACK;
+                case 6 -> SILVER_SABLE;
+                case 7 -> SILVER_SADDLEBACK;
+                case 8 -> TAN_SABLE;
+                case 9 -> TAN_SADDLEBACK;
+                case 10 -> WHITE;
+                case 11 -> ALBINISTIC;
+                case 12 -> MELANISTIC;
+                default -> throw new IllegalStateException("Unexpected value: " + ordinal);
+            };
         }
     }
 

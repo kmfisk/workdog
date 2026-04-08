@@ -29,6 +29,11 @@ public class AkitaEntity extends HuntingDogEntity {
     }
 
     @Override
+    public String getVariantName() {
+        return AkitaVariant.fromOrdinal(getVariant()).name().toLowerCase();
+    }
+
+    @Override
     public int getCarriedVariant(int variant) {
         int size = AkitaVariant.getCarriedVariants(variant).size();
         return AkitaVariant.getCarriedVariants(variant).get(random.nextInt(size));
@@ -88,6 +93,35 @@ public class AkitaEntity extends HuntingDogEntity {
 
         public static List<Integer> getCarriedVariants(int variant) {
             return AkitaVariant.values()[variant].carries;
+        }
+
+        public static AkitaVariant fromOrdinal(int ordinal) {
+            return switch (ordinal) {
+                case 0 -> BLACK;
+                case 1 -> BLACK_WHITE_SOCKS;
+                case 2 -> BLACK_PINTO;
+                case 3 -> BLACK_BROWN_PINTO;
+                case 4 -> BLACK_TAN_PINTO;
+                case 5 -> BLACK_BRINDLE;
+                case 6 -> BROWN_BRINDLE;
+                case 7 -> BROWN_PINTO;
+                case 8 -> FAWN;
+                case 9 -> FAWN_BRINDLE;
+                case 10 -> FAWN_PINTO;
+                case 11 -> GRAY_BRINDLE;
+                case 12 -> GRAY_PINTO;
+                case 13 -> SILVER_BRINDLE;
+                case 14 -> SILVER_PINTO;
+                case 15 -> TAN_BRINDLE;
+                case 16 -> TAN_PINTO;
+                case 17 -> TIGER_BRINDLE;
+                case 18 -> RED_SESAME;
+                case 19 -> GOLD_SESAME;
+                case 20 -> WHITE;
+                case 21 -> ALBINISTIC;
+                case 22 -> MELANISTIC;
+                default -> throw new IllegalStateException("Unexpected value: " + ordinal);
+            };
         }
     }
 

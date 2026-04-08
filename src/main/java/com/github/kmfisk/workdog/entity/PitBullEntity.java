@@ -29,6 +29,11 @@ public class PitBullEntity extends HuntingDogEntity {
     }
 
     @Override
+    public String getVariantName() {
+        return PitBullVariant.fromOrdinal(getVariant()).name().toLowerCase();
+    }
+
+    @Override
     public int getCarriedVariant(int variant) {
         int size = PitBullVariant.getCarriedVariants(variant).size();
         return PitBullVariant.getCarriedVariants(variant).get(random.nextInt(size));
@@ -82,6 +87,29 @@ public class PitBullEntity extends HuntingDogEntity {
 
         public static List<Integer> getCarriedVariants(int variant) {
             return PitBullVariant.values()[variant].carries;
+        }
+
+        public static PitBullVariant fromOrdinal(int ordinal) {
+            return switch (ordinal) {
+                case 0 -> BLACK;
+                case 1 -> BLACK_PINTO;
+                case 2 -> BLUE_BRINDLE;
+                case 3 -> BLUE_PINTO;
+                case 4 -> BROWN_BRINDLE;
+                case 5 -> BROWN_PINTO;
+                case 6 -> DARK_BLUE;
+                case 7 -> DARK_BROWN;
+                case 8 -> DARK_RED;
+                case 9 -> FAWN;
+                case 10 -> LIGHT_BLUE;
+                case 11 -> LIGHT_BROWN;
+                case 12 -> LIGHT_RED;
+                case 13 -> RED_PINTO;
+                case 14 -> WHITE;
+                case 15 -> ALBINISTIC;
+                case 16 -> MELANISTIC;
+                default -> throw new IllegalStateException("Unexpected value: " + ordinal);
+            };
         }
     }
 

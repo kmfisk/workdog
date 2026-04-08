@@ -29,6 +29,11 @@ public class BorderCollieEntity extends HerdingDogEntity {
     }
 
     @Override
+    public String getVariantName() {
+        return BorderCollieVariant.fromOrdinal(getVariant()).name().toLowerCase();
+    }
+
+    @Override
     public int getCarriedVariant(int variant) {
         int size = BorderCollieVariant.getCarriedVariants(variant).size();
         return BorderCollieVariant.getCarriedVariants(variant).get(random.nextInt(size));
@@ -77,6 +82,29 @@ public class BorderCollieEntity extends HerdingDogEntity {
 
         public static List<Integer> getCarriedVariants(int variant) {
             return BorderCollieVariant.values()[variant].carries;
+        }
+
+        public static BorderCollieVariant fromOrdinal(int ordinal) {
+            return switch (ordinal) {
+                case 0 -> BLACK;
+                case 1 -> BLACK_SKIM;
+                case 2 -> BLACK_LIGHT;
+                case 3 -> BLACK_HEAVY;
+                case 4 -> BLACK_TRI;
+                case 5 -> BLUE_SKIM;
+                case 6 -> BLUE_LIGHT;
+                case 7 -> BLUE_HEAVY;
+                case 8 -> BLUE_MERLE;
+                case 9 -> CHOCOLATE_SKIM;
+                case 10 -> CHOCOLATE_LIGHT;
+                case 11 -> CHOCOLATE_HEAVY;
+                case 12 -> RED_MERLE;
+                case 13 -> TAN;
+                case 14 -> WHITE;
+                case 15 -> ALBINISTIC;
+                case 16 -> MELANISTIC;
+                default -> throw new IllegalStateException("Unexpected value: " + ordinal);
+            };
         }
     }
 

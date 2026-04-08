@@ -84,6 +84,11 @@ public class WDWolfEntity extends WorkDogEntity {
         return 4;
     }
 
+    @Override
+    public String getVariantName() {
+        return WolfVariant.fromOrdinal(getVariant()).name().toLowerCase();
+    }
+
     public int getCarriedVariant(int variant) {
         int size = WolfVariant.getCarriedVariants(variant).size();
         return WolfVariant.getCarriedVariants(variant).get(random.nextInt(size));
@@ -146,6 +151,18 @@ public class WDWolfEntity extends WorkDogEntity {
 
         public static List<Integer> getCarriedVariants(int variant) {
             return WolfVariant.values()[variant].carries;
+        }
+
+        public static WolfVariant fromOrdinal(int ordinal) {
+            return switch (ordinal) {
+                case 0 -> BLACK;
+                case 1 -> BROWN;
+                case 2 -> GRAY;
+                case 3 -> WHITE;
+                case 4 -> ALBINISTIC;
+                case 5 -> MELANISTIC;
+                default -> throw new IllegalStateException("Unexpected value: " + ordinal);
+            };
         }
     }
 

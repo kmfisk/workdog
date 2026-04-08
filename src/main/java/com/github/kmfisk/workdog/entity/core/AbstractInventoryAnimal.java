@@ -7,6 +7,7 @@ import com.github.kmfisk.workdog.item.WorkDogItems;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -41,8 +42,9 @@ public abstract class AbstractInventoryAnimal extends TamableAnimal implements C
     }
 
     public void openInventory(Player player) {
+        Component name = getCustomName() != null ? super.getName() : Component.literal("???");
         if (!level().isClientSide && isTame())
-            NetworkHooks.openScreen((ServerPlayer) player, new SimpleMenuProvider((id, playerInv, pPlayer) -> new WorkDogInventoryMenu(id, playerInv, inventory, AbstractInventoryAnimal.this), getName()));
+            NetworkHooks.openScreen((ServerPlayer) player, new SimpleMenuProvider((id, playerInv, pPlayer) -> new WorkDogInventoryMenu(id, playerInv, inventory, AbstractInventoryAnimal.this), name));
         WorkDog.setReferencedMob(this);
     }
 
@@ -71,7 +73,7 @@ public abstract class AbstractInventoryAnimal extends TamableAnimal implements C
     }
 
     private void equipSaddlebag(Player player, ItemStack itemStack) {
-        setSaddlebag(true);
+        setSaddlebag(true); //todo color
         playSound(SoundEvents.DONKEY_CHEST, 1.0F, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
         if (!player.getAbilities().instabuild) itemStack.shrink(1);
         createInventory();

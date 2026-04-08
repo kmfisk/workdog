@@ -29,6 +29,11 @@ public class JackRussellTerrierEntity extends TerrierDogEntity {
     }
 
     @Override
+    public String getVariantName() {
+        return JackRussellTerrierVariant.fromOrdinal(getVariant()).name().toLowerCase();
+    }
+
+    @Override
     public int getCarriedVariant(int variant) {
         int size = JackRussellTerrierVariant.getCarriedVariants(variant).size();
         return JackRussellTerrierVariant.getCarriedVariants(variant).get(random.nextInt(size));
@@ -71,6 +76,23 @@ public class JackRussellTerrierEntity extends TerrierDogEntity {
 
         public static List<Integer> getCarriedVariants(int variant) {
             return JackRussellTerrierVariant.values()[variant].carries;
+        }
+
+        public static JackRussellTerrierVariant fromOrdinal(int ordinal) {
+            return switch (ordinal) {
+                case 0 -> BLACK;
+                case 1 -> BLACK_AND_TAN;
+                case 2 -> BROWN_EARS;
+                case 3 -> BROWN_FACE;
+                case 4 -> BROWN_SADDLE;
+                case 5 -> HEAVY_TRI;
+                case 6 -> MID_TRI;
+                case 7 -> LIGHT_TRI;
+                case 8 -> WHITE;
+                case 9 -> ALBINISTIC;
+                case 10 -> MELANISTIC;
+                default -> throw new IllegalStateException("Unexpected value: " + ordinal);
+            };
         }
     }
 

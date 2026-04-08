@@ -155,6 +155,8 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
 
     public abstract int getVariantCount();
 
+    public abstract String getVariantName();
+
     public abstract int getCarriedVariant(int variant);
 
     public int getVariant() {
@@ -636,6 +638,10 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
     public enum Gender {
         FEMALE,
         MALE;
+
+        public Component getName() {
+            return Component.translatable("gui.workdog." + this.name().toLowerCase());
+        }
 
         public static Gender fromBool(boolean value) {
             return value ? MALE : FEMALE;
