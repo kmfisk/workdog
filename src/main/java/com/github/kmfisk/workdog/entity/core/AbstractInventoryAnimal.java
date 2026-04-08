@@ -69,7 +69,7 @@ public abstract class AbstractInventoryAnimal extends TamableAnimal implements C
     }
 
     public boolean canEquipSaddlebag() {
-        return isWearingDogEquipmentType(DogEquipmentType.HARNESS);
+        return !isBaby() && isWearingDogEquipmentType(DogEquipmentType.HARNESS);
     }
 
     private void equipSaddlebag(Player player, ItemStack itemStack) {
@@ -93,6 +93,7 @@ public abstract class AbstractInventoryAnimal extends TamableAnimal implements C
     public abstract boolean canWearDogEquipmentType(DogEquipmentType dogEquipmentType); //todo
 
     public boolean canWearDogEquipment(ItemStack stack) {
+        if (isBaby()) return false;
         if (stack.getItem() instanceof DogEquipmentItem dogEquipmentItem) {
             if (dogEquipmentItem.getDogEquipmentType() == DogEquipmentType.VEST)
                 return isWearingDogEquipmentType(DogEquipmentType.HARNESS) && !stack.is(WorkDogItems.SWEATER.get());
@@ -182,7 +183,7 @@ public abstract class AbstractInventoryAnimal extends TamableAnimal implements C
 
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
-        if (!isBaby()) {
+//        if (!isBaby()) {
             ItemStack stack = player.getItemInHand(hand);
             if (isTame() && player.isSecondaryUseActive() && (stack.isEmpty() || !(stack.getItem() instanceof DogEquipmentItem))) {
                 openInventory(player);
@@ -208,10 +209,11 @@ public abstract class AbstractInventoryAnimal extends TamableAnimal implements C
                     }
                 }
 
-                return InteractionResult.PASS;
+//                return InteractionResult.PASS;
             }
 
-        } else return super.mobInteract(player, hand);
+//        } else
+        return super.mobInteract(player, hand);
     }
 
     @Override
