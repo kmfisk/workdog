@@ -32,7 +32,7 @@ public class WorkDogInventoryMenu extends AbstractContainerMenu {
         dogInventory.startOpen(playerInventory.player);
         for (int i = 0; i < 4; i++) {
             int slotId = i;
-            AbstractInventoryAnimal finalDog = dog;
+            AbstractInventoryAnimal finalDog = this.dog;
             addSlot(new Slot(dogInventory, slotId, 50, i * 20 + 76) {
                 @Override
                 public boolean mayPlace(ItemStack itemStack) {
@@ -62,7 +62,7 @@ public class WorkDogInventoryMenu extends AbstractContainerMenu {
             });
         }
 
-        if (dog.hasSaddlebag()) {
+        if (this.dog.hasSaddlebag()) {
             for (int row = 0; row < 3; ++row) {
                 for (int column = 0; column < dog.getInventoryColumns(); ++column) {
                     this.addSlot(new Slot(dogInventory, 4 + column + row * dog.getInventoryColumns(), 192 + column * 18, 26 + row * 18));
@@ -90,32 +90,41 @@ public class WorkDogInventoryMenu extends AbstractContainerMenu {
     @Override
     public ItemStack quickMoveStack(Player player, int slotId) { // todo
         ItemStack stack = ItemStack.EMPTY;
-//        Slot slot = slots.get(slotId);
-//        if (slot != null && slot.hasItem()) {
-//            ItemStack slotItem = slot.getItem();
-//            stack = slotItem.copy();
-//            int i = container.getContainerSize();
-//            if (slotId < i) {
-//                if (!moveItemStackTo(slotItem, i, slots.size(), true)) return ItemStack.EMPTY;
-//            } else if (getSlot(1).mayPlace(slotItem) && !getSlot(1).hasItem()) {
-//                if (!moveItemStackTo(slotItem, 1, 2, false)) return ItemStack.EMPTY;
-//            } else if (getSlot(0).mayPlace(slotItem)) {
-//                if (!moveItemStackTo(slotItem, 0, 1, false)) return ItemStack.EMPTY;
-//            } else if (i <= 2 || !moveItemStackTo(slotItem, 2, i, false)) {
-//                int j = i + 27;
-//                int k = j + 9;
-//                if (slotId >= j && slotId < k) {
-//                    if (!moveItemStackTo(slotItem, i, j, false)) return ItemStack.EMPTY;
-//                } else if (slotId >= i && slotId < j) {
-//                    if (!moveItemStackTo(slotItem, j, k, false)) return ItemStack.EMPTY;
-//                } else if (!moveItemStackTo(slotItem, j, j, false)) return ItemStack.EMPTY;
-//
-//                return ItemStack.EMPTY;
-//            }
-//
-//            if (slotItem.isEmpty()) slot.set(ItemStack.EMPTY);
-//            else slot.setChanged();
-//        }
+        Slot slot = slots.get(slotId);
+        if (slot.hasItem()) {
+            ItemStack slotItem = slot.getItem();
+            stack = slotItem.copy();
+            int containerSize = container.getContainerSize();
+            if (slotId < containerSize) { //from inside dog inventory
+                if (!moveItemStackTo(slotItem, containerSize, slots.size(), true)) return ItemStack.EMPTY;
+
+            } else if (getSlot(3).mayPlace(slotItem) /*&& !getSlot(1).hasItem()*/) {
+                if (!moveItemStackTo(slotItem, 3, 4, false)) return ItemStack.EMPTY;
+
+            } else if (getSlot(2).mayPlace(slotItem) /*&& !getSlot(1).hasItem()*/) {
+                if (!moveItemStackTo(slotItem, 2, 3, false)) return ItemStack.EMPTY;
+
+            } else if (getSlot(1).mayPlace(slotItem) /*&& !getSlot(1).hasItem()*/) {
+                if (!moveItemStackTo(slotItem, 1, 2, false)) return ItemStack.EMPTY;
+
+            } else if (getSlot(0).mayPlace(slotItem) /*&& !getSlot(1).hasItem()*/) {
+                if (!moveItemStackTo(slotItem, 0, 1, false)) return ItemStack.EMPTY;
+
+            } else if (containerSize <= 4 || !moveItemStackTo(slotItem, 4, containerSize, false)) {
+                int j = containerSize + 27;
+                int k = j + 9;
+                if (slotId >= j && slotId < k) {
+                    if (!moveItemStackTo(slotItem, containerSize, j, false)) return ItemStack.EMPTY;
+                } else if (slotId >= containerSize && slotId < j) {
+                    if (!moveItemStackTo(slotItem, j, k, false)) return ItemStack.EMPTY;
+                } else if (!moveItemStackTo(slotItem, j, j, false)) return ItemStack.EMPTY;
+
+                return ItemStack.EMPTY;
+            }
+
+            if (slotItem.isEmpty()) slot.setByPlayer(ItemStack.EMPTY);
+            else slot.setChanged();
+        }
 
         return stack;
     }
