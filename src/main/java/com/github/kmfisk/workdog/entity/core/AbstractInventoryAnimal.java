@@ -67,7 +67,7 @@ public abstract class AbstractInventoryAnimal extends TamableAnimal implements C
     }
 
     public boolean canEquipSaddlebag() {
-        return true;
+        return isWearingDogEquipmentType(DogEquipmentType.HARNESS);
     }
 
     private void equipSaddlebag(Player player, ItemStack itemStack) {
@@ -91,6 +91,10 @@ public abstract class AbstractInventoryAnimal extends TamableAnimal implements C
     public abstract boolean canWearDogEquipmentType(DogEquipmentType dogEquipmentType); //todo
 
     public boolean canWearDogEquipment(ItemStack stack) {
+        if (stack.getItem() instanceof DogEquipmentItem dogEquipmentItem) {
+            if (dogEquipmentItem.getDogEquipmentType() == DogEquipmentType.VEST)
+                return isWearingDogEquipmentType(DogEquipmentType.HARNESS) && !stack.is(WorkDogItems.SWEATER.get());
+        }
         return !stack.is(WorkDogItems.SWEATER.get());
     }
 
