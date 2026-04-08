@@ -177,32 +177,35 @@ public abstract class AbstractInventoryAnimal extends TamableAnimal implements C
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (!isBaby()) {
-            if (isTame() && player.isSecondaryUseActive()) {
+            ItemStack stack = player.getItemInHand(hand);
+            if (isTame() && player.isSecondaryUseActive() && (stack.isEmpty() || !(stack.getItem() instanceof DogEquipmentItem))) {
                 openInventory(player);
                 return InteractionResult.sidedSuccess(level().isClientSide);
-            }
 
-            ItemStack stack = player.getItemInHand(hand);
-            if (!stack.isEmpty()) {
-                if (canEquipSaddlebag() && !hasSaddlebag() && stack.is(WorkDogItems.SADDLEBAG.get())) {
-                    equipSaddlebag(player, stack);
-                    return InteractionResult.sidedSuccess(level().isClientSide);
-                }
-
-                InteractionResult interactionresult = stack.interactLivingEntity(player, this, hand);
-                if (interactionresult.consumesAction()) return interactionresult;
-
-                if (isDogEquipment(stack) && canWearDogEquipment(stack)) {
-                    DogEquipmentType equipmentType = ((DogEquipmentItem) stack.getItem()).getDogEquipmentType();
-                    if (canWearDogEquipmentType(equipmentType) && !isWearingDogEquipmentType(equipmentType)) {
-                        equipDogEquipment(player, equipmentType, stack);
+            } else {
+                if (!stack.isEmpty()) {
+                    if (canEquipSaddlebag() && !hasSaddlebag() && stack.is(WorkDogItems.SADDLEBAG.get())) {
+                        equipSaddlebag(player, stack);
                         return InteractionResult.sidedSuccess(level().isClientSide);
                     }
-                }
-            }
-        }
 
-        return super.mobInteract(player, hand);
+                    InteractionResult interactionresult = stack.interactLivingEntity(player, this, hand);
+                    if (interactionresult.consumesAction()) return interactionresult;
+
+                    if (isDogEquipment(stack) && canWearDogEquipment(stack)) {
+                        DogEquipmentType equipmentType = ((DogEquipmentItem) stack.getItem()).getDogEquipmentType();
+                        if (canWearDogEquipmentType(equipmentType) && !isWearingDogEquipmentType(equipmentType)) {
+                            equipDogEquipment(player, equipmentType, stack);
+                            if (equipmentType == DogEquipmentType.COLLAR && stack.hasCustomHoverName() && !level().isClientSide) setCustomName(stack.getHoverName());
+                            return InteractionResult.sidedSuccess(level().isClientSide);
+                        }
+                    }
+                }
+
+                return InteractionResult.PASS;
+            }
+
+        } else return super.mobInteract(player, hand);
     }
 
     @Override

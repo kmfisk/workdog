@@ -3,6 +3,7 @@ package com.github.kmfisk.workdog.entity.core;
 import com.github.kmfisk.workdog.config.WorkDogConfig;
 import com.github.kmfisk.workdog.entity.WDWolfEntity;
 import com.github.kmfisk.workdog.entity.goal.*;
+import com.github.kmfisk.workdog.item.DogEquipmentItem;
 import com.github.kmfisk.workdog.item.WorkDogItems;
 import com.github.kmfisk.workdog.tags.WorkDogTags;
 import com.google.common.collect.Lists;
@@ -557,18 +558,20 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
                 heal(2.0F);
                 return InteractionResult.sidedSuccess(level().isClientSide);
 
-            } else if (stack.getItem() == WorkDogItems.COLLAR.get()) { //todo
-                if (player.isDiscrete()) {
-                    if (getHomePos() != null) {
-                        homePos = null;
-                        player.displayClientMessage(Component.translatable("chat.info.remove_home", getName()), true);
-                    } else {
-                        setHomePos(getOnPos());
-                        player.displayClientMessage(Component.translatable("chat.info.set_home", getName(), getHomePos().getX(), getHomePos().getY(), getHomePos().getZ()), true);
-                    }
-                } else if (getHomePos() != null)
-                    player.displayClientMessage(Component.literal(getHomePos().getX() + ", " + getHomePos().getY() + ", " + getHomePos().getZ()), true);
-                return InteractionResult.SUCCESS;
+            } else if (stack.getItem() instanceof DogEquipmentItem dogEquipmentItem) { //todo
+                if (dogEquipmentItem == WorkDogItems.COLLAR.get()) {
+                    if (player.isDiscrete()) {
+                        if (getHomePos() != null) {
+                            homePos = null;
+                            player.displayClientMessage(Component.translatable("chat.info.remove_home", getName()), true);
+                        } else {
+                            setHomePos(getOnPos());
+                            player.displayClientMessage(Component.translatable("chat.info.set_home", getName(), getHomePos().getX(), getHomePos().getY(), getHomePos().getZ()), true);
+                        }
+                    } else if (getHomePos() != null)
+                        player.displayClientMessage(Component.literal(getHomePos().getX() + ", " + getHomePos().getY() + ", " + getHomePos().getZ()), true);
+                }
+                return InteractionResult.sidedSuccess(level().isClientSide);
 
             } else if (!isLying() && !player.isSecondaryUseActive()) {
                 setOrderedToSit(!isOrderedToSit());
