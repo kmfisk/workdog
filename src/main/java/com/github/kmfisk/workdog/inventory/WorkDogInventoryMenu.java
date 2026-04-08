@@ -32,12 +32,13 @@ public class WorkDogInventoryMenu extends AbstractContainerMenu {
         dogInventory.startOpen(playerInventory.player);
         for (int i = 0; i < 4; i++) {
             int slotId = i;
+            AbstractInventoryAnimal finalDog = dog;
             addSlot(new Slot(dogInventory, slotId, 50, i * 20 + 76) {
                 @Override
                 public boolean mayPlace(ItemStack itemStack) {
-                    if (WorkDogInventoryMenu.this.dog.isDogEquipment(itemStack) && WorkDogInventoryMenu.this.dog.canWearDogEquipment(itemStack)) {
+                    if (finalDog.isDogEquipment(itemStack) && finalDog.canWearDogEquipment(itemStack)) {
                         AbstractInventoryAnimal.DogEquipmentType equipmentType = ((DogEquipmentItem) itemStack.getItem()).getDogEquipmentType();
-                        return WorkDogInventoryMenu.this.dog.canWearDogEquipmentType(equipmentType) && equipmentType == AbstractInventoryAnimal.DogEquipmentType.fromSlotId(slotId) && !hasItem();
+                        return finalDog.canWearDogEquipmentType(equipmentType) && equipmentType == AbstractInventoryAnimal.DogEquipmentType.fromSlotId(slotId) && !hasItem();
                     }
                     return false;
                 }
@@ -48,13 +49,20 @@ public class WorkDogInventoryMenu extends AbstractContainerMenu {
                 }
 
                 @Override
+                public boolean mayPickup(Player player) {
+                    if (AbstractInventoryAnimal.DogEquipmentType.fromSlotId(slotId) == AbstractInventoryAnimal.DogEquipmentType.HARNESS)
+                        return !finalDog.isWearingDogEquipmentType(AbstractInventoryAnimal.DogEquipmentType.VEST) && !finalDog.hasSaddlebag();
+                    return super.mayPickup(player);
+                }
+
+                @Override
                 public boolean isActive() {
-                    return WorkDogInventoryMenu.this.dog.canWearDogEquipmentType(AbstractInventoryAnimal.DogEquipmentType.fromSlotId(slotId));
+                    return finalDog.canWearDogEquipmentType(AbstractInventoryAnimal.DogEquipmentType.fromSlotId(slotId));
                 }
             });
         }
 
-        if (WorkDogInventoryMenu.this.dog.hasSaddlebag()) {
+        if (dog.hasSaddlebag()) {
             for (int row = 0; row < 3; ++row) {
                 for (int column = 0; column < dog.getInventoryColumns(); ++column) {
                     this.addSlot(new Slot(dogInventory, 4 + column + row * dog.getInventoryColumns(), 192 + column * 18, 26 + row * 18));
