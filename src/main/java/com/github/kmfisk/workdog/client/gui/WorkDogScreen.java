@@ -31,7 +31,7 @@ public class WorkDogScreen extends AbstractContainerScreen<WorkDogInventoryMenu>
         if (menu.dog instanceof WorkDogEntity workDog) {
             Component dogTitle = title.plainCopy().append(", ").append(workDog.getType().getDescription()).append(" ").append(workDog.getGender().getName());
             guiGraphics.drawString(font, dogTitle, 114, 11, 4210752, false);
-            guiGraphics.blit(new ResourceLocation(WorkDog.MOD_ID, "textures/gui/coat_portrait/" + ForgeRegistries.ENTITY_TYPES.getKey(workDog.getType()).getPath() + "_" + workDog.getVariantName() + ".png" /*+ workDog.getType().getDescription()*/), 57, 15, 0, 0, 48, 48, 48, 48);
+            guiGraphics.blit(new ResourceLocation(WorkDog.MOD_ID, "textures/gui/coat_portrait/" + ForgeRegistries.ENTITY_TYPES.getKey(workDog.getType()).getPath() + "_" + workDog.getVariantName() + ".png"), 57, 15, 0, 0, 48, 48, 48, 48);
             renderParentage(guiGraphics, 135, 23);
             renderHealth(guiGraphics, 151, 43);
             Component owner = workDog.getOwner() != null ? Component.translatable("gui.workdog.owner", title, workDog.getOwner().getName()) : Component.translatable("gui.workdog.unknown_owner");
@@ -77,6 +77,15 @@ public class WorkDogScreen extends AbstractContainerScreen<WorkDogInventoryMenu>
         guiGraphics.blit(guiIcons, centeredX, guiY, 16, 0, 9, 9);
         guiGraphics.blit(guiIcons, centeredX, guiY, 52, 0, 9, 9);
         guiGraphics.drawString(font, health, centeredX + 11, guiY + 1, 4210752, false);
+    }
+
+    @Override
+    protected void renderTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+        super.renderTooltip(guiGraphics, mouseX, mouseY);
+        if (menu.dog instanceof WorkDogEntity workDog) {
+            if (isHovering(57, 15, 48, 48, mouseX, mouseY))
+                guiGraphics.renderTooltip(font, title.plainCopy().append(": ").append(Component.translatable("coat.workdog." + workDog.getVariantName())).append(" ").append(workDog.getType().getDescription()), mouseX, mouseY);
+        }
     }
 
     @Override
