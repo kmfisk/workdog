@@ -27,6 +27,11 @@ public class BostonTerrierEntity extends ToyDogEntity {
     }
 
     @Override
+    public Size getSize() {
+        return Size.TOY;
+    }
+
+    @Override
     public int getVariantCount() {
         return 8;
     }
@@ -95,11 +100,6 @@ public class BostonTerrierEntity extends ToyDogEntity {
                 default -> throw new IllegalStateException("Unexpected value: " + ordinal);
             };
         }
-    }
-
-    @Override
-    public int getInventoryColumns() {
-        return 0; // todo (large= 27, 9 columns; medium= 18, 6 columns; small= 9, 3 columns)
     }
 
     @Override

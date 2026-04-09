@@ -24,6 +24,11 @@ public class GermanShepherdEntity extends ProtectionDogEntity {
     }
 
     @Override
+    public Size getSize() {
+        return Size.LARGE;
+    }
+
+    @Override
     public int getVariantCount() {
         return 11;
     }
@@ -98,11 +103,6 @@ public class GermanShepherdEntity extends ProtectionDogEntity {
                 default -> throw new IllegalStateException("Unexpected value: " + ordinal);
             };
         }
-    }
-
-    @Override
-    public int getInventoryColumns() {
-        return 9; // todo (large= 27, 9 columns; medium= 18, 6 columns; small= 9, 3 columns)
     }
 
     @Override

@@ -24,6 +24,11 @@ public class PitBullEntity extends HuntingDogEntity {
     }
 
     @Override
+    public Size getSize() {
+        return Size.MEDIUM;
+    }
+
+    @Override
     public int getVariantCount() {
         return 15;
     }
@@ -111,11 +116,6 @@ public class PitBullEntity extends HuntingDogEntity {
                 default -> throw new IllegalStateException("Unexpected value: " + ordinal);
             };
         }
-    }
-
-    @Override
-    public int getInventoryColumns() {
-        return 6; // todo (large= 27, 9 columns; medium= 18, 6 columns; small= 9, 3 columns)
     }
 
     @Override

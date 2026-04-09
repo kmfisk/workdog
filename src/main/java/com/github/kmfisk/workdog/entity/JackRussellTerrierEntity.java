@@ -24,6 +24,11 @@ public class JackRussellTerrierEntity extends TerrierDogEntity {
     }
 
     @Override
+    public Size getSize() {
+        return Size.SMALL;
+    }
+
+    @Override
     public int getVariantCount() {
         return 9;
     }
@@ -94,11 +99,6 @@ public class JackRussellTerrierEntity extends TerrierDogEntity {
                 default -> throw new IllegalStateException("Unexpected value: " + ordinal);
             };
         }
-    }
-
-    @Override
-    public int getInventoryColumns() {
-        return 3; // todo (large= 27, 9 columns; medium= 18, 6 columns; small= 9, 3 columns)
     }
 
     @Override

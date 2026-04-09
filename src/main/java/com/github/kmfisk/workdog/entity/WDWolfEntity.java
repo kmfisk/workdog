@@ -7,11 +7,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -46,6 +49,11 @@ public class WDWolfEntity extends WorkDogEntity {
     @Override
     public TagKey<EntityType<?>> getWorkGroupTag() {
         return null;
+    }
+
+    @Override
+    public Size getSize() {
+        return Size.LARGE;
     }
 
     @Override
@@ -187,5 +195,27 @@ public class WDWolfEntity extends WorkDogEntity {
             }
         }
         return false;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAmbientSound() {
+        /*if (isAngry()) return SoundEvents.WOLF_GROWL;
+        else*/
+        if (random.nextInt(3) == 0)
+            return isTame() && getHealth() < getMaxHealth() / 2 ? SoundEvents.WOLF_WHINE : SoundEvents.WOLF_PANT;
+        else return null;//SoundEvents.WOLF_AMBIENT;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        return SoundEvents.WOLF_HURT;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getDeathSound() {
+        return SoundEvents.WOLF_DEATH;
     }
 }

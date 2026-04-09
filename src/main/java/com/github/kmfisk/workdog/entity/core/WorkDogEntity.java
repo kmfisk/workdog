@@ -5,6 +5,7 @@ import com.github.kmfisk.workdog.entity.WDWolfEntity;
 import com.github.kmfisk.workdog.entity.goal.*;
 import com.github.kmfisk.workdog.item.DogEquipmentItem;
 import com.github.kmfisk.workdog.item.WorkDogItems;
+import com.github.kmfisk.workdog.sounds.WorkDogSounds;
 import com.github.kmfisk.workdog.tags.WorkDogTags;
 import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
@@ -132,6 +133,8 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
 
     @Nullable
     public abstract TagKey<EntityType<?>> getWorkGroupTag();
+
+    public abstract Size getSize();
 
     public Gender getGender() {
         return Gender.fromBool(entityData.get(GENDER));
@@ -604,6 +607,11 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
     }
 
     @Override
+    public int getInventoryColumns() {
+        return getSize().getInventoryColumns();
+    }
+
+    @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
         playSound(SoundEvents.WOLF_STEP, 0.15F, 1.0F);
     }
@@ -614,14 +622,15 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
         /*if (isAngry()) return SoundEvents.WOLF_GROWL;
         else*/
         if (random.nextInt(3) == 0)
-            return isTame() && getHealth() < getMaxHealth() / 2 ? SoundEvents.WOLF_WHINE : SoundEvents.WOLF_PANT;
-        else return SoundEvents.WOLF_AMBIENT;
+            return isTame() && getHealth() < getMaxHealth() / 2 ? getSize().getHurtSound() : getSize().getIdleSound();
+        else if (isBaby() && random.nextInt(3) == 0) return WorkDogSounds.PUPPY_IDLE.get();
+        else return null;//getSize().getHappyBarkSound();
     }
 
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return SoundEvents.WOLF_HURT;
+        return getSize().getHurtSound();
     }
 
     @Nullable
@@ -633,6 +642,11 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
     @Override
     protected float getSoundVolume() {
         return 0.4f;
+    }
+
+    @Override
+    public int getAmbientSoundInterval() {
+        return 240;
     }
 
     public enum Gender {
@@ -672,5 +686,48 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
     public enum BreedingStatus {
         HEAT,
         PREGNANT;
+    }
+
+    public enum Size {
+        LARGE(9, Arrays.asList(WorkDogSounds.MEDIUM_HAPPY.get(), WorkDogSounds.LARGE_IDLE.get(), WorkDogSounds.LARGE_HURT.get(), WorkDogSounds.LARGE_GROWL.get(), WorkDogSounds.LARGE_WARNING.get()/*, WorkDogSounds.LARGE_ATTACK.get()*/)),
+        MEDIUM(6, Arrays.asList(WorkDogSounds.MEDIUM_HAPPY.get(), WorkDogSounds.MEDIUM_IDLE.get(), WorkDogSounds.MEDIUM_HURT.get(), WorkDogSounds.LARGE_GROWL.get(), WorkDogSounds.MEDIUM_WARNING.get()/*, WorkDogSounds.MEDIUM_ATTACK.get()*/)), // missing: growl, attack
+        SMALL(3, Arrays.asList(WorkDogSounds.TOY_HAPPY.get(), WorkDogSounds.MEDIUM_IDLE.get(), WorkDogSounds.SMALL_HURT.get(), WorkDogSounds.SMALL_GROWL.get(), WorkDogSounds.TOY_WARNING.get()/*, WorkDogSounds.SMALL_ATTACK.get()*/)), // missing: idle, warning, attack
+        TOY(0, Arrays.asList(WorkDogSounds.TOY_HAPPY.get(), WorkDogSounds.MEDIUM_IDLE.get(), WorkDogSounds.SMALL_HURT.get(), WorkDogSounds.TOY_GROWL.get(), WorkDogSounds.TOY_WARNING.get()/*, WorkDogSounds.TOY_ATTACK.get()*/)); // missing: idle, hurt, attack
+
+        private final int inventoryColumns;
+        private final List<SoundEvent> sounds;
+
+        Size(int inventoryColumns, List<SoundEvent> sounds) {
+            this.inventoryColumns = inventoryColumns;
+            this.sounds = sounds;
+        }
+
+        public int getInventoryColumns() {
+            return inventoryColumns;
+        }
+
+        public SoundEvent getHappyBarkSound() {
+            return sounds.get(0);
+        }
+
+        public SoundEvent getIdleSound() {
+            return sounds.get(1);
+        }
+
+        public SoundEvent getHurtSound() {
+            return sounds.get(2);
+        }
+
+        public SoundEvent getGrowlSound() {
+            return sounds.get(3);
+        }
+
+        public SoundEvent getWarningSound() {
+            return sounds.get(4);
+        }
+
+        /*public SoundEvent getAttackSound() {
+            return sounds.get(5);
+        }*/
     }
 }

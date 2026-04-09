@@ -12,6 +12,7 @@ import com.github.kmfisk.workdog.entity.merchant.villager.WorkDogVillagerTrades;
 import com.github.kmfisk.workdog.entity.merchant.villager.WorkDogVillagers;
 import com.github.kmfisk.workdog.inventory.WDMenuTypes;
 import com.github.kmfisk.workdog.item.WorkDogItems;
+import com.github.kmfisk.workdog.sounds.WorkDogSounds;
 import com.github.kmfisk.workdog.world.WorkDogSpawns;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
@@ -69,6 +70,7 @@ public class WorkDog {
         WorkDogBlocks.REGISTRAR.register(bus);
         WorkDogItems.REGISTRAR.register(bus);
         CREATIVE_MODE_TAB.register(bus);
+        WorkDogSounds.REGISTRAR.register(bus);
         WDMenuTypes.REGISTRAR.register(bus);
         WorkDogVillagers.POI_TYPES.register(bus);
         WorkDogVillagers.PROFESSIONS.register(bus);

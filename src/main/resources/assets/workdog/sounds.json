@@ -1,0 +1,129 @@
+{
+  "call_whistle": {
+    "subtitle": "subtitles.workdog.entity.player.call_whistle",
+    "sounds": [
+      "workdog:call_whistle"
+    ]
+  },
+  "go_here_1": {
+    "subtitle": "subtitles.workdog.entity.player.go_here_1",
+    "sounds": [
+      "workdog:go_here_1"
+    ]
+  },
+  "go_here_2": {
+    "subtitle": "subtitles.workdog.entity.player.go_here_2",
+    "sounds": [
+      "workdog:go_here_2"
+    ]
+  },
+  "large_attack": {
+    "subtitle": "subtitles.workdog.entity.large_dog.attack",
+    "sounds": [
+      "workdog:large_attack"
+    ]
+  },
+  "large_growl": {
+    "subtitle": "subtitles.workdog.entity.large_dog.growl",
+    "sounds": [
+      "workdog:large_growl"
+    ]
+  },
+  "large_hurt": {
+    "subtitle": "subtitles.workdog.entity.large_dog.hurt",
+    "sounds": [
+      "workdog:large_hurt_1",
+      "workdog:large_hurt_2"
+    ]
+  },
+  "large_idle": {
+    "subtitle": "subtitles.workdog.entity.large_dog.idle",
+    "sounds": [
+      "workdog:large_idle_1"
+    ]
+  },
+  "large_warning": {
+    "subtitle": "subtitles.workdog.entity.large_dog.warning",
+    "sounds": [
+      "workdog:large_warning_bark"
+    ]
+  },
+  "medium_happy": {
+    "subtitle": "subtitles.workdog.entity.medium_dog.happy",
+    "sounds": [
+      "workdog:medium_happy_bark"
+    ]
+  },
+  "medium_hurt": {
+    "subtitle": "subtitles.workdog.entity.medium_dog.hurt",
+    "sounds": [
+      {
+        "name": "workdog:medium_hurt_1",
+        "volume": 0.5
+      },
+      {
+        "name": "workdog:medium_hurt_2",
+        "volume": 0.5
+      }
+    ]
+  },
+  "medium_idle": {
+    "subtitle": "subtitles.workdog.entity.medium_dog.idle",
+    "sounds": [
+      {
+        "name": "workdog:medium_idle_1",
+        "weight": 3
+      },
+      "workdog:medium_idle_2"
+    ]
+  },
+  "medium_warning": {
+    "subtitle": "subtitles.workdog.entity.medium_dog.warning",
+    "sounds": [
+      {
+        "name": "workdog:medium_warning_bark",
+        "volume": 2.0
+      }
+    ]
+  },
+  "puppy_idle": {
+    "subtitle": "subtitles.workdog.entity.puppy.idle",
+    "sounds": [
+      "workdog:puppy_idle_1"
+    ]
+  },
+  "small_growl": {
+    "subtitle": "subtitles.workdog.entity.small_dog.growl",
+    "sounds": [
+      "workdog:small_growl"
+    ]
+  },
+  "small_hurt": {
+    "subtitle": "subtitles.workdog.entity.small_dog.hurt",
+    "sounds": [
+      "workdog:small_hurt_1",
+      "workdog:small_hurt_2"
+    ]
+  },
+  "toy_growl": {
+    "subtitle": "subtitles.workdog.entity.toy_dog.growl",
+    "sounds": [
+      {
+        "name": "workdog:toy_growl",
+        "volume": 2.0
+      }
+    ]
+  },
+  "toy_happy": {
+    "subtitle": "subtitles.workdog.entity.toy_dog.happy",
+    "sounds": [
+      "workdog:toy_happy_bark"
+    ]
+  },
+  "toy_warning": {
+    "subtitle": "subtitles.workdog.entity.toy_dog.warning",
+    "sounds": [
+      "workdog:toy_warning_bark"
+    ]
+  }
+}
