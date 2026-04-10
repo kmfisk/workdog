@@ -4,6 +4,7 @@ import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.entity.core.AbstractInventoryAnimal;
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
 import com.github.kmfisk.workdog.inventory.WorkDogInventoryMenu;
+import net.minecraft.Util;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -67,8 +68,8 @@ public class WorkDogScreen extends AbstractContainerScreen<WorkDogInventoryMenu>
             ResourceLocation paternalIcon = unknownIcon;
             ResourceLocation maternalIcon = unknownIcon;
             if (!workDog.getParentDataList().isEmpty() && workDog.getParentDataList().size() == 8) {
-                paternalIcon = new ResourceLocation(WorkDog.MOD_ID, "textures/gui/coat_portrait/" + workDog.getParentDataList().get(3).toLowerCase() + "_" + workDog.getParentDataList().get(2) + ".png");
-                maternalIcon = new ResourceLocation(WorkDog.MOD_ID, "textures/gui/coat_portrait/" + workDog.getParentDataList().get(7).toLowerCase() + "_" + workDog.getParentDataList().get(6) + ".png");
+                paternalIcon = new ResourceLocation(WorkDog.MOD_ID, "textures/gui/coat_portrait/" + workDog.getParentDataList().get(3) + "_" + workDog.getParentDataList().get(2) + ".png");
+                maternalIcon = new ResourceLocation(WorkDog.MOD_ID, "textures/gui/coat_portrait/" + workDog.getParentDataList().get(7) + "_" + workDog.getParentDataList().get(6) + ".png");
                 guiGraphics.drawWordWrap(font, Component.translatable("gui.workdog.parentage", pronoun, workDog.getParentDataList().get(1), workDog.getParentDataList().get(5)), 68, 118, 122, 4210752);
 
             } else guiGraphics.drawWordWrap(font, Component.translatable("gui.workdog.stray", pronoun), 68, 118, 122, 4210752);
@@ -99,11 +100,13 @@ public class WorkDogScreen extends AbstractContainerScreen<WorkDogInventoryMenu>
             if (!workDog.getParentDataList().isEmpty() && workDog.getParentDataList().size() == 8) {
                 if (isHovering(135, 23, 16, 16, mouseX, mouseY)) {
                     Component variantName = Component.translatable("coat.workdog." + workDog.getParentDataList().get(2));
-                    guiGraphics.renderTooltip(font, Component.literal(workDog.getParentDataList().get(1) + ": " + variantName.getString() + " " + workDog.getParentDataList().get(3)), mouseX, mouseY);
+                    Component breedName = Component.translatable(Util.makeDescriptionId("entity", new ResourceLocation(WorkDog.MOD_ID, workDog.getParentDataList().get(3))));
+                    guiGraphics.renderTooltip(font, Component.literal(workDog.getParentDataList().get(1) + ": " + variantName.getString() + " " + breedName.getString()), mouseX, mouseY);
                 }
                 if (isHovering(135 + 18, 23, 16, 16, mouseX, mouseY)) {
                     Component variantName = Component.translatable("coat.workdog." + workDog.getParentDataList().get(6));
-                    guiGraphics.renderTooltip(font, Component.literal(workDog.getParentDataList().get(5) + ": " + variantName.getString() + " " + workDog.getParentDataList().get(7)), mouseX, mouseY);
+                    Component breedName = Component.translatable(Util.makeDescriptionId("entity", new ResourceLocation(WorkDog.MOD_ID, workDog.getParentDataList().get(7))));
+                    guiGraphics.renderTooltip(font, Component.literal(workDog.getParentDataList().get(5) + ": " + variantName.getString() + " " + breedName.getString()), mouseX, mouseY);
                 }
             }
         }

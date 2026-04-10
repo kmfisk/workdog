@@ -11,6 +11,7 @@ import com.github.kmfisk.workdog.tags.WorkDogTags;
 import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -175,8 +176,8 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
     }
 
     public void setParentData(UUID uuid, String name, String variantName, EntityType<?> breed) { // if anyone is reading this, don't. eugh.
-        if (parent1 == null) parent1 = new String[]{uuid.toString(), name, variantName, breed.getDescription().plainCopy().getString()};
-        else parent2 = new String[]{uuid.toString(), name, variantName, breed.getDescription().plainCopy().getString()};
+        if (parent1 == null) parent1 = new String[]{uuid.toString(), name, variantName, BuiltInRegistries.ENTITY_TYPE.getKey(breed).getPath()};
+        else parent2 = new String[]{uuid.toString(), name, variantName, BuiltInRegistries.ENTITY_TYPE.getKey(breed).getPath()};
     }
 
     public boolean isMother(UUID uuid) {
@@ -324,8 +325,8 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
 
         ListTag parentNbtList = nbt.getList("Parents", 8);
         if (!parentNbtList.isEmpty()) {
-            setParentData(UUID.fromString(parentNbtList.get(0).getAsString()), parentNbtList.get(1).getAsString(), parentNbtList.get(2).getAsString(), ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(WorkDog.MOD_ID, parentNbtList.get(3).getAsString().toLowerCase())));
-            setParentData(UUID.fromString(parentNbtList.get(4).getAsString()), parentNbtList.get(5).getAsString(), parentNbtList.get(6).getAsString(), ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(WorkDog.MOD_ID, parentNbtList.get(7).getAsString().toLowerCase())));
+            setParentData(UUID.fromString(parentNbtList.get(0).getAsString()), parentNbtList.get(1).getAsString(), parentNbtList.get(2).getAsString(), ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(WorkDog.MOD_ID, parentNbtList.get(3).getAsString())));
+            setParentData(UUID.fromString(parentNbtList.get(4).getAsString()), parentNbtList.get(5).getAsString(), parentNbtList.get(6).getAsString(), ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(WorkDog.MOD_ID, parentNbtList.get(7).getAsString())));
         }
 
         setInfertile(nbt.getBoolean("Infertile"));
@@ -460,8 +461,8 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
         setLonghair(longhair);
         if (WorkDogConfig.nameBabies.get() && (maternal.hasCustomName() || paternal.hasCustomName()))
             setCustomName(Component.translatable("name.workdog.name_babies", maternal.hasCustomName() ? maternal.getCustomName() : paternal.getCustomName()));
-        setParentData(paternal.getUUID(), paternal.getCustomName() == null ? "???" : paternal.getCustomName().plainCopy().toString(), paternal.getVariantName(), paternal.getType());
-        setParentData(maternal.getUUID(), maternal.getCustomName() == null ? "???" : maternal.getCustomName().plainCopy().toString(), maternal.getVariantName(), maternal.getType());
+        setParentData(paternal.getUUID(), paternal.getCustomName() != null ? paternal.getName().getString() : "???", paternal.getVariantName(), paternal.getType());
+        setParentData(maternal.getUUID(), maternal.getCustomName() != null ? maternal.getName().getString() : "???", maternal.getVariantName(), maternal.getType());
         if (maternal.isTame() && WorkDogConfig.tamedLimit.get() == 0/* || owner.getPersistentData().getInt("DogCount") < WorkDogConfig.tamedLimit.get()*/)
             tame((Player) maternal.getOwner());
         if (maternal.getHomePos() != null) setHomePos(maternal.getHomePos());
