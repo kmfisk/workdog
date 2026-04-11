@@ -29,6 +29,7 @@ public class PinkJuiceItem extends Item {
             if ((!dog.isTame() || (dog.isTame() && dog.isOwnedBy(player))) && player.isCrouching()) {
                 dog.discard();
                 if (!player.isCreative()) stack.shrink(1);
+                return InteractionResult.sidedSuccess(dog.level().isClientSide);
             }
         }
         return super.interactLivingEntity(stack, player, target, hand);

@@ -536,11 +536,10 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
 
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
-        super.mobInteract(player, hand);
         ItemStack stack = player.getItemInHand(hand);
-        List<Item> functionalItems = Arrays.asList(WorkDogItems.CRATE.get(), WorkDogItems.PINK_JUICE.get(),
-                WorkDogItems.STERILIZATION_POTION.get(), WorkDogItems.SURRENDER_FORM.get());
-        if (functionalItems.contains(stack.getItem())) return InteractionResult.PASS;
+        InteractionResult stackInteraction = stack.interactLivingEntity(player, this, hand);
+        if (stackInteraction.consumesAction()) return stackInteraction;
+        super.mobInteract(player, hand);
 
         boolean isOwner = isOwnedBy(player);
         if (isTame() && isOwner) {

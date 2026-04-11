@@ -35,7 +35,7 @@ public class SterilizationPotionItem extends Item {
                     double d2 = dog.getRandom().nextGaussian() * 0.02D;
                     dog.level().addParticle(ParticleTypes.HAPPY_VILLAGER, dog.getRandomX(1.0D), dog.getRandomY() + 0.5D, dog.getRandomZ(1.0D), d0, d1, d2);
                 }
-                if (!target.level().isClientSide()) {
+                if (!dog.level().isClientSide()) {
                     dog.setInfertile(true);
                     player.displayClientMessage(Component.translatable(dog.getGender() == WorkDogEntity.Gender.FEMALE ? "chat.workdog.sterilization_potion.success_female" : "chat.workdog.sterilization_potion.success_male", dog.getName()), true);
 
@@ -48,6 +48,7 @@ public class SterilizationPotionItem extends Item {
                             player.drop(emptyBottle, false);
                     }
                 }
+                return InteractionResult.sidedSuccess(dog.level().isClientSide);
             }
         }
         return super.interactLivingEntity(stack, player, target, hand);

@@ -34,7 +34,7 @@ public class SurrenderFormItem extends Item {
                     double d2 = dog.getRandom().nextGaussian() * 0.02D;
                     dog.level().addParticle(ParticleTypes.SMOKE, dog.getRandomX(1.0D), dog.getRandomY() + 0.5D, dog.getRandomZ(1.0D), d0, d1, d2);
                 }
-                if (!target.level().isClientSide()) {
+                if (!dog.level().isClientSide()) {
                     if (dog.isOrderedToSit()) dog.setOrderedToSit(false);
                     dog.setMode(WorkDogEntity.Mode.WANDER);
                     dog.setTame(false);
@@ -42,6 +42,7 @@ public class SurrenderFormItem extends Item {
                     player.displayClientMessage(Component.translatable("chat.workdog.surrender_form.success", dog.getName()), true);
                     if (!player.isCreative()) stack.shrink(1);
                 }
+                return InteractionResult.sidedSuccess(dog.level().isClientSide);
             }
         }
         return super.interactLivingEntity(stack, player, target, hand);
