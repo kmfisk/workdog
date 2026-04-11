@@ -1,6 +1,7 @@
 package com.github.kmfisk.workdog.client.gui;
 
 import com.github.kmfisk.workdog.WorkDog;
+import com.github.kmfisk.workdog.config.WorkDogConfig;
 import com.github.kmfisk.workdog.entity.core.AbstractInventoryAnimal;
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
 import com.github.kmfisk.workdog.inventory.WorkDogInventoryMenu;
@@ -16,6 +17,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class WorkDogScreen extends AbstractContainerScreen<WorkDogInventoryMenu> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(WorkDog.MOD_ID, "textures/gui/dog_1.png");
+    private boolean albinistic, melanistic;
+    int conditionalIconsShown;
 
     public WorkDogScreen(WorkDogInventoryMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
@@ -42,20 +45,20 @@ public class WorkDogScreen extends AbstractContainerScreen<WorkDogInventoryMenu>
             Component lifeStage = Component.translatable(workDog.isBaby() ? "gui.workdog.age_puppy" : "gui.workdog.age_adult");
             guiGraphics.drawString(font, Component.translatable("gui.workdog.age", pronoun, lifeStage), 68, 100, 4210752, false);
 
-            boolean albinistic = workDog.getVariant() == workDog.getVariantCount();
-            boolean melanistic = workDog.getVariant() == workDog.getVariantCount() + 1;
-            int i = albinistic || melanistic ? 2 : 1;
+            albinistic = workDog.getVariant() == workDog.getVariantCount();
+            melanistic = workDog.getVariant() == workDog.getVariantCount() + 1;
+            conditionalIconsShown = albinistic || melanistic ? 2 : 1;
             int icon1X = -16;
             if (workDog.getBreedingStatus(WorkDogEntity.BreedingStatus.HEAT)) icon1X = 163;
             else if (workDog.getBreedingStatus(WorkDogEntity.BreedingStatus.PREGNANT)) icon1X = 181;
             else if (workDog.isInfertile()) icon1X = 199;
-            else i = 1;
-            guiGraphics.blit(TEXTURE, 129 - (16 * i) / 2, 165, icon1X, 188, 16, 16, 384, 256);
+            else conditionalIconsShown = 1;
+            guiGraphics.blit(TEXTURE, 129 - (16 * conditionalIconsShown) / 2, 165, icon1X, 188, 16, 16, 384, 256);
 
             int icon2X = -16;
             if (albinistic) icon2X = 217;
             else if (melanistic) icon2X = 235;
-            guiGraphics.blit(TEXTURE, 129 - (16 * i) / 2 + 16 * (i - 1), 165, icon2X, 188, 16, 16, 384, 256);
+            guiGraphics.blit(TEXTURE, 129 - (16 * conditionalIconsShown) / 2 + 16 * (conditionalIconsShown - 1), 165, icon2X, 188, 16, 16, 384, 256);
         }
 
         guiGraphics.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, 4210752, false);
@@ -107,6 +110,37 @@ public class WorkDogScreen extends AbstractContainerScreen<WorkDogInventoryMenu>
                     Component variantName = Component.translatable("coat.workdog." + workDog.getParentDataList().get(6));
                     Component breedName = Component.translatable(Util.makeDescriptionId("entity", new ResourceLocation(WorkDog.MOD_ID, workDog.getParentDataList().get(7))));
                     guiGraphics.renderTooltip(font, Component.literal(workDog.getParentDataList().get(5) + ": " + variantName.getString() + " " + breedName.getString()), mouseX, mouseY);
+                }
+            }
+
+            if (conditionalIconsShown > 1 || (!albinistic && !melanistic)) {
+                if (isHovering(129 - (16 * conditionalIconsShown) / 2, 165, 16, 16, mouseX, mouseY)) {
+                    Component breedingStatus = null;
+                    Component pronoun = Component.translatable(workDog.getGender().toBool() ? "gui.workdog.male.pronoun" : "gui.workdog.female.pronoun");
+                    if (workDog.getBreedingStatus(WorkDogEntity.BreedingStatus.HEAT))
+                        breedingStatus = Component.translatable("gui.workdog.heat", title);
+                    else if (workDog.getBreedingStatus(WorkDogEntity.BreedingStatus.PREGNANT)) {
+                        Component timerHint;
+                        if (workDog.getBreedTimer() >= WorkDogConfig.pregnancyTimer.get() / 1.5)
+                            timerHint = Component.translatable("gui.workdog.pregnant.hint_1");
+                        else if (workDog.getBreedTimer() >= WorkDogConfig.pregnancyTimer.get() / 3)
+                            timerHint = Component.translatable("gui.workdog.pregnant.hint_2");
+                        else if (workDog.getBreedTimer() >= WorkDogConfig.pregnancyTimer.get() / 9)
+                            timerHint = Component.translatable("gui.workdog.pregnant.hint_3");
+                        else timerHint = Component.translatable("gui.workdog.pregnant.hint_4");
+                        Component s = workDog.getSire().contains("CustomName", 8) ? Component.Serializer.fromJson(workDog.getSire().getString("CustomName")) : Component.empty();
+                        String sireName = s == null || s.getString().isEmpty() ? "???" : s.getString();
+                        breedingStatus = Component.translatable("gui.workdog.pregnant", title, sireName, timerHint);
+                    } else if (workDog.isInfertile())
+                        breedingStatus = Component.translatable("gui.workdog.infertile", title, pronoun);
+                    if (breedingStatus != null) guiGraphics.renderTooltip(font, font.split(breedingStatus, Math.max(guiGraphics.guiWidth() / 2, 200)), mouseX, mouseY);
+                }
+            }
+            if (albinistic || melanistic) {
+                if (isHovering(129 - (16 * conditionalIconsShown) / 2 + 18 * (conditionalIconsShown - 1), 165, 16, 16, mouseX, mouseY)) {
+                    String pronoun2 = Component.translatable(workDog.getGender().toBool() ? "gui.workdog.male.pronoun2" : "gui.workdog.female.pronoun2").getString().toLowerCase();
+                    Component tooltip = Component.translatable(albinistic ? "gui.workdog.albinistic" : "gui.workdog.melanistic", title, pronoun2);
+                    guiGraphics.renderTooltip(font, font.split(tooltip, Math.max(guiGraphics.guiWidth() / 2, 200)), mouseX, mouseY);
                 }
             }
         }
