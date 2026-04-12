@@ -29,6 +29,11 @@ public class PitBullEntity extends HuntingDogEntity {
     }
 
     @Override
+    public Weather getWeatherType() {
+        return Weather.TEMPERATE;
+    }
+
+    @Override
     public int getVariantCount() {
         return 15;
     }

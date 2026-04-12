@@ -29,6 +29,11 @@ public class GermanShepherdEntity extends ProtectionDogEntity {
     }
 
     @Override
+    public Weather getWeatherType() {
+        return isLonghair() ? Weather.COLD : Weather.TEMPERATE;
+    }
+
+    @Override
     public int getVariantCount() {
         return 11;
     }

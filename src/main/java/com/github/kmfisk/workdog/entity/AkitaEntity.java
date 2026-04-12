@@ -29,6 +29,11 @@ public class AkitaEntity extends HuntingDogEntity {
     }
 
     @Override
+    public Weather getWeatherType() {
+        return Weather.COLD;
+    }
+
+    @Override
     public int getVariantCount() {
         return 21;
     }

@@ -4,6 +4,7 @@ import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.config.WorkDogConfig;
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
 import com.github.kmfisk.workdog.inventory.WorkDogUnownedContainerMenu;
+import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -31,7 +32,7 @@ public class WorkDogUnownedContainerScreen extends AbstractContainerScreen<WorkD
     protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         if (menu.dog instanceof WorkDogEntity workDog) {
             guiGraphics.blit(new ResourceLocation(WorkDog.MOD_ID, "textures/gui/coat_portrait/" + ForgeRegistries.ENTITY_TYPES.getKey(workDog.getType()).getPath() + "_" + workDog.getVariantName() + ".png"), 15, 15, 0, 0, 48, 48, 48, 48);
-            drawCenteredString(guiGraphics, title, 130, 11);
+            drawCenteredString(guiGraphics, title.plainCopy().withStyle(ChatFormatting.BOLD), 130, 11);
             drawCenteredString(guiGraphics, workDog.getType().getDescription(), 130, 20);
             drawCenteredString(guiGraphics, workDog.getGender().getName(), 130, 29);
             renderParentage(guiGraphics, 113, 41);

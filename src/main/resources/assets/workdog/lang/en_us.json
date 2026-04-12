@@ -83,6 +83,7 @@
   "gui.workdog.melanistic": "%s is melanistic: all of the pigment in %s body is ink black. You’ve bred a gothic gem.",
 
   "__comment": "Items",
+  "item.workdog.breed_standard_book": "Breed Standard Book",
   "item.workdog.crate": "Crate",
   "tooltip.workdog.crate.empty": "This crate can help capture and move your dogs.",
   "tooltip.workdog.crate.owner": "Owned by %s",
@@ -286,5 +287,24 @@
   "subtitles.workdog.entity.toy_dog.happy": "Toy dog barks happily",
   "subtitles.workdog.entity.toy_dog.hurt": "Toy dog hurts",
   "subtitles.workdog.entity.toy_dog.idle": "Toy dog pants",
-  "subtitles.workdog.entity.toy_dog.warning": "Toy dog warns"
+  "subtitles.workdog.entity.toy_dog.warning": "Toy dog warns",
+
+  "__comment": "Blurbs",
+  "blurb.workdog.hunting_group": "%s is a hunting dog. If you put %3$s in working mode, %2$s will target an entity that you attack. %2$s will get Looting on any kill, so tell %3$s what to do and let %3$s do the hard work for you!",
+  "blurb.workdog.bay_group": "%s is a baying dog. WORK IN PROGRESS",
+  "blurb.workdog.terrier_group": "%s is a tenacious terrier dog. %2$s lives to track down and torment pests, and in working mode, %2$s will use %3$s fast feet and ferocious teeth to track down and attack anything you target.",
+  "blurb.workdog.guardian_group": "%s is a loving livestock guardian dog. If you put %3$s to work, %2$s won’t follow you, but will stay close to other passive entities. When a threat gets too close, %2$s will warn it away, and punish predators - and players - that don’t listen.",
+  "blurb.workdog.herding_group": "%s is a humble herding dog. If you put %3$s in working mode, %2$s will be able to move livestock animals. %2$s can move huge groups all at once - guide %3$s where to go, and your animals will follow!",
+  "blurb.workdog.sled_group": "%s is a sled dog. In working mode, hook %3$s up to a sled or cart, and let ‘em go! Sled dogs love to run, and love to work with other dogs, and %2$s will get where %2$s’s going even faster with friends.",
+  "blurb.workdog.protection_group": "%s is a proud protection dog. In working mode, %2$s will follow you and warn away hostiles that come too close. If the bark doesn’t work, the bite will start, and %2$s will punish anything that breaches your personal bubble.",
+  "blurb.workdog.retriever_group": "%s is a retriever dog. In working mode, %2$s will seek out dropped items, arrows and tridents, pick them up, and hold them in %3$s inventory for you. Give %3$s a saddle bag for more potential!",
+  "blurb.workdog.toy_group": "%s is a toy dog. While %2$s can’t actually work, %2$s can do an even more important job: keeping you company. Or, that’s what you tell yourself. %2$s isn’t exactly paying rent, now, is %2$s?",
+  "blurb.workdog.support_group": "%s is a support dog. In work mode, %2$s will follow you and provide support: whether it’s sniffing out treasure, digging up goodies, or giving you a stat boost, you don’t have to give %3$s much direction!",
+  "blurb.workdog.wolf": "",
+  "blurb.workdog.akita": "Calculating and challenging, this giant Spitz breed doesn’t bark… but it definitely bites. This quiet, reserved dog is known for its immense loyalty, its bear-like bulk, and a dubious honor of devastating, unpredictable attacks. Bred for centuries to grab game by the horns, wrestle down fighting dogs, and ward off strangers, the akita doesn’t suffer fools.",
+  "blurb.workdog.border_collie": "",
+  "blurb.workdog.boston_terrier": "",
+  "blurb.workdog.german_shepherd": "",
+  "blurb.workdog.jack_russell_terrier": "",
+  "blurb.workdog.pit_bull": ""
 }

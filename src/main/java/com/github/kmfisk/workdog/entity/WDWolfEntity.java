@@ -2,6 +2,7 @@ package com.github.kmfisk.workdog.entity;
 
 import com.github.kmfisk.workdog.config.WorkDogConfig;
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
+import com.github.kmfisk.workdog.entity.core.WorkGroup;
 import com.github.kmfisk.workdog.entity.goal.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -34,7 +35,10 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class WDWolfEntity extends WorkDogEntity {
@@ -47,7 +51,12 @@ public class WDWolfEntity extends WorkDogEntity {
     }
 
     @Override
-    public TagKey<EntityType<?>> getWorkGroupTag() {
+    public WorkGroup getWorkGroup() {
+        return null;
+    }
+
+    @Override
+    public Weather getWeatherType() {
         return null;
     }
 

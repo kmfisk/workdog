@@ -1,7 +1,6 @@
 package com.github.kmfisk.workdog.entity.core;
 
 import com.github.kmfisk.workdog.entity.goal.AttackableTargetRangedGoal;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
@@ -9,8 +8,6 @@ import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.level.Level;
-
-import static com.github.kmfisk.workdog.tags.WorkDogTags.TERRIER_DOGS;
 
 public abstract class TerrierDogEntity extends WorkDogEntity {
     private final OwnerHurtTargetGoal ownerHurtTargetGoal = new OwnerHurtTargetGoal(this);
@@ -22,8 +19,8 @@ public abstract class TerrierDogEntity extends WorkDogEntity {
     }
 
     @Override
-    public TagKey<EntityType<?>> getWorkGroupTag() {
-        return TERRIER_DOGS;
+    public WorkGroup getWorkGroup() {
+        return WorkGroup.TERRIER;
     }
 
     @Override

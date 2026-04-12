@@ -36,27 +36,32 @@ public class WorkDogVillagers {
 
     public static void registerTrades() {
 //        numberOfItems, maxUses, villagerXp
+//       emeraldCost, numberOfItems, maxUses, villagerXp
         VillagerTrades.ItemListing[] novice = new VillagerTrades.ItemListing[]{
                 new VillagerTrades.EmeraldForItems(Items.BEEF, 10, 16, 2),
                 new VillagerTrades.EmeraldForItems(Items.PORKCHOP, 7, 16, 2),
                 new VillagerTrades.EmeraldForItems(Items.COD, 15, 16, 2),
-                new VillagerTrades.EmeraldForItems(Items.CHICKEN, 14, 16, 2)};
-//       emeraldCost, numberOfItems, maxUses, villagerXp, priceMultiplier
+                new VillagerTrades.EmeraldForItems(Items.CHICKEN, 14, 16, 2),
+//                new VillagerTrades.ItemsForEmeraldsTrade(WorkDogItems.TENNIS_BALL.get(), 1, 1, 16, 2),
+//                new VillagerTrades.ItemsForEmeraldsTrade(WorkDogItems.THROW_STICK.get(), 1, 1, 16, 2),
+                new VillagerTrades.ItemsForEmeralds(WorkDogItems.FRISBEE.get(), 1, 1, 16, 2)};
+
         VillagerTrades.ItemListing[] apprentice = new VillagerTrades.ItemListing[]{
-//                new VillagerTrades.ItemsForEmeraldsTrade(WorkDogItems.TENNIS_BALL.get(), 1, 1, 3, 10),
-//                new VillagerTrades.ItemsForEmeraldsTrade(WorkDogItems.THROW_STICK.get(), 1, 1, 3, 10),
-                new VillagerTrades.ItemsForEmeralds(WorkDogItems.FRISBEE.get(), 1, 1, 3, 10),
-                new DyedEquipmentForEmeraldsTrade(WorkDogItems.COLLAR.get(), 3, 3, 10),
-                new VillagerTrades.ItemsForEmeralds(WorkDogItems.STERILIZATION_POTION.get(), 3, 1, 16, 10)};
+                new VillagerTrades.ItemsForEmeralds(WorkDogItems.BREED_STANDARD_BOOK.get(), 1, 1, 3, 10),
+                new DyedEquipmentForEmeraldsTrade(WorkDogItems.COLLAR.get(), 3, 3, 10)};
+
         VillagerTrades.ItemListing[] journeyman = new VillagerTrades.ItemListing[]{
                 new DyedEquipmentForEmeraldsTrade(WorkDogItems.HARNESS.get(), 7, 3, 10),
                 new DyedEquipmentForEmeraldsTrade(WorkDogItems.HOG_VEST.get(), 7, 3, 10),
-                new DyedEquipmentForEmeraldsTrade(WorkDogItems.SWEATER.get(), 3, 3, 10)};
+                new DyedEquipmentForEmeraldsTrade(WorkDogItems.SWEATER.get(), 3, 3, 10),
+                new VillagerTrades.ItemsForEmeralds(WorkDogItems.SERVICE_VESTS.get(DyeColor.WHITE).get(), 7, 1, 3, 10),
+//                new VillagerTrades.ItemsForEmeraldsTrade(WorkDogItems.WOLF_COLLAR.get(), 7, 1, 3, 10),
+                new DyedEquipmentForEmeraldsTrade(WorkDogItems.MUZZLE.get(), 7, 3, 10)};
+
         VillagerTrades.ItemListing[] expert = new VillagerTrades.ItemListing[]{
                 new VillagerTrades.ItemsForEmeralds(WorkDogItems.CRATE.get(), 3, 1, 3, 30),
-                new VillagerTrades.ItemsForEmeralds(WorkDogItems.SERVICE_VESTS.get(DyeColor.WHITE).get(), 7, 1, 3, 15),
-//                new VillagerTrades.ItemsForEmeraldsTrade(WorkDogItems.WOLF_COLLAR.get(), 7, 1, 3, 15),
-                new DyedEquipmentForEmeraldsTrade(WorkDogItems.MUZZLE.get(), 7, 3, 15)};
+                new VillagerTrades.ItemsForEmeralds(WorkDogItems.STERILIZATION_POTION.get(), 3, 1, 3, 15)};
+
         VillagerTrades.ItemListing[] master = new VillagerTrades.ItemListing[]{
                 new VillagerTrades.ItemsForEmeralds(new ItemStack(ForgeSpawnEggItem.fromEntityType(WorkDogEntities.BOSTON_TERRIER.get())), 16, 1, 3, 15, 0.2f),
                 new VillagerTrades.ItemsForEmeralds(new ItemStack(ForgeSpawnEggItem.fromEntityType(WorkDogEntities.JACK_RUSSELL_TERRIER.get())), 32, 1, 3, 15, 0.2f),

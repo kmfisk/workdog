@@ -32,6 +32,11 @@ public class BostonTerrierEntity extends ToyDogEntity {
     }
 
     @Override
+    public Weather getWeatherType() {
+        return Weather.TEMPERATE;
+    }
+
+    @Override
     public int getVariantCount() {
         return 8;
     }

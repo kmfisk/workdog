@@ -1,6 +1,7 @@
 package com.github.kmfisk.workdog.inventory;
 
 import com.github.kmfisk.workdog.WorkDog;
+import com.github.kmfisk.workdog.client.gui.BreedStandardContainerScreen;
 import com.github.kmfisk.workdog.client.gui.WorkDogContainerScreen;
 import com.github.kmfisk.workdog.client.gui.WorkDogUnownedContainerScreen;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -17,10 +18,12 @@ public class WDMenuTypes {
 
     public static final RegistryObject<MenuType<WorkDogContainerMenu>> WORK_DOG_CONTAINER = REGISTRAR.register("work_dog_container", () -> new MenuType<>(WorkDogContainerMenu::new, FeatureFlags.DEFAULT_FLAGS));
     public static final RegistryObject<MenuType<WorkDogUnownedContainerMenu>> WORK_DOG_UNOWNED_CONTAINER = REGISTRAR.register("work_dog_unowned_container", () -> new MenuType<>(WorkDogUnownedContainerMenu::new, FeatureFlags.DEFAULT_FLAGS));
+    public static final RegistryObject<MenuType<BreedStandardContainerMenu>> BREED_STANDARD_CONTAINER = REGISTRAR.register("breed_standard_container", () -> new MenuType<>(BreedStandardContainerMenu::new, FeatureFlags.DEFAULT_FLAGS));
 
     @OnlyIn(Dist.CLIENT)
     public static void registerFactories() {
         MenuScreens.register(WORK_DOG_CONTAINER.get(), WorkDogContainerScreen::new);
         MenuScreens.register(WORK_DOG_UNOWNED_CONTAINER.get(), WorkDogUnownedContainerScreen::new);
+        MenuScreens.register(BREED_STANDARD_CONTAINER.get(), BreedStandardContainerScreen::new);
     }
 }

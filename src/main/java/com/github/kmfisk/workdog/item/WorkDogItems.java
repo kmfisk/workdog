@@ -15,6 +15,7 @@ import java.util.Map;
 public class WorkDogItems {
     public static final DeferredRegister<Item> REGISTRAR = DeferredRegister.create(ForgeRegistries.ITEMS, WorkDog.MOD_ID);
 
+    public static final RegistryObject<Item> BREED_STANDARD_BOOK = REGISTRAR.register("breed_standard_book", () -> new BreedStandardBookItem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> CRATE = REGISTRAR.register("crate", () -> new CrateItem(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> PINK_JUICE = REGISTRAR.register("pink_juice", () -> new PinkJuiceItem(new Item.Properties()));

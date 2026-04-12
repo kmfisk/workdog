@@ -29,6 +29,11 @@ public class JackRussellTerrierEntity extends TerrierDogEntity {
     }
 
     @Override
+    public Weather getWeatherType() {
+        return isLonghair() ? Weather.TEMPERATE : Weather.HOT;
+    }
+
+    @Override
     public int getVariantCount() {
         return 9;
     }

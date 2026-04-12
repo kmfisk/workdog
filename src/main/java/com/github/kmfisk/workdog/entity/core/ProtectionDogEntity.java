@@ -1,7 +1,6 @@
 package com.github.kmfisk.workdog.entity.core;
 
 import com.github.kmfisk.workdog.entity.goal.AttackableTargetRangedGoal;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
@@ -9,8 +8,6 @@ import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.level.Level;
-
-import static com.github.kmfisk.workdog.tags.WorkDogTags.PROTECTION_DOGS;
 
 public abstract class ProtectionDogEntity extends WorkDogEntity {
     private final FollowOwnerGoal protectorsFollowGoal = new FollowOwnerGoal(this, 1.5D, 4.0F, 2.0F, false);
@@ -22,8 +19,8 @@ public abstract class ProtectionDogEntity extends WorkDogEntity {
     }
 
     @Override
-    public TagKey<EntityType<?>> getWorkGroupTag() {
-        return PROTECTION_DOGS;
+    public WorkGroup getWorkGroup() {
+        return WorkGroup.PROTECTION;
     }
 
     @Override
