@@ -23,6 +23,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
@@ -211,6 +212,21 @@ public abstract class AbstractInventoryAnimal extends TamableAnimal implements C
                             setCustomName(stack.getHoverName());
                         return InteractionResult.sidedSuccess(level().isClientSide);
                     }
+                }
+
+                if (hasSaddlebag() && stack.is(Tags.Items.SHEARS)) {
+                    if (!level().isClientSide) {
+                        spawnAtLocation(WorkDogItems.SADDLEBAG.get());
+                        if (inventory != null) {
+                            for (int i = 4; i < inventory.getContainerSize(); ++i) {
+                                ItemStack invStack = inventory.getItem(i);
+                                if (!invStack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(invStack)) spawnAtLocation(invStack);
+                            }
+                        }
+                    }
+                    setSaddlebag(false);
+                    createInventory();
+                    return InteractionResult.sidedSuccess(level().isClientSide);
                 }
             }
         }

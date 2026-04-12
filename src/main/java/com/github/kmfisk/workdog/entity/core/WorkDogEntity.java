@@ -39,6 +39,7 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
@@ -575,6 +576,8 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
                     } else if (getHomePos() != null)
                         player.displayClientMessage(Component.literal(getHomePos().getX() + ", " + getHomePos().getY() + ", " + getHomePos().getZ()), true);
                 }
+                return InteractionResult.sidedSuccess(level().isClientSide);
+            } else if (stack.is(WorkDogItems.SADDLEBAG.get()) || stack.is(Tags.Items.SHEARS)) {
                 return InteractionResult.sidedSuccess(level().isClientSide);
 
             } else if (!isLying() && !player.isSecondaryUseActive()) {
