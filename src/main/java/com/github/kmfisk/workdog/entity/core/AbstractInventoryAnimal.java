@@ -38,7 +38,7 @@ import java.util.function.Predicate;
 
 public abstract class AbstractInventoryAnimal extends TamableAnimal implements ContainerListener {
     private static final UUID ARMOR_MODIFIER_UUID = UUID.fromString("556E1665-8B10-40C8-8F9D-CF9B1667F295");
-    private static final EntityDataAccessor<Boolean> SADDLEBAG = SynchedEntityData.defineId(AbstractInventoryAnimal.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<ItemStack> SADDLEBAG = SynchedEntityData.defineId(AbstractInventoryAnimal.class, EntityDataSerializers.ITEM_STACK);
     protected SimpleContainer inventory;
     private LazyOptional<?> itemHandler = null;
 
@@ -67,15 +67,19 @@ public abstract class AbstractInventoryAnimal extends TamableAnimal implements C
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        entityData.define(SADDLEBAG, false);
+        entityData.define(SADDLEBAG, ItemStack.EMPTY);
     }
 
     public boolean hasSaddlebag() {
-        return entityData.get(SADDLEBAG);
+        return !getSaddlebag().isEmpty();
     }
 
-    public void setSaddlebag(boolean hasSaddlebag) {
-        entityData.set(SADDLEBAG, hasSaddlebag);
+    public void setSaddlebag(ItemStack saddlebagStack) {
+        entityData.set(SADDLEBAG, saddlebagStack.copyWithCount(1));
+    }
+
+    public ItemStack getSaddlebag() {
+        return entityData.get(SADDLEBAG);
     }
 
     public boolean canEquipSaddlebag() {
@@ -83,7 +87,7 @@ public abstract class AbstractInventoryAnimal extends TamableAnimal implements C
     }
 
     private void equipSaddlebag(Player player, ItemStack itemStack) {
-        setSaddlebag(true); //todo color
+        setSaddlebag(itemStack);
         playSound(SoundEvents.DONKEY_CHEST, 1.0F, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
         if (!player.getAbilities().instabuild) itemStack.shrink(1);
         createInventory();
@@ -185,9 +189,9 @@ public abstract class AbstractInventoryAnimal extends TamableAnimal implements C
                 if (!itemstack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(itemstack)) spawnAtLocation(itemstack);
             }
         }
-        if (hasSaddlebag()) { //todo color
-            if (!level().isClientSide) spawnAtLocation(WorkDogItems.SADDLEBAG.get());
-            setSaddlebag(false);
+        if (hasSaddlebag()) {
+            if (!level().isClientSide) spawnAtLocation(getSaddlebag());
+            setSaddlebag(ItemStack.EMPTY);
         }
     }
 
@@ -220,7 +224,7 @@ public abstract class AbstractInventoryAnimal extends TamableAnimal implements C
 
                 if (hasSaddlebag() && stack.is(Tags.Items.SHEARS)) {
                     if (!level().isClientSide) {
-                        spawnAtLocation(WorkDogItems.SADDLEBAG.get());
+                        spawnAtLocation(getSaddlebag());
                         if (inventory != null) {
                             for (int i = 4; i < inventory.getContainerSize(); ++i) {
                                 ItemStack invStack = inventory.getItem(i);
@@ -228,7 +232,7 @@ public abstract class AbstractInventoryAnimal extends TamableAnimal implements C
                             }
                         }
                     }
-                    setSaddlebag(false);
+                    setSaddlebag(ItemStack.EMPTY);
                     createInventory();
                     return InteractionResult.sidedSuccess(level().isClientSide);
                 }
@@ -250,7 +254,7 @@ public abstract class AbstractInventoryAnimal extends TamableAnimal implements C
         if (!inventory.getItem(3).isEmpty())
             compoundTag.put("VestItem", inventory.getItem(3).save(new CompoundTag()));
 
-        compoundTag.putBoolean("Saddlebag", hasSaddlebag());
+        compoundTag.put("Saddlebag", getSaddlebag().save(new CompoundTag()));
         if (hasSaddlebag()) {
             ListTag listtag = new ListTag();
             for (int i = 4; i < inventory.getContainerSize(); ++i) {
@@ -286,7 +290,7 @@ public abstract class AbstractInventoryAnimal extends TamableAnimal implements C
             if (!itemstack.isEmpty() && isDogEquipment(itemstack)) inventory.setItem(3, itemstack);
         }
 
-        setSaddlebag(compoundTag.getBoolean("Saddlebag"));
+        setSaddlebag(ItemStack.of(compoundTag.getCompound("Saddlebag")));
         createInventory();
         if (hasSaddlebag()) {
             ListTag listtag = compoundTag.getList("Items", 10);
@@ -323,21 +327,21 @@ public abstract class AbstractInventoryAnimal extends TamableAnimal implements C
             return new SlotAccess() {
                 @Override
                 public ItemStack get() {
-                    return AbstractInventoryAnimal.this.hasSaddlebag() ? new ItemStack(WorkDogItems.SADDLEBAG.get()) : ItemStack.EMPTY;
+                    return AbstractInventoryAnimal.this.hasSaddlebag() ? new ItemStack(AbstractInventoryAnimal.this.getSaddlebag().getItem()) : ItemStack.EMPTY;
                 }
 
                 @Override
                 public boolean set(ItemStack stack) {
                     if (stack.isEmpty()) {
                         if (AbstractInventoryAnimal.this.hasSaddlebag()) {
-                            AbstractInventoryAnimal.this.setSaddlebag(false);
+                            AbstractInventoryAnimal.this.setSaddlebag(ItemStack.EMPTY);
                             AbstractInventoryAnimal.this.createInventory();
                         }
                         return true;
 
                     } else if (stack.is(WorkDogItems.SADDLEBAG.get())) {
                         if (!AbstractInventoryAnimal.this.hasSaddlebag()) {
-                            AbstractInventoryAnimal.this.setSaddlebag(true);
+                            AbstractInventoryAnimal.this.setSaddlebag(stack);
                             AbstractInventoryAnimal.this.createInventory();
                         }
                         return true;

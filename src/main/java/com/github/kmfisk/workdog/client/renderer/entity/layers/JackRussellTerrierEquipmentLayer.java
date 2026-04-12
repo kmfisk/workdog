@@ -6,6 +6,7 @@ import com.github.kmfisk.workdog.entity.JackRussellTerrierEntity;
 import com.github.kmfisk.workdog.entity.core.AbstractInventoryAnimal;
 import com.github.kmfisk.workdog.item.DogEquipmentItem;
 import com.github.kmfisk.workdog.item.DyeableDogEquipmentItem;
+import com.github.kmfisk.workdog.item.SaddlebagItem;
 import com.github.kmfisk.workdog.item.ServiceVestItem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -32,11 +33,10 @@ public class JackRussellTerrierEquipmentLayer extends RenderLayer<JackRussellTer
             getParentModel().copyPropertiesTo(model);
             model.prepareMobModel(entity, limbSwing, limbSwingAmount, partialTicks);
             model.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-//            int i = dyedItem.getColor(equipmentStack); // todo
-//            float f = (float) (i >> 16 & 255) / 255.0F;
-//            float f1 = (float) (i >> 8 & 255) / 255.0F;
-//            float f2 = (float) (i & 255) / 255.0F;
-            float f = 1.0F, f1 = 1.0F, f2 = 1.0F;
+            int i = ((SaddlebagItem) entity.getSaddlebag().getItem()).getColor(entity.getSaddlebag());
+            float f = (float) (i >> 16 & 255) / 255.0F;
+            float f1 = (float) (i >> 8 & 255) / 255.0F;
+            float f2 = (float) (i & 255) / 255.0F;
             VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityTranslucent(new ResourceLocation(WorkDog.MOD_ID, "textures/entity/jack_russell_terrier/equipment/jackrussell_saddlebag.png")));
             model.renderToBuffer(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, f, f1, f2, 1.0F);
             VertexConsumer vertexConsumer2 = buffer.getBuffer(RenderType.entityCutoutNoCull(new ResourceLocation(WorkDog.MOD_ID, "textures/entity/jack_russell_terrier/equipment/jackrussell_saddlebag_metal.png")));
