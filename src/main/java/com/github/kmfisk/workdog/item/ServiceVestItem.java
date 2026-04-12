@@ -7,8 +7,8 @@ import net.minecraft.world.item.Item;
 public class ServiceVestItem extends DogEquipmentItem {
     private final DyeColor color;
 
-    public ServiceVestItem(Properties properties, DyeColor color) {
-        super(properties, AbstractInventoryAnimal.DogEquipmentType.VEST);
+    public ServiceVestItem(Properties properties, int protection, DyeColor color) {
+        super(properties, protection, AbstractInventoryAnimal.DogEquipmentType.VEST);
         this.color = color;
     }
 

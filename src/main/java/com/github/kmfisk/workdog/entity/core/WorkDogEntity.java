@@ -27,6 +27,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
@@ -541,6 +542,13 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
     }
 
     @Override
+    public boolean doHurtTarget(Entity entity) {
+        boolean flag = !isWearingDogEquipmentType(DogEquipmentType.MUZZLE) && entity.hurt(damageSources().mobAttack(this), (float) ((int) getAttributeValue(Attributes.ATTACK_DAMAGE)));
+        if (flag) doEnchantDamageEffects(this, entity);
+        return flag;
+    }
+
+    @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         InteractionResult stackInteraction = stack.interactLivingEntity(player, this, hand);
@@ -568,7 +576,7 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
                 heal(2.0F);
                 return InteractionResult.sidedSuccess(level().isClientSide);
 
-            } else if (stack.getItem() instanceof DogEquipmentItem dogEquipmentItem) { //todo
+            } else if (stack.getItem() instanceof DogEquipmentItem dogEquipmentItem) {
                 if (dogEquipmentItem == WorkDogItems.COLLAR.get()) {
                     if (player.isDiscrete()) {
                         if (getHomePos() != null) {

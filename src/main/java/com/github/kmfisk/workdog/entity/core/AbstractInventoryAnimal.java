@@ -19,6 +19,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -31,9 +33,11 @@ import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.UUID;
 import java.util.function.Predicate;
 
 public abstract class AbstractInventoryAnimal extends TamableAnimal implements ContainerListener {
+    private static final UUID ARMOR_MODIFIER_UUID = UUID.fromString("556E1665-8B10-40C8-8F9D-CF9B1667F295");
     private static final EntityDataAccessor<Boolean> SADDLEBAG = SynchedEntityData.defineId(AbstractInventoryAnimal.class, EntityDataSerializers.BOOLEAN);
     protected SimpleContainer inventory;
     private LazyOptional<?> itemHandler = null;
@@ -96,7 +100,7 @@ public abstract class AbstractInventoryAnimal extends TamableAnimal implements C
         }
     }
 
-    public abstract boolean canWearDogEquipmentType(DogEquipmentType dogEquipmentType); //todo
+    public abstract boolean canWearDogEquipmentType(DogEquipmentType dogEquipmentType);
 
     public boolean canWearDogEquipment(ItemStack stack) {
         if (isBaby()) return false;
@@ -126,14 +130,14 @@ public abstract class AbstractInventoryAnimal extends TamableAnimal implements C
     private void setEquipment(DogEquipmentType dogEquipmentType, ItemStack itemStack) {
         setItemSlot(dogEquipmentType.getEquipmentSlot(), itemStack);
         setDropChance(dogEquipmentType.getEquipmentSlot(), 0.0F);
-//        if (!level().isClientSide) { todo
-//            getAttribute(Attributes.ARMOR).removeModifier(ARMOR_MODIFIER_UUID);
-//            if (isDogEquipment(itemStack)) {
-//                int i = ((DogEquipmentItem) itemStack.getItem()).getProtection();
-//                if (i != 0)
-//                    getAttribute(Attributes.ARMOR).addTransientModifier(new AttributeModifier(ARMOR_MODIFIER_UUID, "Dog equipment bonus", (double) i, AttributeModifier.Operation.ADDITION));
-//            }
-//        }
+        if (!level().isClientSide) {
+            getAttribute(Attributes.ARMOR).removeModifier(ARMOR_MODIFIER_UUID);
+            if (isDogEquipment(itemStack)) {
+                int i = ((DogEquipmentItem) itemStack.getItem()).getProtection();
+                if (i != 0)
+                    getAttribute(Attributes.ARMOR).addTransientModifier(new AttributeModifier(ARMOR_MODIFIER_UUID, "Dog equipment bonus", (double) i, AttributeModifier.Operation.ADDITION));
+            }
+        }
     }
 
     protected void createInventory() {

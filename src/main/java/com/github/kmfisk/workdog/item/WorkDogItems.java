@@ -23,16 +23,16 @@ public class WorkDogItems {
 
     public static final RegistryObject<Item> FRISBEE = REGISTRAR.register("frisbee", () -> new Item(new Item.Properties()));
 
-    public static final RegistryObject<Item> MUZZLE = REGISTRAR.register("muzzle", () -> new DyeableDogEquipmentItem(new Item.Properties(), AbstractInventoryAnimal.DogEquipmentType.MUZZLE));
-    public static final RegistryObject<Item> COLLAR = REGISTRAR.register("collar", () -> new DyeableDogEquipmentItem(new Item.Properties(), AbstractInventoryAnimal.DogEquipmentType.COLLAR));
-    public static final RegistryObject<Item> HARNESS = REGISTRAR.register("harness", () -> new DyeableDogEquipmentItem(new Item.Properties(), AbstractInventoryAnimal.DogEquipmentType.HARNESS));
-    public static final RegistryObject<Item> HOG_VEST = REGISTRAR.register("hog_vest", () -> new DyeableDogEquipmentItem(new Item.Properties(), AbstractInventoryAnimal.DogEquipmentType.VEST));
+    public static final RegistryObject<Item> MUZZLE = REGISTRAR.register("muzzle", () -> new DyeableDogEquipmentItem(new Item.Properties(), 0, AbstractInventoryAnimal.DogEquipmentType.MUZZLE));
+    public static final RegistryObject<Item> COLLAR = REGISTRAR.register("collar", () -> new DyeableDogEquipmentItem(new Item.Properties(), 0, AbstractInventoryAnimal.DogEquipmentType.COLLAR));
+    public static final RegistryObject<Item> HARNESS = REGISTRAR.register("harness", () -> new DyeableDogEquipmentItem(new Item.Properties(), 0, AbstractInventoryAnimal.DogEquipmentType.HARNESS));
+    public static final RegistryObject<Item> HOG_VEST = REGISTRAR.register("hog_vest", () -> new DyeableDogEquipmentItem(new Item.Properties(), 5, AbstractInventoryAnimal.DogEquipmentType.VEST));
     public static final RegistryObject<Item> SADDLEBAG = REGISTRAR.register("saddlebag", () -> new SaddlebagItem(new Item.Properties()));
-    public static final RegistryObject<Item> SWEATER = REGISTRAR.register("sweater", () -> new DyeableDogEquipmentItem(new Item.Properties(), AbstractInventoryAnimal.DogEquipmentType.VEST));
+    public static final RegistryObject<Item> SWEATER = REGISTRAR.register("sweater", () -> new DyeableDogEquipmentItem(new Item.Properties(), 3, AbstractInventoryAnimal.DogEquipmentType.VEST));
     public static final Map<DyeColor, RegistryObject<Item>> SERVICE_VESTS = Util.make(new HashMap<>(), list -> {
         for (int i = 0; i < DyeColor.values().length; i++) {
             DyeColor color = DyeColor.byId(i);
-            list.put(color, REGISTRAR.register(color.getName() + "_service_vest", () -> new ServiceVestItem(new Item.Properties(), color)));
+            list.put(color, REGISTRAR.register(color.getName() + "_service_vest", () -> new ServiceVestItem(new Item.Properties(), 3, color)));
         }
     });
 }

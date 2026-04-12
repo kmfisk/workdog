@@ -176,7 +176,7 @@ public class WDWolfEntity extends WorkDogEntity {
 
     @Override
     public int getInventoryColumns() {
-        return 0; // todo (large= 27, 9 columns; medium= 18, 6 columns; small= 9, 3 columns)
+        return 0;
     }
 
     @Override
