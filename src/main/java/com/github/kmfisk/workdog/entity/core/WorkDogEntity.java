@@ -32,7 +32,6 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
@@ -125,6 +124,12 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
         setVariant(variant);
         if (getGender() == Gender.FEMALE && !isInfertile()) setHeatCycle(false, WorkDogConfig.heatCooldown.get());
         setMode(Mode.WANDER);
+        if (!(this instanceof WDWolfEntity)) {
+            Component name;
+            if (getGender() == Gender.MALE) name = Component.literal(WorkDogConfig.maleNameStockList.get().get(random.nextInt(WorkDogConfig.maleNameStockList.get().size())));
+            else name = Component.literal(WorkDogConfig.femaleNameStockList.get().get(random.nextInt(WorkDogConfig.femaleNameStockList.get().size())));
+            setCustomName(name);
+        }
         return super.finalizeSpawn(world, difficulty, reason, spawnData, dataTag);
     }
 
