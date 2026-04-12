@@ -1,7 +1,8 @@
 package com.github.kmfisk.workdog.entity.core;
 
 import com.github.kmfisk.workdog.WorkDog;
-import com.github.kmfisk.workdog.inventory.WorkDogInventoryMenu;
+import com.github.kmfisk.workdog.inventory.WorkDogContainerMenu;
+import com.github.kmfisk.workdog.inventory.WorkDogUnownedContainerMenu;
 import com.github.kmfisk.workdog.item.DogEquipmentItem;
 import com.github.kmfisk.workdog.item.WorkDogItems;
 import net.minecraft.core.Direction;
@@ -43,8 +44,12 @@ public abstract class AbstractInventoryAnimal extends TamableAnimal implements C
 
     public void openInventory(Player player) {
         Component name = getCustomName() != null ? super.getName() : Component.literal("???");
-        if (!level().isClientSide && isTame())
-            NetworkHooks.openScreen((ServerPlayer) player, new SimpleMenuProvider((id, playerInv, pPlayer) -> new WorkDogInventoryMenu(id, playerInv, inventory, AbstractInventoryAnimal.this), name));
+        if (!level().isClientSide) {
+            if (isTame() && isOwnedBy(player))
+                NetworkHooks.openScreen((ServerPlayer) player, new SimpleMenuProvider((id, playerInv, pPlayer) -> new WorkDogContainerMenu(id, playerInv, inventory, AbstractInventoryAnimal.this), name));
+            else
+                NetworkHooks.openScreen((ServerPlayer) player, new SimpleMenuProvider((id, playerInv, pPlayer) -> new WorkDogUnownedContainerMenu(id, playerInv), name));
+        }
         WorkDog.setReferencedMob(this);
     }
 
@@ -186,26 +191,25 @@ public abstract class AbstractInventoryAnimal extends TamableAnimal implements C
         ItemStack stack = player.getItemInHand(hand);
         InteractionResult stackInteraction = stack.interactLivingEntity(player, this, hand);
         if (stackInteraction.consumesAction()) return stackInteraction;
-        if (isTame() && isOwnedBy(player)) {
-            if (player.isSecondaryUseActive() && (stack.isEmpty() || !(stack.getItem() instanceof DogEquipmentItem))) {
-                openInventory(player);
-                return InteractionResult.sidedSuccess(level().isClientSide);
 
-            } else {
-                if (!stack.isEmpty()) {
-                    if (canEquipSaddlebag() && !hasSaddlebag() && stack.is(WorkDogItems.SADDLEBAG.get())) {
-                        equipSaddlebag(player, stack);
+        if (player.isSecondaryUseActive() && (stack.isEmpty() || !(stack.getItem() instanceof DogEquipmentItem))) {
+            openInventory(player);
+            return InteractionResult.sidedSuccess(level().isClientSide);
+
+        } else if (isTame() && isOwnedBy(player)) {
+            if (!stack.isEmpty()) {
+                if (canEquipSaddlebag() && !hasSaddlebag() && stack.is(WorkDogItems.SADDLEBAG.get())) {
+                    equipSaddlebag(player, stack);
+                    return InteractionResult.sidedSuccess(level().isClientSide);
+                }
+
+                if (isDogEquipment(stack) && canWearDogEquipment(stack)) {
+                    DogEquipmentType equipmentType = ((DogEquipmentItem) stack.getItem()).getDogEquipmentType();
+                    if (canWearDogEquipmentType(equipmentType) && !isWearingDogEquipmentType(equipmentType)) {
+                        equipDogEquipment(player, equipmentType, stack);
+                        if (equipmentType == DogEquipmentType.COLLAR && stack.hasCustomHoverName() && !level().isClientSide)
+                            setCustomName(stack.getHoverName());
                         return InteractionResult.sidedSuccess(level().isClientSide);
-                    }
-
-                    if (isDogEquipment(stack) && canWearDogEquipment(stack)) {
-                        DogEquipmentType equipmentType = ((DogEquipmentItem) stack.getItem()).getDogEquipmentType();
-                        if (canWearDogEquipmentType(equipmentType) && !isWearingDogEquipmentType(equipmentType)) {
-                            equipDogEquipment(player, equipmentType, stack);
-                            if (equipmentType == DogEquipmentType.COLLAR && stack.hasCustomHoverName() && !level().isClientSide)
-                                setCustomName(stack.getHoverName());
-                            return InteractionResult.sidedSuccess(level().isClientSide);
-                        }
                     }
                 }
             }

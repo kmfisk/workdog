@@ -13,17 +13,17 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ForgeMod;
 
-public class WorkDogInventoryMenu extends AbstractContainerMenu {
+public class WorkDogContainerMenu extends AbstractContainerMenu {
     private final Container container;
     public final AbstractInventoryAnimal dog;
 
-    public WorkDogInventoryMenu(int id, Inventory playerInventory) {
+    public WorkDogContainerMenu(int id, Inventory playerInventory) {
         this(id, playerInventory, new SimpleContainer(
                 WorkDog.getReferencedMob() != null && WorkDog.getReferencedMob() instanceof WorkDogEntity ? ((WorkDogEntity) WorkDog.getReferencedMob()).getInventorySize() : 4
         ), null);
     }
 
-    public WorkDogInventoryMenu(int id, Inventory playerInventory, Container dogInventory, AbstractInventoryAnimal dog) {
+    public WorkDogContainerMenu(int id, Inventory playerInventory, Container dogInventory, AbstractInventoryAnimal dog) {
         super(WDMenuTypes.WORK_DOG_CONTAINER.get(), id);
         this.container = dogInventory;
         if (dog == null && WorkDog.getReferencedMob() instanceof WorkDogEntity)
@@ -88,7 +88,7 @@ public class WorkDogInventoryMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public ItemStack quickMoveStack(Player player, int slotId) { // todo
+    public ItemStack quickMoveStack(Player player, int slotId) {
         ItemStack stack = ItemStack.EMPTY;
         Slot slot = slots.get(slotId);
         if (slot.hasItem()) {
