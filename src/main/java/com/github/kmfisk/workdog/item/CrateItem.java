@@ -36,7 +36,7 @@ public class CrateItem extends Item {
             }
 
             WorkDogEntity dog = (WorkDogEntity) target;
-            if (!dog.isTame() || dog.getOwner() == player) {
+            if (!dog.isTame() || dog.getOwner() == player || player.hasPermissions(2)) {
                 if (player.level().isClientSide) return InteractionResult.SUCCESS;
                 ItemStack capturedEntityItem = caughtEntityItem(dog, player);
                 player.setItemInHand(hand, capturedEntityItem);
@@ -59,7 +59,7 @@ public class CrateItem extends Item {
 
         ResourceLocation key = EntityType.getKey(dog.getType());
         tags.putString("id", key.toString());
-        if (dog.isTame()) tags.putString("OwnerName", player.getName().getString());
+        if (dog.isTame() && dog.isOwnedBy(player)) tags.putString("OwnerName", player.getName().getString());
         if (dog.hasCustomName()) tags.putString("DisplayName", dog.getDisplayName().getString());
 
         dog.discard();
