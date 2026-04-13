@@ -39,7 +39,7 @@ public class WorkDogUnownedContainerScreen extends AbstractContainerScreen<WorkD
             renderHealth(guiGraphics, 130, 61);
             Component owner = workDog.getOwner() != null ? Component.translatable("gui.workdog.owner", title, workDog.getOwner().getName()) : Component.translatable("gui.workdog.unknown_owner");
             drawCenteredString(guiGraphics, owner, 96, 82); // todo save owner name to nbt to account for offline players probably?
-            Component pronoun = Component.translatable(workDog.getGender().toBool() ? "gui.workdog.male.pronoun" : "gui.workdog.female.pronoun");
+            Component pronoun = Component.translatable(workDog.getGender().toBool() ? "gui.workdog.male.pronoun1" : "gui.workdog.female.pronoun1");
 //            guiGraphics.drawString(font, Component.translatable("gui.workdog.birthday", pronoun, "[DATE]"), 68, 82 + 9 * 2, 4210752, false);
             Component lifeStage = Component.translatable(workDog.isBaby() ? "gui.workdog.age_puppy" : "gui.workdog.age_adult");
             drawCenteredString(guiGraphics, Component.translatable("gui.workdog.age", pronoun, lifeStage), 96, 100);
@@ -74,7 +74,7 @@ public class WorkDogUnownedContainerScreen extends AbstractContainerScreen<WorkD
 
     private void renderParentage(GuiGraphics guiGraphics, int guiX, int guiY) {
         if (menu.dog instanceof WorkDogEntity workDog) {
-            Component pronoun = Component.translatable(workDog.getGender().toBool() ? "gui.workdog.male.pronoun" : "gui.workdog.female.pronoun");
+            Component pronoun = Component.translatable(workDog.getGender().toBool() ? "gui.workdog.male.pronoun1" : "gui.workdog.female.pronoun1");
             ResourceLocation unknownIcon = new ResourceLocation(WorkDog.MOD_ID, "textures/gui/coat_portrait/unknown.png");
             ResourceLocation paternalIcon = unknownIcon;
             ResourceLocation maternalIcon = unknownIcon;
@@ -124,7 +124,7 @@ public class WorkDogUnownedContainerScreen extends AbstractContainerScreen<WorkD
             if (conditionalIconsShown > 1 || (!albinistic && !melanistic)) {
                 if (isHovering(96 - (16 * conditionalIconsShown) / 2, 165, 16, 16, mouseX, mouseY)) {
                     Component breedingStatus = null;
-                    Component pronoun = Component.translatable(workDog.getGender().toBool() ? "gui.workdog.male.pronoun" : "gui.workdog.female.pronoun");
+                    Component pronoun = Component.translatable(workDog.getGender().toBool() ? "gui.workdog.male.pronoun1" : "gui.workdog.female.pronoun1");
                     if (workDog.getBreedingStatus(WorkDogEntity.BreedingStatus.HEAT))
                         breedingStatus = Component.translatable("gui.workdog.heat", title);
                     else if (workDog.getBreedingStatus(WorkDogEntity.BreedingStatus.PREGNANT)) {
