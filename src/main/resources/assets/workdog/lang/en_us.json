@@ -123,7 +123,7 @@
   "item.workdog.sterilization_potion": "Sterilization Potion",
   "tooltip.workdog.sterilization_potion.usage": "Sneak to use. THIS IS PERMANENT! Sterilized dogs can no longer be bred.",
   "item.workdog.surrender_form": "Surrender Form",
-  "tooltip.workdog.surrender_form.usage": "Sneak to use. This item will untame your dog.",
+  "tooltip.workdog.surrender_form.usage": "Sneak to use. This item will untame your pet.",
   "item.workdog.frisbee": "Frisbee",
   "item.workdog.collar": "Collar",
   "item.workdog.harness": "Harness",

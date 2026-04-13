@@ -7,6 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -25,24 +26,23 @@ public class SurrenderFormItem extends Item {
 
     @Override
     public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target, InteractionHand hand) {
-        if (target instanceof WorkDogEntity) {
-            WorkDogEntity dog = (WorkDogEntity) target;
-            if (dog.isTame() && dog.isOwnedBy(player) && player.isCrouching()) {
+        if (target instanceof TamableAnimal tame) {
+            if (tame.isTame() && (tame.isOwnedBy(player) || player.hasPermissions(2)) && player.isCrouching()) {
                 for (int i = 0; i < 7; ++i) {
-                    double d0 = dog.getRandom().nextGaussian() * 0.02D;
-                    double d1 = dog.getRandom().nextGaussian() * 0.02D;
-                    double d2 = dog.getRandom().nextGaussian() * 0.02D;
-                    dog.level().addParticle(ParticleTypes.SMOKE, dog.getRandomX(1.0D), dog.getRandomY() + 0.5D, dog.getRandomZ(1.0D), d0, d1, d2);
+                    double d0 = tame.getRandom().nextGaussian() * 0.02D;
+                    double d1 = tame.getRandom().nextGaussian() * 0.02D;
+                    double d2 = tame.getRandom().nextGaussian() * 0.02D;
+                    tame.level().addParticle(ParticleTypes.SMOKE, tame.getRandomX(1.0D), tame.getRandomY() + 0.5D, tame.getRandomZ(1.0D), d0, d1, d2);
                 }
-                if (!dog.level().isClientSide()) {
-                    if (dog.isOrderedToSit()) dog.setOrderedToSit(false);
-                    dog.setMode(WorkDogEntity.Mode.WANDER);
-                    dog.setTame(false);
-                    dog.setOwnerUUID(null);
-                    player.displayClientMessage(Component.translatable("chat.workdog.surrender_form.success", dog.getName()), true);
+                if (!tame.level().isClientSide()) {
+                    if (tame.isOrderedToSit()) tame.setOrderedToSit(false);
+                    if (tame instanceof WorkDogEntity dog) dog.setMode(WorkDogEntity.Mode.WANDER);
+                    tame.setTame(false);
+                    tame.setOwnerUUID(null);
+                    player.displayClientMessage(Component.translatable("chat.workdog.surrender_form.success", tame.getName()), true);
                     if (!player.isCreative()) stack.shrink(1);
                 }
-                return InteractionResult.sidedSuccess(dog.level().isClientSide);
+                return InteractionResult.sidedSuccess(tame.level().isClientSide);
             }
         }
         return super.interactLivingEntity(stack, player, target, hand);
