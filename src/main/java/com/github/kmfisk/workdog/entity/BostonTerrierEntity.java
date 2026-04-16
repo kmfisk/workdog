@@ -23,12 +23,17 @@ public class BostonTerrierEntity extends ToyDogEntity {
     }
 
     public static AttributeSupplier.Builder registerAttributes() {
-        return createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.2F).add(Attributes.MAX_HEALTH, 6.0F).add(Attributes.ATTACK_DAMAGE, 1.0F);
+        return createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.128F).add(Attributes.MAX_HEALTH, 6.0F).add(Attributes.ATTACK_DAMAGE, 1.0F);
     }
 
     @Override
     public Size getSize() {
         return Size.TOY;
+    }
+
+    @Override
+    public double sprintPredisposition() {
+        return 1.6D;
     }
 
     @Override

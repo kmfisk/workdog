@@ -20,12 +20,17 @@ public class JackRussellTerrierEntity extends TerrierDogEntity {
     }
 
     public static AttributeSupplier.Builder registerAttributes() {
-        return createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.3F).add(Attributes.MAX_HEALTH, 10.0F).add(Attributes.ATTACK_DAMAGE, 3.0F);
+        return createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.31F).add(Attributes.MAX_HEALTH, 10.0F).add(Attributes.ATTACK_DAMAGE, 3.0F);
     }
 
     @Override
     public Size getSize() {
         return Size.SMALL;
+    }
+
+    @Override
+    public double sprintPredisposition() {
+        return 2.0D;
     }
 
     @Override

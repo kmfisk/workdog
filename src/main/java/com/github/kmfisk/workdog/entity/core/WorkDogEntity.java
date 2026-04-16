@@ -22,6 +22,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -46,6 +48,7 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.DoubleSupplier;
 
 public abstract class WorkDogEntity extends AbstractInventoryAnimal {
     public static final EntityDataAccessor<Boolean> GENDER = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.BOOLEAN);
@@ -60,6 +63,7 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
     private String[] parent2;
     @Nullable
     BlockPos homePos;
+    private double sprintSpeedMod;
     private DogAvoidEntityGoal<Player> avoidPlayersGoal;
     protected WaterAvoidingRandomStrollGoal wanderGoal;
     protected final FollowOwnerGoal followGoal = new FollowOwnerGoal(this, 1.33D, 10.0F, 2.0F, false);
@@ -131,7 +135,12 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
             else name = Component.literal(WorkDogConfig.femaleNameStockList.get().get(random.nextInt(WorkDogConfig.femaleNameStockList.get().size())));
             setCustomName(name);
         }
+        sprintSpeedMod = generateSprintMod(world.getRandom()::nextDouble);
         return super.finalizeSpawn(world, difficulty, reason, spawnData, dataTag);
+    }
+
+    public double sprintPredisposition() {
+        return 1.8D; //low=1.6, mid=1.8, high=2.0
     }
 
     public abstract WorkGroup getWorkGroup();
@@ -294,6 +303,34 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
         homePos = position;
     }
 
+    public double getSprintSpeedMod() {
+        return sprintSpeedMod;
+    }
+
+    private double generateSprintMod(DoubleSupplier doubleSupplier) {
+        double result = 1.25D + doubleSupplier.getAsDouble() * 0.55D + doubleSupplier.getAsDouble() * 0.55D;
+        return (result + sprintPredisposition() * 4) / 5.0D;
+    }
+
+    private static double createOffspringSprintMod(double parent1, double parent2, RandomSource randomSource) {
+        double min = 1.25D, max = 2.35D;
+        parent1 = Mth.clamp(parent1, min, max);
+        parent2 = Mth.clamp(parent2, min, max);
+        double d0 = Math.abs(parent1 - parent2) + (max - min) * 0.05D; // parent's absolute difference + 5% whole range
+        double d1 = (randomSource.nextDouble() + randomSource.nextDouble() + randomSource.nextDouble()) / 3.0D - 0.5D; // -0.5 - 0.5
+        double parentAvg = (parent1 + parent2) / 2.0D;
+        double result = parentAvg + d0 * d1;
+        if (result > max) {
+            double d6 = result - max;
+            return max - d6;
+        } else if (result < min) {
+            double d5 = min - result;
+            return min + d5;
+        } else {
+            return result;
+        }
+    }
+
     @Override
     public void addAdditionalSaveData(CompoundTag nbt) {
         super.addAdditionalSaveData(nbt);
@@ -322,6 +359,7 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
 
         nbt.putInt("Mode", getMode().ordinal());
         if (getHomePos() != null) nbt.put("HomePos", NbtUtils.writeBlockPos(getHomePos()));
+        nbt.putDouble("SprintMod", sprintSpeedMod == 0 ? generateSprintMod(getRandom()::nextDouble) : sprintSpeedMod);
     }
 
     @Override
@@ -351,6 +389,7 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
 
         setMode(Mode.fromOrdinal(nbt.getInt("Mode")));
         if (nbt.contains("HomePos")) setHomePos(NbtUtils.readBlockPos(nbt.getCompound("HomePos")));
+        sprintSpeedMod = nbt.getDouble("SprintMod");
     }
 
     @Override
@@ -474,6 +513,7 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
         if (maternal.isTame() && WorkDogConfig.tamedLimit.get() == 0/* || owner.getPersistentData().getInt("DogCount") < WorkDogConfig.tamedLimit.get()*/)
             tame((Player) maternal.getOwner());
         if (maternal.getHomePos() != null) setHomePos(maternal.getHomePos());
+        sprintSpeedMod = createOffspringSprintMod(paternal.sprintSpeedMod, maternal.sprintSpeedMod, random);
     }
 
     @Override

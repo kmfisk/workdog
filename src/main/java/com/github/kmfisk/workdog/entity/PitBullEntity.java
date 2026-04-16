@@ -20,7 +20,7 @@ public class PitBullEntity extends HuntingDogEntity {
     }
 
     public static AttributeSupplier.Builder registerAttributes() {
-        return createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.2F).add(Attributes.MAX_HEALTH, 20.0F).add(Attributes.ATTACK_DAMAGE, 6.0F);
+        return createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.128F).add(Attributes.MAX_HEALTH, 20.0F).add(Attributes.ATTACK_DAMAGE, 6.0F);
     }
 
     @Override
