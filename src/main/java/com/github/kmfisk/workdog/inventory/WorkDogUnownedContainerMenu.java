@@ -25,6 +25,6 @@ public class WorkDogUnownedContainerMenu extends AbstractContainerMenu {
     @Override
     public boolean stillValid(Player player) {
         double reach = player.getAttributeValue(ForgeMod.ENTITY_REACH.get()) + 5;
-        return dog.isAlive() && dog.distanceTo(player) < reach;
+        return dog != null && dog.isAlive() && dog.distanceTo(player) < reach;
     }
 }
