@@ -483,14 +483,14 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
             boolean purebred = getType() == sire.getType();
             if (purebred || random.nextBoolean()) {
                 childBreedType = getBreedOffspring(world, sire);
-                if (purebred && random.nextInt(100) < 2 && getWorkGroup().getTagKey() != null) {
+                if (purebred && random.nextInt(100) < 2 && getWorkGroup() != null) {
                     Entity newBreed = ForgeRegistries.ENTITY_TYPES.tags().getTag(getWorkGroup().getTagKey()).stream().findAny().get().create(world);
                     if (newBreed instanceof WorkDogEntity)
                         childBreedType = ((WorkDogEntity) newBreed).getBreedOffspring(world, this);
                 }
             } else childBreedType = sire.getBreedOffspring(world, this);
-            if (!purebred && random.nextInt(100) < 5 && getWorkGroup().getTagKey() != null) {
-                TagKey<EntityType<?>> newBreedTag = random.nextBoolean() && sire.getWorkGroup().getTagKey() != null ? sire.getWorkGroup().getTagKey() : getWorkGroup().getTagKey();
+            if (!purebred && random.nextInt(100) < 5 && getWorkGroup() != null) {
+                TagKey<EntityType<?>> newBreedTag = random.nextBoolean() && sire.getWorkGroup() != null ? sire.getWorkGroup().getTagKey() : getWorkGroup().getTagKey();
                 Entity newBreed = ForgeRegistries.ENTITY_TYPES.tags().getTag(newBreedTag).stream().findAny().get().create(world);
                 if (newBreed instanceof WorkDogEntity)
                     childBreedType = ((WorkDogEntity) newBreed).getBreedOffspring(world, this);
