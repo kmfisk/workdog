@@ -10,7 +10,7 @@ import net.minecraftforge.event.entity.living.LootingLevelEvent;
 
 public abstract class HuntingDogEntity extends WorkDogEntity {
     private final OwnerHurtTargetGoal ownerHurtTargetGoal = new OwnerHurtTargetGoal(this);
-    private final FollowOwnerGoal huntersFollowGoal = new FollowOwnerGoal(this, 1.5D, 4.0F, 2.0F, false);
+    private final FollowOwnerGoal huntersFollowGoal = new FollowOwnerGoal(this, getSprintSpeedMod(), 4.0F, 2.0F, false);
 
     public HuntingDogEntity(EntityType<? extends TamableAnimal> type, Level world) {
         super(type, world);

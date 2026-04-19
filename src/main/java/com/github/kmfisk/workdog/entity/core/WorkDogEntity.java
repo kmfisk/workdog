@@ -66,7 +66,7 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
     private double sprintSpeedMod;
     private DogAvoidEntityGoal<Player> avoidPlayersGoal;
     protected WaterAvoidingRandomStrollGoal wanderGoal;
-    protected final FollowOwnerGoal followGoal = new FollowOwnerGoal(this, 1.33D, 10.0F, 2.0F, false);
+    protected final FollowOwnerGoal followGoal = new FollowOwnerGoal(this, sprintSpeedMod, 10.0F, 2.0F, false);
 
     public WorkDogEntity(EntityType<? extends TamableAnimal> type, Level world) {
         super(type, world);
@@ -80,7 +80,7 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
         this.goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(3, new DogTemptGoal(this, 0.6D));
         this.goalSelector.addGoal(4, new LeapAtTargetGoal(this, 0.4F));
-        this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.5D, true));
+        this.goalSelector.addGoal(5, new MeleeAttackGoal(this, getSprintSpeedMod(), true));
         this.goalSelector.addGoal(6, new FollowMotherGoal(this, 1.1D));
         this.goalSelector.addGoal(9, new DogBreedGoal(this, 1.2D));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
@@ -90,7 +90,7 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
     protected void reassessTameGoals() {
         if (isBaby() || !(this instanceof WDWolfEntity)) {
             if (avoidPlayersGoal == null)
-                avoidPlayersGoal = new DogAvoidEntityGoal<>(this, Player.class, 16.0F, 0.8D, 1.33D);
+                avoidPlayersGoal = new DogAvoidEntityGoal<>(this, Player.class, 16.0F, 0.8D, sprintSpeedMod);
 
             this.goalSelector.removeGoal(avoidPlayersGoal);
             if (!isTame()) this.goalSelector.addGoal(4, avoidPlayersGoal);
