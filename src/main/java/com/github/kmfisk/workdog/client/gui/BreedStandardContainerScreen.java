@@ -8,7 +8,6 @@ import net.minecraft.Util;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.FormattedText;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
@@ -18,6 +17,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class BreedStandardContainerScreen extends AbstractContainerScreen<BreedStandardContainerMenu> {
     private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(WorkDog.MOD_ID, "textures/gui/dog_2.png");
+    private static final double lowSpeed = 6.99, medSpeed = 10.78;
 
     public BreedStandardContainerScreen(BreedStandardContainerMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
@@ -39,7 +39,8 @@ public class BreedStandardContainerScreen extends AbstractContainerScreen<BreedS
             guiGraphics.blit(BACKGROUND_TEXTURE, 50, 96, 160 + 16 * workDog.getGender().ordinal(), 187, 16, 16, 384, 256);
             guiGraphics.blit(BACKGROUND_TEXTURE, 50, 116, 192 + 16 * workDog.getWeatherType().ordinal(), 187, 16, 16, 384, 256);
             guiGraphics.blit(BACKGROUND_TEXTURE, 50, 136, workDog.isLonghair() ? 0 : 16, 203, 16, 16, 384, 256);
-            guiGraphics.blit(BACKGROUND_TEXTURE, 50, 156, 32, 203, 16, 16, 384, 256);
+            double sprintSpeed = Math.round(workDog.getAttributeBaseValue(Attributes.MOVEMENT_SPEED) * workDog.getSprintSpeedMod() * 20 * 100) / 100D;
+            guiGraphics.blit(BACKGROUND_TEXTURE, 50, 156, sprintSpeed < lowSpeed ? 32 : sprintSpeed < medSpeed ? 48 : 64, 203, 16, 16, 384, 256);
 
             Component pronoun1 = Component.translatable(workDog.getGender().toBool() ? "gui.workdog.male.pronoun1" : "gui.workdog.female.pronoun1"); // he/she
             Component pronoun2 = Component.translatable(workDog.getGender().toBool() ? "gui.workdog.male.pronoun2" : "gui.workdog.female.pronoun2"); // him/her
@@ -137,7 +138,9 @@ public class BreedStandardContainerScreen extends AbstractContainerScreen<BreedS
                 guiGraphics.renderTooltip(font, font.split(coatTooltip, Math.max(guiGraphics.guiWidth() / 2, 200)), mouseX, mouseY);
             }
             if (isHovering(50, 156, 16, 16, mouseX, mouseY)) {
-                Component speedTooltip = Component.translatable("gui.workdog.speed", title, Component.translatable("gui.workdog.speed.low", "[SPEED]")); //todo
+                double sprintSpeed = Math.round(workDog.getAttributeBaseValue(Attributes.MOVEMENT_SPEED) * workDog.getSprintSpeedMod() * 20 * 100) / 100D;
+                String speedLoc = sprintSpeed < lowSpeed ? "gui.workdog.speed.low" : sprintSpeed < medSpeed ? "gui.workdog.speed.moderate" : "gui.workdog.speed.high";
+                Component speedTooltip = Component.translatable("gui.workdog.speed", title, Component.translatable(speedLoc, sprintSpeed));
                 guiGraphics.renderTooltip(font, font.split(speedTooltip, Math.max(guiGraphics.guiWidth() / 2, 200)), mouseX, mouseY);
             }
         }

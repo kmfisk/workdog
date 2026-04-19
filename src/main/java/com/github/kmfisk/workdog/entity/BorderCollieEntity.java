@@ -29,6 +29,11 @@ public class BorderCollieEntity extends HerdingDogEntity {
     }
 
     @Override
+    public double sprintPredisposition() {
+        return 2.0D;
+    }
+
+    @Override
     public Weather getWeatherType() {
         return isLonghair() ? Weather.TEMPERATE : Weather.HOT;
     }

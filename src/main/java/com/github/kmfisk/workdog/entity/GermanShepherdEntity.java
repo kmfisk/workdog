@@ -29,6 +29,11 @@ public class GermanShepherdEntity extends ProtectionDogEntity {
     }
 
     @Override
+    public double sprintPredisposition() {
+        return 2.0D;
+    }
+
+    @Override
     public Weather getWeatherType() {
         return isLonghair() ? Weather.COLD : Weather.TEMPERATE;
     }
