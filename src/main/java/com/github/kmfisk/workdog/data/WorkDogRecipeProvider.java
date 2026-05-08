@@ -11,6 +11,8 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -179,12 +181,12 @@ public class WorkDogRecipeProvider extends RecipeProvider {
     }
 
     public static void dogBowl(Consumer<FinishedRecipe> consumer, Block bowl, Block concrete) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, bowl)
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, bowl, 3)
                 .pattern("FCW")
                 .pattern("CCC")
                 .define('F', WorkDogTags.RAW_MEATS)
                 .define('C', concrete)
-                .define('W', Items.POTION.getDefaultInstance().getItem())
+                .define('W', Items.WATER_BUCKET.asItem())
                 .unlockedBy("has_concrete", InventoryChangeTrigger.TriggerInstance.hasItems(concrete)).save(consumer);
     }
 }
