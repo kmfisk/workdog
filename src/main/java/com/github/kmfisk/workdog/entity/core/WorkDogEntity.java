@@ -598,21 +598,7 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
 
         boolean isOwner = isOwnedBy(player);
         if (isTame() && isOwner) {
-            if (stack.getItem() == Items.STICK) {
-                if (getMode() == Mode.WANDER) { //if (stack.getItem() == Items.SLIME_BALL)
-                    setMode(Mode.FOLLOW);
-                    player.displayClientMessage(Component.translatable("chat.workdog.follow_mode", getName()), true);
-                    return InteractionResult.sidedSuccess(level().isClientSide);
-                } else if (getMode() == Mode.FOLLOW) { //if (stack.getItem() == Items.GUNPOWDER) {
-                    setMode(Mode.WORK);
-                    player.displayClientMessage(Component.translatable("chat.workdog.work_mode", getName()), true);
-                    return InteractionResult.sidedSuccess(level().isClientSide);
-                } else if (getMode() == Mode.WORK) { //if (stack.getItem() == Items.FEATHER)
-                    setMode(Mode.WANDER);
-                    player.displayClientMessage(Component.translatable("chat.workdog.wander_mode", getName()), true);
-                    return InteractionResult.sidedSuccess(level().isClientSide);
-                }
-            } else if (isFood(stack) && getHealth() < getMaxHealth()) {
+            if (isFood(stack) && getHealth() < getMaxHealth()) {
                 usePlayerItem(player, hand, stack);
                 heal(2.0F);
                 return InteractionResult.sidedSuccess(level().isClientSide);
@@ -725,9 +711,15 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
     }
 
     public enum Mode {
-        WORK,
-        FOLLOW,
-        WANDER;
+        WORK("work"),
+        FOLLOW("follow"),
+        WANDER("wander");
+
+        private final String name;
+
+        Mode(String name) {
+            this.name = name;
+        }
 
         public static Mode fromOrdinal(int ordinal) {
             return switch (ordinal) {
@@ -736,6 +728,10 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
                 case 2 -> WANDER;
                 default -> throw new IllegalStateException("Unexpected value: " + ordinal);
             };
+        }
+
+        public Component getDisplayName() {
+            return Component.translatable("name.workdog." + name + "_mode");
         }
     }
 

@@ -7,6 +7,7 @@ import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
 import com.github.kmfisk.workdog.inventory.WorkDogContainerMenu;
 import net.minecraft.Util;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.CycleButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -28,6 +29,19 @@ public class WorkDogContainerScreen extends AbstractContainerScreen<WorkDogConta
         this.titleLabelY = 15;
         this.inventoryLabelX = 192;
         this.inventoryLabelY = 91;
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+        if (menu.dog instanceof WorkDogEntity workDog) {
+            addRenderableWidget(CycleButton.builder(WorkDogEntity.Mode::getDisplayName)
+                    .withValues(WorkDogEntity.Mode.values()).withInitialValue(workDog.getMode())
+                    .displayOnlyValue().create(
+                            leftPos + 152 - 35, topPos + 57, 70, 20, Component.empty(),
+                            (button, mode) -> workDog.setMode(mode)
+                    ));
+        }
     }
 
     @Override
@@ -75,7 +89,8 @@ public class WorkDogContainerScreen extends AbstractContainerScreen<WorkDogConta
                 maternalIcon = new ResourceLocation(WorkDog.MOD_ID, "textures/gui/coat_portrait/" + workDog.getParentDataList().get(7) + "_" + workDog.getParentDataList().get(6) + ".png");
                 guiGraphics.drawWordWrap(font, Component.translatable("gui.workdog.parentage", pronoun, workDog.getParentDataList().get(1), workDog.getParentDataList().get(5)), 68, 118, 122, 4210752);
 
-            } else guiGraphics.drawWordWrap(font, Component.translatable("gui.workdog.stray", pronoun), 68, 118, 122, 4210752);
+            } else
+                guiGraphics.drawWordWrap(font, Component.translatable("gui.workdog.stray", pronoun), 68, 118, 122, 4210752);
 
             guiGraphics.blit(paternalIcon, guiX, guiY, 0, 0, 16, 16, 16, 16);
             guiGraphics.blit(maternalIcon, guiX + 18, guiY, 0, 0, 16, 16, 16, 16);
@@ -133,7 +148,8 @@ public class WorkDogContainerScreen extends AbstractContainerScreen<WorkDogConta
                         breedingStatus = Component.translatable("gui.workdog.pregnant", title, sireName, timerHint);
                     } else if (workDog.isInfertile())
                         breedingStatus = Component.translatable("gui.workdog.infertile", title, pronoun);
-                    if (breedingStatus != null) guiGraphics.renderTooltip(font, font.split(breedingStatus, Math.max(guiGraphics.guiWidth() / 2, 200)), mouseX, mouseY);
+                    if (breedingStatus != null)
+                        guiGraphics.renderTooltip(font, font.split(breedingStatus, Math.max(guiGraphics.guiWidth() / 2, 200)), mouseX, mouseY);
                 }
             }
             if (albinistic || melanistic) {
@@ -158,11 +174,16 @@ public class WorkDogContainerScreen extends AbstractContainerScreen<WorkDogConta
         guiGraphics.blit(BACKGROUND_TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight, 384, 256);
         AbstractInventoryAnimal dog = menu.dog;
         if (dog != null) {
-            if (dog.hasSaddlebag()) guiGraphics.blit(BACKGROUND_TEXTURE, leftPos + 191, topPos + 25, 0, 187, dog.getInventoryColumns() * 18, 54, 384, 256);
-            if (dog.canWearDogEquipmentType(AbstractInventoryAnimal.DogEquipmentType.MUZZLE)) guiGraphics.blit(BACKGROUND_TEXTURE, leftPos + 49, topPos + 75, 162, 205, 18, 18, 384, 256);
-            if (dog.canWearDogEquipmentType(AbstractInventoryAnimal.DogEquipmentType.COLLAR)) guiGraphics.blit(BACKGROUND_TEXTURE, leftPos + 49, topPos + 95, 180, 205, 18, 18, 384, 256);
-            if (dog.canWearDogEquipmentType(AbstractInventoryAnimal.DogEquipmentType.HARNESS)) guiGraphics.blit(BACKGROUND_TEXTURE, leftPos + 49, topPos + 115, 198, 205, 18, 18, 384, 256);
-            if (dog.canWearDogEquipmentType(AbstractInventoryAnimal.DogEquipmentType.VEST)) guiGraphics.blit(BACKGROUND_TEXTURE, leftPos + 49, topPos + 135, 216, 205, 18, 18, 384, 256);
+            if (dog.hasSaddlebag())
+                guiGraphics.blit(BACKGROUND_TEXTURE, leftPos + 191, topPos + 25, 0, 187, dog.getInventoryColumns() * 18, 54, 384, 256);
+            if (dog.canWearDogEquipmentType(AbstractInventoryAnimal.DogEquipmentType.MUZZLE))
+                guiGraphics.blit(BACKGROUND_TEXTURE, leftPos + 49, topPos + 75, 162, 205, 18, 18, 384, 256);
+            if (dog.canWearDogEquipmentType(AbstractInventoryAnimal.DogEquipmentType.COLLAR))
+                guiGraphics.blit(BACKGROUND_TEXTURE, leftPos + 49, topPos + 95, 180, 205, 18, 18, 384, 256);
+            if (dog.canWearDogEquipmentType(AbstractInventoryAnimal.DogEquipmentType.HARNESS))
+                guiGraphics.blit(BACKGROUND_TEXTURE, leftPos + 49, topPos + 115, 198, 205, 18, 18, 384, 256);
+            if (dog.canWearDogEquipmentType(AbstractInventoryAnimal.DogEquipmentType.VEST))
+                guiGraphics.blit(BACKGROUND_TEXTURE, leftPos + 49, topPos + 135, 216, 205, 18, 18, 384, 256);
         }
     }
 }

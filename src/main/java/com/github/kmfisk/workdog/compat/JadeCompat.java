@@ -66,12 +66,7 @@ public class JadeCompat implements IWailaPlugin {
             if (!entityAccessor.getServerData().contains("Mode", CompoundTag.TAG_INT)) return;
 
             WorkDogEntity.Mode mode = ((WorkDogEntity) entityAccessor.getEntity()).getMode();
-
-            Component workModeComponent;
-            if (mode == WorkDogEntity.Mode.FOLLOW) workModeComponent = Component.translatable("name.workdog.follow_mode");
-            else if (mode == WorkDogEntity.Mode.WORK) workModeComponent = Component.translatable("name.workdog.work_mode");
-            else workModeComponent = Component.translatable("name.workdog.wander_mode");
-
+            Component workModeComponent = mode.getDisplayName();
             iTooltip.add(workModeComponent);
         }
 
