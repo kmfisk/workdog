@@ -31,4 +31,8 @@ public enum WorkGroup {
     public TagKey<EntityType<?>> getTagKey() {
         return tagKey;
     }
+
+    public boolean hasWorkingMode() {
+        return this != TOY;
+    }
 }

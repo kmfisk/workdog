@@ -5,6 +5,7 @@ import com.github.kmfisk.workdog.config.WorkDogConfig;
 import com.github.kmfisk.workdog.entity.core.AbstractInventoryAnimal;
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
 import com.github.kmfisk.workdog.inventory.WorkDogContainerMenu;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.Util;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.CycleButton;
@@ -36,7 +37,8 @@ public class WorkDogContainerScreen extends AbstractContainerScreen<WorkDogConta
         super.init();
         if (menu.dog instanceof WorkDogEntity workDog) {
             addRenderableWidget(CycleButton.builder(WorkDogEntity.Mode::getDisplayName)
-                    .withValues(WorkDogEntity.Mode.values()).withInitialValue(workDog.getMode())
+                    .withValues(CycleButton.ValueListSupplier.create(() -> workDog.getWorkGroup() == null || !workDog.getWorkGroup().hasWorkingMode(), ImmutableList.copyOf(WorkDogEntity.Mode.values()), ImmutableList.of(WorkDogEntity.Mode.FOLLOW, WorkDogEntity.Mode.WANDER)))
+                    .withInitialValue(workDog.getMode())
                     .displayOnlyValue().create(
                             leftPos + 152 - 35, topPos + 57, 70, 20, Component.empty(),
                             (button, mode) -> workDog.setMode(mode)
