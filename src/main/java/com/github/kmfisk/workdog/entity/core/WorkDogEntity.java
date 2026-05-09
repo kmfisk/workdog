@@ -1,6 +1,5 @@
 package com.github.kmfisk.workdog.entity.core;
 
-import com.github.kmfisk.workdog.WorkDog;
 import com.github.kmfisk.workdog.config.WorkDogConfig;
 import com.github.kmfisk.workdog.entity.WDWolfEntity;
 import com.github.kmfisk.workdog.entity.goal.*;
@@ -8,16 +7,18 @@ import com.github.kmfisk.workdog.item.DogEquipmentItem;
 import com.github.kmfisk.workdog.item.WorkDogItems;
 import com.github.kmfisk.workdog.sounds.WorkDogSounds;
 import com.github.kmfisk.workdog.tags.WorkDogTags;
-import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.*;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -36,7 +37,6 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -59,8 +59,7 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
     private static final EntityDataAccessor<Integer> BREED_TIMER = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> PUPPIES = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> LITTERS = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.INT);
-    private String[] parent1;
-    private String[] parent2;
+    private static final EntityDataAccessor<CompoundTag> PARENTS = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.COMPOUND_TAG);
     @Nullable
     BlockPos homePos;
     private double sprintSpeedMod;
@@ -114,10 +113,11 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
         this.entityData.define(GENDER, false);
         this.entityData.define(LONGHAIR, false);
         this.entityData.define(VARIANT, 0);
+        this.entityData.define(MODE, 2);
         this.entityData.define(BREED_TIMER, 0);
         this.entityData.define(PUPPIES, 0);
         this.entityData.define(LITTERS, 0);
-        this.entityData.define(MODE, 2);
+        this.entityData.define(PARENTS, new CompoundTag());
     }
 
     @Override
@@ -131,8 +131,10 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
         setMode(Mode.WANDER);
         if (!(this instanceof WDWolfEntity)) {
             Component name;
-            if (getGender() == Gender.MALE) name = Component.literal(WorkDogConfig.maleNameStockList.get().get(random.nextInt(WorkDogConfig.maleNameStockList.get().size())));
-            else name = Component.literal(WorkDogConfig.femaleNameStockList.get().get(random.nextInt(WorkDogConfig.femaleNameStockList.get().size())));
+            if (getGender() == Gender.MALE)
+                name = Component.literal(WorkDogConfig.maleNameStockList.get().get(random.nextInt(WorkDogConfig.maleNameStockList.get().size())));
+            else
+                name = Component.literal(WorkDogConfig.femaleNameStockList.get().get(random.nextInt(WorkDogConfig.femaleNameStockList.get().size())));
             setCustomName(name);
         }
         sprintSpeedMod = generateSprintMod(world.getRandom()::nextDouble);
@@ -183,22 +185,39 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
         entityData.set(VARIANT, variant);
     }
 
-    public List<String> getParentDataList() {
-        List<String> list = Lists.newArrayList();
-        if (parent1 != null) {
-            list.addAll(List.of(parent1));
-            list.addAll(List.of(parent2));
+    public NonNullList<String[]> getParentDataList() {
+        NonNullList<String[]> list = NonNullList.withSize(2, new String[]{});
+        if (!getParents().isEmpty()) {
+            CompoundTag parentsTag = getParents();
+            list.set(0, new String[]{parentsTag.getString("PaternalUUID"), parentsTag.getString("PaternalName"), parentsTag.getString("PaternalVariantName"), parentsTag.getString("PaternalBreed")});
+            list.set(1, new String[]{parentsTag.getString("MaternalUUID"), parentsTag.getString("MaternalName"), parentsTag.getString("MaternalVariantName"), parentsTag.getString("MaternalBreed")});
         }
         return list;
     }
 
-    public void setParentData(UUID uuid, String name, String variantName, EntityType<?> breed) { // if anyone is reading this, don't. eugh.
-        if (parent1 == null) parent1 = new String[]{uuid.toString(), name, variantName, BuiltInRegistries.ENTITY_TYPE.getKey(breed).getPath()};
-        else parent2 = new String[]{uuid.toString(), name, variantName, BuiltInRegistries.ENTITY_TYPE.getKey(breed).getPath()};
+    public void setParentData(WorkDogEntity paternal, WorkDogEntity maternal) {
+        CompoundTag parentsTag = new CompoundTag();
+        parentsTag.putString("PaternalUUID", paternal.getUUID().toString());
+        parentsTag.putString("PaternalName", paternal.getCustomName() != null ? paternal.getName().getString() : "???");
+        parentsTag.putString("PaternalVariantName", paternal.getVariantName());
+        parentsTag.putString("PaternalBreed", BuiltInRegistries.ENTITY_TYPE.getKey(paternal.getType()).getPath());
+        parentsTag.putString("MaternalUUID", maternal.getUUID().toString());
+        parentsTag.putString("MaternalName", maternal.getCustomName() != null ? maternal.getName().getString() : "???");
+        parentsTag.putString("MaternalVariantName", maternal.getVariantName());
+        parentsTag.putString("MaternalBreed", BuiltInRegistries.ENTITY_TYPE.getKey(maternal.getType()).getPath());
+        entityData.set(PARENTS, parentsTag);
+    }
+
+    public void setParents(CompoundTag parentsTag) {
+        entityData.set(PARENTS, parentsTag);
+    }
+
+    public CompoundTag getParents() {
+        return entityData.get(PARENTS);
     }
 
     public boolean isMother(UUID uuid) {
-        String uuidFromData = !getParentDataList().isEmpty() && getParentDataList().size() == 8 ? getParentDataList().get(4) : "";
+        String uuidFromData = getParentDataList().get(1).length > 0 ? getParentDataList().get(1)[0] : "";
         UUID mother = uuidFromData.isEmpty() ? null : UUID.fromString(uuidFromData);
         return mother != null && mother.equals(uuid);
     }
@@ -338,12 +357,7 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
         nbt.putBoolean("Longhair", isLonghair());
         nbt.putInt("Variant", getVariant());
 
-        List<String> list = getParentDataList();
-        ListTag parentNbtList = new ListTag();
-        for (String string : list) {
-            if (!string.isEmpty()) parentNbtList.add(StringTag.valueOf(string));
-        }
-        nbt.put("Parents", parentNbtList);
+        nbt.put("ParentsTag", getParents());
 
         nbt.putBoolean("Infertile", isInfertile());
         nbt.putInt("Litters", getLitters());
@@ -370,10 +384,19 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
         setVariant(nbt.getInt("Variant"));
 
         ListTag parentNbtList = nbt.getList("Parents", 8);
-        if (!parentNbtList.isEmpty()) {
-            setParentData(UUID.fromString(parentNbtList.get(0).getAsString()), parentNbtList.get(1).getAsString(), parentNbtList.get(2).getAsString(), ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(WorkDog.MOD_ID, parentNbtList.get(3).getAsString())));
-            setParentData(UUID.fromString(parentNbtList.get(4).getAsString()), parentNbtList.get(5).getAsString(), parentNbtList.get(6).getAsString(), ForgeRegistries.ENTITY_TYPES.getValue(new ResourceLocation(WorkDog.MOD_ID, parentNbtList.get(7).getAsString())));
-        }
+        if (!parentNbtList.isEmpty()) { //todo remove on later versions
+            CompoundTag parentsTag = new CompoundTag();
+            parentsTag.putString("PaternalUUID", parentNbtList.get(0).getAsString());
+            parentsTag.putString("PaternalName", parentNbtList.get(1).getAsString());
+            parentsTag.putString("PaternalVariantName", parentNbtList.get(2).getAsString());
+            parentsTag.putString("PaternalBreed", parentNbtList.get(3).getAsString());
+            parentsTag.putString("MaternalUUID", parentNbtList.get(4).getAsString());
+            parentsTag.putString("MaternalName", parentNbtList.get(5).getAsString());
+            parentsTag.putString("MaternalVariantName", parentNbtList.get(6).getAsString());
+            parentsTag.putString("MaternalBreed", parentNbtList.get(7).getAsString());
+            entityData.set(PARENTS, parentsTag);
+
+        } else setParents(nbt.getCompound("ParentsTag"));
 
         setInfertile(nbt.getBoolean("Infertile"));
         setLitters(nbt.getInt("Litters"));
@@ -508,8 +531,7 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
         setLonghair(longhair);
         if (WorkDogConfig.nameBabies.get() && (maternal.hasCustomName() || paternal.hasCustomName()))
             setCustomName(Component.translatable("name.workdog.name_babies", maternal.hasCustomName() ? maternal.getCustomName() : paternal.getCustomName()));
-        setParentData(paternal.getUUID(), paternal.getCustomName() != null ? paternal.getName().getString() : "???", paternal.getVariantName(), paternal.getType());
-        setParentData(maternal.getUUID(), maternal.getCustomName() != null ? maternal.getName().getString() : "???", maternal.getVariantName(), maternal.getType());
+        setParentData(paternal, maternal);
         if (maternal.isTame() && WorkDogConfig.tamedLimit.get() == 0/* || owner.getPersistentData().getInt("DogCount") < WorkDogConfig.tamedLimit.get()*/)
             tame((Player) maternal.getOwner());
         if (maternal.getHomePos() != null) setHomePos(maternal.getHomePos());

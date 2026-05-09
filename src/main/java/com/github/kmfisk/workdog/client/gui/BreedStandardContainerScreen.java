@@ -83,9 +83,9 @@ public class BreedStandardContainerScreen extends AbstractContainerScreen<BreedS
             ResourceLocation unknownIcon = new ResourceLocation(WorkDog.MOD_ID, "textures/gui/coat_portrait/unknown.png");
             ResourceLocation paternalIcon = unknownIcon;
             ResourceLocation maternalIcon = unknownIcon;
-            if (!workDog.getParentDataList().isEmpty() && workDog.getParentDataList().size() == 8) {
-                paternalIcon = new ResourceLocation(WorkDog.MOD_ID, "textures/gui/coat_portrait/" + workDog.getParentDataList().get(3) + "_" + workDog.getParentDataList().get(2) + ".png");
-                maternalIcon = new ResourceLocation(WorkDog.MOD_ID, "textures/gui/coat_portrait/" + workDog.getParentDataList().get(7) + "_" + workDog.getParentDataList().get(6) + ".png");
+            if (workDog.getParentDataList().get(0).length > 0) {
+                paternalIcon = new ResourceLocation(WorkDog.MOD_ID, "textures/gui/coat_portrait/" + workDog.getParentDataList().get(0)[3] + "_" + workDog.getParentDataList().get(0)[2] + ".png");
+                maternalIcon = new ResourceLocation(WorkDog.MOD_ID, "textures/gui/coat_portrait/" + workDog.getParentDataList().get(1)[3] + "_" + workDog.getParentDataList().get(1)[2] + ".png");
             }
             guiGraphics.blit(paternalIcon, guiX, guiY, 0, 0, 16, 16, 16, 16);
             guiGraphics.blit(maternalIcon, guiX + 18, guiY, 0, 0, 16, 16, 16, 16);
@@ -110,16 +110,16 @@ public class BreedStandardContainerScreen extends AbstractContainerScreen<BreedS
             if (isHovering(57, 15, 48, 48, mouseX, mouseY))
                 guiGraphics.renderTooltip(font, title.plainCopy().append(": ").append(Component.translatable("coat.workdog." + workDog.getVariantName())).append(" ").append(workDog.getType().getDescription()), mouseX, mouseY);
 
-            if (!workDog.getParentDataList().isEmpty() && workDog.getParentDataList().size() == 8) {
+            if (workDog.getParentDataList().get(0).length > 0) {
                 if (isHovering(135, 38, 16, 16, mouseX, mouseY)) {
-                    Component variantName = Component.translatable("coat.workdog." + workDog.getParentDataList().get(2));
-                    Component breedName = Component.translatable(Util.makeDescriptionId("entity", new ResourceLocation(WorkDog.MOD_ID, workDog.getParentDataList().get(3))));
-                    guiGraphics.renderTooltip(font, Component.literal(workDog.getParentDataList().get(1) + ": " + variantName.getString() + " " + breedName.getString()), mouseX, mouseY);
+                    Component variantName = Component.translatable("coat.workdog." + workDog.getParentDataList().get(0)[2]);
+                    Component breedName = Component.translatable(Util.makeDescriptionId("entity", new ResourceLocation(WorkDog.MOD_ID, workDog.getParentDataList().get(0)[3])));
+                    guiGraphics.renderTooltip(font, Component.literal(workDog.getParentDataList().get(0)[1] + ": " + variantName.getString() + " " + breedName.getString()), mouseX, mouseY);
                 }
                 if (isHovering(135 + 18, 38, 16, 16, mouseX, mouseY)) {
-                    Component variantName = Component.translatable("coat.workdog." + workDog.getParentDataList().get(6));
-                    Component breedName = Component.translatable(Util.makeDescriptionId("entity", new ResourceLocation(WorkDog.MOD_ID, workDog.getParentDataList().get(7))));
-                    guiGraphics.renderTooltip(font, Component.literal(workDog.getParentDataList().get(5) + ": " + variantName.getString() + " " + breedName.getString()), mouseX, mouseY);
+                    Component variantName = Component.translatable("coat.workdog." + workDog.getParentDataList().get(1)[2]);
+                    Component breedName = Component.translatable(Util.makeDescriptionId("entity", new ResourceLocation(WorkDog.MOD_ID, workDog.getParentDataList().get(1)[3])));
+                    guiGraphics.renderTooltip(font, Component.literal(workDog.getParentDataList().get(1)[1] + ": " + variantName.getString() + " " + breedName.getString()), mouseX, mouseY);
                 }
             }
 

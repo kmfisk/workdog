@@ -86,10 +86,10 @@ public class WorkDogContainerScreen extends AbstractContainerScreen<WorkDogConta
             ResourceLocation unknownIcon = new ResourceLocation(WorkDog.MOD_ID, "textures/gui/coat_portrait/unknown.png");
             ResourceLocation paternalIcon = unknownIcon;
             ResourceLocation maternalIcon = unknownIcon;
-            if (!workDog.getParentDataList().isEmpty() && workDog.getParentDataList().size() == 8) {
-                paternalIcon = new ResourceLocation(WorkDog.MOD_ID, "textures/gui/coat_portrait/" + workDog.getParentDataList().get(3) + "_" + workDog.getParentDataList().get(2) + ".png");
-                maternalIcon = new ResourceLocation(WorkDog.MOD_ID, "textures/gui/coat_portrait/" + workDog.getParentDataList().get(7) + "_" + workDog.getParentDataList().get(6) + ".png");
-                guiGraphics.drawWordWrap(font, Component.translatable("gui.workdog.parentage", pronoun, workDog.getParentDataList().get(1), workDog.getParentDataList().get(5)), 68, 118, 122, 4210752);
+            if (workDog.getParentDataList().get(0).length > 0) {
+                paternalIcon = new ResourceLocation(WorkDog.MOD_ID, "textures/gui/coat_portrait/" + workDog.getParentDataList().get(0)[3] + "_" + workDog.getParentDataList().get(0)[2] + ".png");
+                maternalIcon = new ResourceLocation(WorkDog.MOD_ID, "textures/gui/coat_portrait/" + workDog.getParentDataList().get(1)[3] + "_" + workDog.getParentDataList().get(1)[2] + ".png");
+                guiGraphics.drawWordWrap(font, Component.translatable("gui.workdog.parentage", pronoun, workDog.getParentDataList().get(0)[1], workDog.getParentDataList().get(1)[1]), 68, 118, 122, 4210752);
 
             } else
                 guiGraphics.drawWordWrap(font, Component.translatable("gui.workdog.stray", pronoun), 68, 118, 122, 4210752);
@@ -117,16 +117,16 @@ public class WorkDogContainerScreen extends AbstractContainerScreen<WorkDogConta
             if (isHovering(57, 15, 48, 48, mouseX, mouseY))
                 guiGraphics.renderTooltip(font, title.plainCopy().append(": ").append(Component.translatable("coat.workdog." + workDog.getVariantName())).append(" ").append(workDog.getType().getDescription()), mouseX, mouseY);
 
-            if (!workDog.getParentDataList().isEmpty() && workDog.getParentDataList().size() == 8) {
+            if (workDog.getParentDataList().get(0).length > 0) {
                 if (isHovering(135, 23, 16, 16, mouseX, mouseY)) {
-                    Component variantName = Component.translatable("coat.workdog." + workDog.getParentDataList().get(2));
-                    Component breedName = Component.translatable(Util.makeDescriptionId("entity", new ResourceLocation(WorkDog.MOD_ID, workDog.getParentDataList().get(3))));
-                    guiGraphics.renderTooltip(font, Component.literal(workDog.getParentDataList().get(1) + ": " + variantName.getString() + " " + breedName.getString()), mouseX, mouseY);
+                    Component variantName = Component.translatable("coat.workdog." + workDog.getParentDataList().get(0)[2]);
+                    Component breedName = Component.translatable(Util.makeDescriptionId("entity", new ResourceLocation(WorkDog.MOD_ID, workDog.getParentDataList().get(0)[3])));
+                    guiGraphics.renderTooltip(font, Component.literal(workDog.getParentDataList().get(0)[1] + ": " + variantName.getString() + " " + breedName.getString()), mouseX, mouseY);
                 }
                 if (isHovering(135 + 18, 23, 16, 16, mouseX, mouseY)) {
-                    Component variantName = Component.translatable("coat.workdog." + workDog.getParentDataList().get(6));
-                    Component breedName = Component.translatable(Util.makeDescriptionId("entity", new ResourceLocation(WorkDog.MOD_ID, workDog.getParentDataList().get(7))));
-                    guiGraphics.renderTooltip(font, Component.literal(workDog.getParentDataList().get(5) + ": " + variantName.getString() + " " + breedName.getString()), mouseX, mouseY);
+                    Component variantName = Component.translatable("coat.workdog." + workDog.getParentDataList().get(1)[2]);
+                    Component breedName = Component.translatable(Util.makeDescriptionId("entity", new ResourceLocation(WorkDog.MOD_ID, workDog.getParentDataList().get(1)[3])));
+                    guiGraphics.renderTooltip(font, Component.literal(workDog.getParentDataList().get(1)[1] + ": " + variantName.getString() + " " + breedName.getString()), mouseX, mouseY);
                 }
             }
 
