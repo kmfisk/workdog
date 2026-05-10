@@ -32,8 +32,8 @@ public class BostonTerrierEntity extends ToyDogEntity {
     }
 
     @Override
-    public double sprintPredisposition() {
-        return 1.6D;
+    public float sprintPredisposition() {
+        return 1.6F;
     }
 
     @Override

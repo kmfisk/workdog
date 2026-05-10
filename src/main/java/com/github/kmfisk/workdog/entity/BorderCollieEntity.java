@@ -29,8 +29,8 @@ public class BorderCollieEntity extends HerdingDogEntity {
     }
 
     @Override
-    public double sprintPredisposition() {
-        return 2.0D;
+    public float sprintPredisposition() {
+        return 2.0F;
     }
 
     @Override

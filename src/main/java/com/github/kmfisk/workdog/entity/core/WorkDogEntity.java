@@ -54,6 +54,7 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
     public static final EntityDataAccessor<Boolean> GENDER = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<Boolean> LONGHAIR = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Float> SPRINT_MOD = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Integer> MODE = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.INT);
 
     private static final EntityDataAccessor<Integer> BREED_TIMER = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.INT);
@@ -62,10 +63,9 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
     private static final EntityDataAccessor<CompoundTag> PARENTS = SynchedEntityData.defineId(WorkDogEntity.class, EntityDataSerializers.COMPOUND_TAG);
     @Nullable
     BlockPos homePos;
-    private double sprintSpeedMod;
     private DogAvoidEntityGoal<Player> avoidPlayersGoal;
     protected WaterAvoidingRandomStrollGoal wanderGoal;
-    protected final FollowOwnerGoal followGoal = new FollowOwnerGoal(this, sprintSpeedMod, 10.0F, 2.0F, false);
+    protected final FollowOwnerGoal followGoal = new FollowOwnerGoal(this, getSprintSpeedMod(), 10.0F, 2.0F, false);
 
     public WorkDogEntity(EntityType<? extends TamableAnimal> type, Level world) {
         super(type, world);
@@ -89,7 +89,7 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
     protected void reassessTameGoals() {
         if (isBaby() || !(this instanceof WDWolfEntity)) {
             if (avoidPlayersGoal == null)
-                avoidPlayersGoal = new DogAvoidEntityGoal<>(this, Player.class, 16.0F, 0.8D, sprintSpeedMod);
+                avoidPlayersGoal = new DogAvoidEntityGoal<>(this, Player.class, 16.0F, 0.8D, getSprintSpeedMod());
 
             this.goalSelector.removeGoal(avoidPlayersGoal);
             if (!isTame()) this.goalSelector.addGoal(4, avoidPlayersGoal);
@@ -113,6 +113,7 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
         this.entityData.define(GENDER, false);
         this.entityData.define(LONGHAIR, false);
         this.entityData.define(VARIANT, 0);
+        this.entityData.define(SPRINT_MOD, 0F);
         this.entityData.define(MODE, 2);
         this.entityData.define(BREED_TIMER, 0);
         this.entityData.define(PUPPIES, 0);
@@ -137,12 +138,12 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
                 name = Component.literal(WorkDogConfig.femaleNameStockList.get().get(random.nextInt(WorkDogConfig.femaleNameStockList.get().size())));
             setCustomName(name);
         }
-        sprintSpeedMod = generateSprintMod(world.getRandom()::nextDouble);
+        setSprintSpeedMod(generateSprintMod(world.getRandom().nextFloat()));
         return super.finalizeSpawn(world, difficulty, reason, spawnData, dataTag);
     }
 
-    public double sprintPredisposition() {
-        return 1.8D; //low=1.6, mid=1.8, high=2.0
+    public float sprintPredisposition() {
+        return 1.8F; //low=1.6, mid=1.8, high=2.0
     }
 
     public abstract WorkGroup getWorkGroup();
@@ -322,28 +323,32 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
         homePos = position;
     }
 
-    public double getSprintSpeedMod() {
-        return sprintSpeedMod;
+    public void setSprintSpeedMod(float sprintMod) {
+        entityData.set(SPRINT_MOD, sprintMod);
     }
 
-    private double generateSprintMod(DoubleSupplier doubleSupplier) {
-        double result = 1.25D + doubleSupplier.getAsDouble() * 0.55D + doubleSupplier.getAsDouble() * 0.55D;
-        return (result + sprintPredisposition() * 4) / 5.0D;
+    public float getSprintSpeedMod() {
+        return entityData.get(SPRINT_MOD);
     }
 
-    private static double createOffspringSprintMod(double parent1, double parent2, RandomSource randomSource) {
-        double min = 1.25D, max = 2.35D;
+    private float generateSprintMod(float nextFloat) {
+        float result = 1.25F + nextFloat * 0.55F + nextFloat * 0.55F;
+        return (result + sprintPredisposition() * 4) / 5.0F;
+    }
+
+    private static float createOffspringSprintMod(float parent1, float parent2, RandomSource randomSource) {
+        float min = 1.25F, max = 2.35F;
         parent1 = Mth.clamp(parent1, min, max);
         parent2 = Mth.clamp(parent2, min, max);
-        double d0 = Math.abs(parent1 - parent2) + (max - min) * 0.05D; // parent's absolute difference + 5% whole range
-        double d1 = (randomSource.nextDouble() + randomSource.nextDouble() + randomSource.nextDouble()) / 3.0D - 0.5D; // -0.5 - 0.5
-        double parentAvg = (parent1 + parent2) / 2.0D;
-        double result = parentAvg + d0 * d1;
+        float d0 = Math.abs(parent1 - parent2) + (max - min) * 0.05F; // parent's absolute difference + 5% whole range
+        float d1 = (randomSource.nextFloat() + randomSource.nextFloat() + randomSource.nextFloat()) / 3.0F - 0.5F; // -0.5 - 0.5
+        float parentAvg = (parent1 + parent2) / 2.0F;
+        float result = parentAvg + d0 * d1;
         if (result > max) {
-            double d6 = result - max;
+            float d6 = result - max;
             return max - d6;
         } else if (result < min) {
-            double d5 = min - result;
+            float d5 = min - result;
             return min + d5;
         } else {
             return result;
@@ -373,7 +378,7 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
 
         nbt.putInt("Mode", getMode().ordinal());
         if (getHomePos() != null) nbt.put("HomePos", NbtUtils.writeBlockPos(getHomePos()));
-        nbt.putDouble("SprintMod", sprintSpeedMod == 0 ? generateSprintMod(getRandom()::nextDouble) : sprintSpeedMod);
+        nbt.putFloat("SprintMod", getSprintSpeedMod() == 0 ? generateSprintMod(getRandom().nextFloat()) : getSprintSpeedMod());
     }
 
     @Override
@@ -412,7 +417,7 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
 
         setMode(Mode.fromOrdinal(nbt.getInt("Mode")));
         if (nbt.contains("HomePos")) setHomePos(NbtUtils.readBlockPos(nbt.getCompound("HomePos")));
-        sprintSpeedMod = nbt.getDouble("SprintMod");
+        setSprintSpeedMod(nbt.getFloat("SprintMod"));
     }
 
     @Override
@@ -535,7 +540,7 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
         if (maternal.isTame() && WorkDogConfig.tamedLimit.get() == 0/* || owner.getPersistentData().getInt("DogCount") < WorkDogConfig.tamedLimit.get()*/)
             tame((Player) maternal.getOwner());
         if (maternal.getHomePos() != null) setHomePos(maternal.getHomePos());
-        sprintSpeedMod = createOffspringSprintMod(paternal.sprintSpeedMod, maternal.sprintSpeedMod, random);
+        setSprintSpeedMod(createOffspringSprintMod(paternal.getSprintSpeedMod(), maternal.getSprintSpeedMod(), random));
     }
 
     @Override
