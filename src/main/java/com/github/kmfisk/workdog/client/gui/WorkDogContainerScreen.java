@@ -5,6 +5,8 @@ import com.github.kmfisk.workdog.config.WorkDogConfig;
 import com.github.kmfisk.workdog.entity.core.AbstractInventoryAnimal;
 import com.github.kmfisk.workdog.entity.core.WorkDogEntity;
 import com.github.kmfisk.workdog.inventory.WorkDogContainerMenu;
+import com.github.kmfisk.workdog.network.ServerboundSetDogModePacket;
+import com.github.kmfisk.workdog.network.WorkDogChannel;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.Util;
 import net.minecraft.client.gui.GuiGraphics;
@@ -41,9 +43,14 @@ public class WorkDogContainerScreen extends AbstractContainerScreen<WorkDogConta
                     .withInitialValue(workDog.getMode())
                     .displayOnlyValue().create(
                             leftPos + 152 - 35, topPos + 57, 70, 20, Component.empty(),
-                            (button, mode) -> workDog.setMode(mode)
+                            (button, mode) -> changeDogMode(workDog, mode)
                     ));
         }
+    }
+
+    private void changeDogMode(WorkDogEntity workDog, WorkDogEntity.Mode mode) {
+        workDog.setMode(mode);
+        WorkDogChannel.sendToServer(new ServerboundSetDogModePacket(workDog.getId(), mode.ordinal()));
     }
 
     @Override

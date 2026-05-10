@@ -12,6 +12,7 @@ import com.github.kmfisk.workdog.entity.merchant.villager.WorkDogVillagerTrades;
 import com.github.kmfisk.workdog.entity.merchant.villager.WorkDogVillagers;
 import com.github.kmfisk.workdog.inventory.WDMenuTypes;
 import com.github.kmfisk.workdog.item.WorkDogItems;
+import com.github.kmfisk.workdog.network.WorkDogChannel;
 import com.github.kmfisk.workdog.sounds.WorkDogSounds;
 import com.github.kmfisk.workdog.world.WorkDogSpawns;
 import net.minecraft.core.registries.Registries;
@@ -94,6 +95,7 @@ public class WorkDog {
     }
 
     private void setup(final FMLCommonSetupEvent event) {
+        WorkDogChannel.register();
         WorkDogEntities.registerSpawnPlacements();
         event.enqueueWork(WorkDogVillagers::registerTrades);
     }
