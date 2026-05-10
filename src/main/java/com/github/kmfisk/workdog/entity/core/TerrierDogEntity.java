@@ -11,7 +11,7 @@ import net.minecraft.world.level.Level;
 
 public abstract class TerrierDogEntity extends WorkDogEntity {
     private final OwnerHurtTargetGoal ownerHurtTargetGoal = new OwnerHurtTargetGoal(this);
-    private final FollowOwnerGoal terriersFollowGoal = new FollowOwnerGoal(this, getSprintSpeedMod(), 4.0F, 2.0F, false);
+    private FollowOwnerGoal terriersFollowGoal;
     private final AttackableTargetRangedGoal<LivingEntity> attackNearbyMobsGoal = new AttackableTargetRangedGoal<>(this, LivingEntity.class, false, false, 10.0D, (entity) -> entity instanceof Enemy);
 
     public TerrierDogEntity(EntityType<? extends TamableAnimal> type, Level world) {
@@ -26,6 +26,8 @@ public abstract class TerrierDogEntity extends WorkDogEntity {
     @Override
     public void reassessModeGoals() {
         super.reassessModeGoals();
+        if (terriersFollowGoal == null)
+            terriersFollowGoal = new FollowOwnerGoal(this, getSprintSpeedMod(), 4.0F, 2.0F, false);
         this.goalSelector.removeGoal(terriersFollowGoal);
         this.targetSelector.removeGoal(ownerHurtTargetGoal);
         this.targetSelector.removeGoal(attackNearbyMobsGoal);

@@ -10,7 +10,7 @@ import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.level.Level;
 
 public abstract class ProtectionDogEntity extends WorkDogEntity {
-    private final FollowOwnerGoal protectorsFollowGoal = new FollowOwnerGoal(this, getSprintSpeedMod(), 4.0F, 2.0F, false);
+    private FollowOwnerGoal protectorsFollowGoal;
     private final OwnerHurtByTargetGoal ownerHurtByTargetGoal = new OwnerHurtByTargetGoal(this);
     private final AttackableTargetRangedGoal<LivingEntity> attackNearbyMobsGoal = new AttackableTargetRangedGoal<>(this, LivingEntity.class, false, false, 10.0D, (entity) -> entity instanceof Enemy);
 
@@ -26,6 +26,8 @@ public abstract class ProtectionDogEntity extends WorkDogEntity {
     @Override
     public void reassessModeGoals() {
         super.reassessModeGoals();
+        if (protectorsFollowGoal == null)
+            protectorsFollowGoal = new FollowOwnerGoal(this, getSprintSpeedMod(), 4.0F, 2.0F, false);
         this.goalSelector.removeGoal(protectorsFollowGoal);
         this.targetSelector.removeGoal(ownerHurtByTargetGoal);
         this.targetSelector.removeGoal(attackNearbyMobsGoal);

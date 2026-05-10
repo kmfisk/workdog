@@ -65,11 +65,10 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
     BlockPos homePos;
     private DogAvoidEntityGoal<Player> avoidPlayersGoal;
     protected WaterAvoidingRandomStrollGoal wanderGoal;
-    protected final FollowOwnerGoal followGoal = new FollowOwnerGoal(this, getSprintSpeedMod(), 10.0F, 2.0F, false);
+    protected FollowOwnerGoal followGoal;
 
     public WorkDogEntity(EntityType<? extends TamableAnimal> type, Level world) {
         super(type, world);
-        reassessModeGoals();
     }
 
     @Override
@@ -79,7 +78,6 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
         this.goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(3, new DogTemptGoal(this, 0.6D));
         this.goalSelector.addGoal(4, new LeapAtTargetGoal(this, 0.4F));
-        this.goalSelector.addGoal(5, new MeleeAttackGoal(this, getSprintSpeedMod(), true));
         this.goalSelector.addGoal(6, new FollowMotherGoal(this, 1.1D));
         this.goalSelector.addGoal(9, new DogBreedGoal(this, 1.2D));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
@@ -96,9 +94,11 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
         }
     }
 
-    public void reassessModeGoals() {
+    protected void reassessModeGoals() {
+        this.goalSelector.addGoal(5, new MeleeAttackGoal(this, getSprintSpeedMod(), true));
         if (wanderGoal == null) wanderGoal = new DogWanderGoal(this, 1.0D, 0.001F);
         this.goalSelector.removeGoal(wanderGoal);
+        if (followGoal == null) followGoal = new FollowOwnerGoal(this, getSprintSpeedMod(), 10.0F, 2.0F, false);
         this.goalSelector.removeGoal(followGoal);
         if (getMode() == Mode.FOLLOW) {
             this.goalSelector.addGoal(6, followGoal);
@@ -129,6 +129,7 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
         if (dataTag != null && dataTag.contains("Variant")) variant = dataTag.getInt("Variant");
         setVariant(variant);
         if (getGender() == Gender.FEMALE && !isInfertile()) setHeatCycle(false, WorkDogConfig.heatCooldown.get());
+        setSprintSpeedMod(generateSprintMod(world.getRandom().nextFloat()));
         setMode(Mode.WANDER);
         if (!(this instanceof WDWolfEntity)) {
             Component name;
@@ -138,7 +139,6 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
                 name = Component.literal(WorkDogConfig.femaleNameStockList.get().get(random.nextInt(WorkDogConfig.femaleNameStockList.get().size())));
             setCustomName(name);
         }
-        setSprintSpeedMod(generateSprintMod(world.getRandom().nextFloat()));
         return super.finalizeSpawn(world, difficulty, reason, spawnData, dataTag);
     }
 
@@ -376,9 +376,9 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
         }
         if (!isInfertile()) nbt.putInt("Timer", getBreedTimer());
 
+        nbt.putFloat("SprintMod", getSprintSpeedMod() == 0 ? generateSprintMod(getRandom().nextFloat()) : getSprintSpeedMod());
         nbt.putInt("Mode", getMode().ordinal());
         if (getHomePos() != null) nbt.put("HomePos", NbtUtils.writeBlockPos(getHomePos()));
-        nbt.putFloat("SprintMod", getSprintSpeedMod() == 0 ? generateSprintMod(getRandom().nextFloat()) : getSprintSpeedMod());
     }
 
     @Override
@@ -415,9 +415,9 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
         }
         if (!isInfertile()) setBreedTimer(nbt.getInt("Timer"));
 
+        setSprintSpeedMod(nbt.getFloat("SprintMod"));
         setMode(Mode.fromOrdinal(nbt.getInt("Mode")));
         if (nbt.contains("HomePos")) setHomePos(NbtUtils.readBlockPos(nbt.getCompound("HomePos")));
-        setSprintSpeedMod(nbt.getFloat("SprintMod"));
     }
 
     @Override
@@ -663,7 +663,6 @@ public abstract class WorkDogEntity extends AbstractInventoryAnimal {
                 navigation.stop();
                 setTarget(null);
                 setOrderedToSit(true);
-                this.goalSelector.addGoal(6, followGoal);
                 setMode(Mode.FOLLOW);
                 level().broadcastEntityEvent(this, (byte) 7);
 
